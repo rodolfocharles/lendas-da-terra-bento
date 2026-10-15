@@ -129,7 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 257247991}
   - component: {fileID: 257247990}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: PontoGancho
   m_TagString: Gancho
   m_Icon: {fileID: 0}
@@ -507,7 +507,7 @@ GameObject:
   - component: {fileID: 539978916}
   - component: {fileID: 539978915}
   - component: {fileID: 539978914}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Chao (2)
   m_TagString: Chao
   m_Icon: {fileID: 0}
@@ -729,7 +729,7 @@ GameObject:
   - component: {fileID: 817659307}
   - component: {fileID: 817659306}
   - component: {fileID: 817659305}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Chao (1)
   m_TagString: Chao
   m_Icon: {fileID: 0}
@@ -1026,7 +1026,7 @@ GameObject:
   - component: {fileID: 902768998}
   - component: {fileID: 902768997}
   - component: {fileID: 902768999}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Chao
   m_TagString: Chao
   m_Icon: {fileID: 0}
@@ -1164,7 +1164,7 @@ GameObject:
   - component: {fileID: 1184978115}
   - component: {fileID: 1184978114}
   - component: {fileID: 1184978113}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Chao (3)
   m_TagString: Chao
   m_Icon: {fileID: 0}
@@ -1302,7 +1302,7 @@ GameObject:
   - component: {fileID: 1302508245}
   - component: {fileID: 1302508244}
   - component: {fileID: 1302508243}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Chao (4)
   m_TagString: Chao
   m_Icon: {fileID: 0}
@@ -1445,7 +1445,7 @@ GameObject:
   - component: {fileID: 1749111397}
   - component: {fileID: 1749111396}
   - component: {fileID: 1749111395}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Chao (5)
   m_TagString: Chao
   m_Icon: {fileID: 0}

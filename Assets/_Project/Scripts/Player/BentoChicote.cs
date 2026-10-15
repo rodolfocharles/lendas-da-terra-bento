@@ -62,6 +62,7 @@ public class BentoChicote : MonoBehaviour
 
         if (Input.GetButtonDown("Jump"))
         {
+            movimento.ConsumirPuloDoQuadro();
             Soltar(true);
             return;
         }
@@ -122,6 +123,7 @@ public class BentoChicote : MonoBehaviour
         junta.enabled = false;
         linha.enabled = false;
         movimento.ControleAtivo = true;
+        movimento.RestaurarPulosExtras();
 
         if (comPulo)
         {

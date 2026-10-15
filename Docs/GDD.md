@@ -18,6 +18,8 @@ As lendas não são vilãs: foram corrompidas pelo Barão. Bento **purifica** em
 
 Etnógrafo, arqueólogo e folclorista. Chapéu, mochila, chicote enrolado e amuleto no peito.
 
+**Movimento base:** correr, pulo variável, pulo duplo (`pulosExtrasMax`, recarrega no chão e ao soltar o chicote), coyote time e buffer de pulo.
+
 | Ferramenta | Função |
 |---|---|
 | Chicote / corda com gancho | Balançar em pontos de gancho, alcançar plataformas, desarmar mecanismos |
