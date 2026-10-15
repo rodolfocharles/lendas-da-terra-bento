@@ -1,0 +1,23 @@
+* text=auto
+
+# Arquivos do Unity em texto (YAML)
+*.unity     text eol=lf
+*.prefab    text eol=lf
+*.asset     text eol=lf
+*.meta      text eol=lf
+*.mat       text eol=lf
+*.anim      text eol=lf
+*.controller text eol=lf
+*.cs        text diff=csharp
+
+# Arte e audio
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.psd  binary
+*.aseprite binary
+*.wav  binary
+*.mp3  binary
+*.ogg  binary
+*.ttf  binary
+*.otf  binary
