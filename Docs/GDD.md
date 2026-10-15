@@ -176,10 +176,10 @@ Pisos falsos, pedras, dardos, luz/espelhos em ruínas (Marajoara, jesuítas, qui
 ## 11. Roteiro técnico da fatia vertical
 
 1. ~~Movimento + chicote (balanço) + pulo duplo~~ ✅
-2. Câmera (Cinemachine + limites)
-3. Vida, dano, checkpoint
-4. UI básica (vida, energia, corrupção)
-5. Diálogo (Dona Nair + 2 NPCs)
+2. ~~Câmera (Cinemachine + limites)~~ ✅
+3. ~~Vida, dano, checkpoint, zona de morte~~ ✅
+4. UI básica (energia, corrupção) — vida ✅ protótipo
+5. ~~Diálogo base + Dona Nair~~ ✅ · falta namorada do Boto e pescador
 6. Inventário + economia (escambo, moeda, fundo com teto)
 7. Combate (facão, besta, Sombra) + chicote de combate/puzzle
 8. Caderno de Campo + Mesa de Pesquisa

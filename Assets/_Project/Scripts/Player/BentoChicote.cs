@@ -117,7 +117,7 @@ public class BentoChicote : MonoBehaviour
         movimento.ControleAtivo = false;
     }
 
-    void Soltar(bool comPulo)
+    public void Soltar(bool comPulo)
     {
         pontoAtual = null;
         junta.enabled = false;

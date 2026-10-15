@@ -12,6 +12,10 @@ Para colar/espelhar no Notion. Status: `Backlog` | `Em desenvolvimento` | `Concl
 | C04 | Pulo duplo + recarga ao soltar chicote | Base |
 | C05 | Camadas Chao/Gancho/Jogador + configurador `Lendas/` | Base |
 | C06 | GDD consolidado (pilares, Cap. 1, culinária, amuleto) | Produção |
+| C07 | Câmera Cinemachine + Confiner2D (`LimiteDaFase`) | Base |
+| C08 | Vida, dano, invencibilidade, checkpoint e zona de morte | Base |
+| C09 | HUD de vida (protótipo OnGUI) | Base |
+| C10 | Sistema de diálogo + Dona Nair (placeholder) | Narrativa |
 
 ## Em desenvolvimento
 
@@ -22,9 +26,7 @@ _(vazio)_
 ### Épico: Base
 | ID | Tarefa | Depende de |
 |---|---|---|
-| B01 | Câmera Cinemachine seguindo Bento + limites (`LimiteDaFase`) | C02 |
-| B02 | Vida, dano, morte e checkpoint | B01 |
-| B03 | UI HUD (vida, energia espiritual, munição, barra de corrupção) | B02 |
+| B03 | UI HUD completa (energia espiritual, munição, barra de corrupção) | C09 |
 | B04 | Salvamento/carregamento (JSON) na Barca | B02, B10 |
 | B05 | Menu pausa / opções | B03 |
 | B06 | Migrar Input System (teclado, controle, toque) | B01 |
@@ -32,11 +34,10 @@ _(vazio)_
 ### Épico: Narrativa
 | ID | Tarefa | Depende de |
 |---|---|---|
-| N01 | Sistema de diálogo (retrato + emoção) | — |
-| N02 | Falas Dona Nair (chegada: avô, amuleto, Tacacá) | N01 |
-| N03 | NPC Namorada do Boto (pista + epílogo feliz/apaixonada) | N01 |
-| N04 | NPC Pescador / testemunha da Iara | N01 |
-| N05 | Caderno de Campo (páginas, rascunhos, abrir no boss) | N01, I01 |
+| N02 | Expandir falas Dona Nair + retratos reais | C10 |
+| N03 | NPC Namorada do Boto (pista + epílogo feliz/apaixonada) | C10 |
+| N04 | NPC Pescador / testemunha da Iara | C10 |
+| N05 | Caderno de Campo (páginas, rascunhos, abrir no boss) | C10, I01 |
 | N06 | Diário do avô na Mesa de Pesquisa | N05, B10 |
 | N07 | Sequência pós-restauração (Dona Nair, crianças, pescadores, namorada) | N02–N04, H01 |
 
