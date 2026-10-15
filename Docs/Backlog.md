@@ -45,7 +45,7 @@ _(vazio)_
 | ID | Tarefa | Depende de |
 |---|---|---|
 | I01 | Inventário (itens, ingredientes, reagentes) | — |
-| I02 | Escambo com NPCs | I01, N01 |
+| I02 | Escambo com NPCs | I01, C10 |
 | I03 | Feira / mercador com moeda | I01 |
 | I04 | Fundo de pesquisa com teto por fase | I03 |
 | I05 | Ingredientes Norte: Jambu, Tucupi, Goma de Tapioca | I01 |
