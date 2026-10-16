@@ -75,8 +75,8 @@ _(vazio)_
 ### Épico: Encontros Cap. 1
 | ID | Tarefa | Depende de |
 |---|---|---|
-| H10 | Puzzle / encontro Boto (rio bloqueado) | X09, N03, B11 |
-| H11 | Encontro Iara + Gota de Quartzo | H10, N04 |
+| H10 | Puzzle / encontro Boto (rio bloqueado) | X09, C11, B11 |
+| H11 | Encontro Iara + Gota de Quartzo | H10, C12 |
 | H12 | Resgate da fauna | X09, I01 |
 | H01 | Boss Curupira (ritual novelo + Sombras + corrupção) | H11, B13, N05, X03 |
 | H02 | Restauração do belo (cor + música) | H01 |

@@ -179,7 +179,7 @@ Pisos falsos, pedras, dardos, luz/espelhos em ruínas (Marajoara, jesuítas, qui
 2. ~~Câmera (Cinemachine + limites)~~ ✅
 3. ~~Vida, dano, checkpoint, zona de morte~~ ✅
 4. UI básica (energia, corrupção) — vida ✅ protótipo
-5. ~~Diálogo base + Dona Nair~~ ✅ · falta namorada do Boto e pescador
+5. ~~Diálogo base + Dona Nair + Lia + Seu Zeca~~ ✅
 6. Inventário + economia (escambo, moeda, fundo com teto)
 7. Combate (facão, besta, Sombra) + chicote de combate/puzzle
 8. Caderno de Campo + Mesa de Pesquisa

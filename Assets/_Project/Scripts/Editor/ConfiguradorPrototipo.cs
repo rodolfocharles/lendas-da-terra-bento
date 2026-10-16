@@ -100,6 +100,8 @@ public static class ConfiguradorPrototipo
         GarantirCheckpointInicial();
         GarantirZonaMorte();
         GarantirDonaNair();
+        GarantirNamoradaDoBoto();
+        GarantirPescadorDaIara();
 
         var cena = EditorSceneManager.GetActiveScene();
         EditorSceneManager.MarkSceneDirty(cena);
@@ -164,43 +166,114 @@ public static class ConfiguradorPrototipo
 
     static void GarantirDonaNair()
     {
-        if (GameObject.Find("DonaNair") != null) return;
+        CriarNpcEditor(
+            "DonaNair",
+            new Vector3(-3.5f, 1.2f, 0f),
+            new Color(1f, 0.75f, 0.2f),
+            new Vector3(1.1f, 1.8f, 1f),
+            new[]
+            {
+                new FalaDialogo
+                {
+                    personagem = "Dona Nair",
+                    emocao = "preocupada",
+                    texto = "Bento! A vila esta acinzentada... o Barao enlouqueceu o Curupira e poluiu as aguas."
+                },
+                new FalaDialogo
+                {
+                    personagem = "Dona Nair",
+                    emocao = "saudade",
+                    texto = "Seu avo deixou o amuleto com voce por um motivo. A Visao Espectral ainda dorme nele."
+                },
+                new FalaDialogo
+                {
+                    personagem = "Dona Nair",
+                    emocao = "esperanca",
+                    texto = "Vou te ensinar o Tacaca: jambu, tucupi e goma. Serve de oferenda ao Boto e a Iara — e te protege da paralisia."
+                }
+            });
+    }
 
-        var go = new GameObject("DonaNair");
-        Undo.RegisterCreatedObjectUndo(go, "Criar DonaNair");
-        go.transform.position = new Vector3(-4f, 0.5f, 0f);
-        go.transform.localScale = new Vector3(0.8f, 1.2f, 1f);
+    static void GarantirNamoradaDoBoto()
+    {
+        CriarNpcEditor(
+            "NamoradaDoBoto",
+            new Vector3(2.5f, 1.2f, 0f),
+            new Color(1f, 0.45f, 0.7f),
+            new Vector3(1f, 1.6f, 1f),
+            new[]
+            {
+                new FalaDialogo
+                {
+                    personagem = "Lia",
+                    emocao = "triste",
+                    texto = "Todas as noites um rapaz bonito vinha me encontrar na beira do igarape... Depois da fumaca, ele sumiu."
+                },
+                new FalaDialogo
+                {
+                    personagem = "Lia",
+                    emocao = "confidente",
+                    texto = "Os mais velhos dizem que aquele rapaz e o Boto. Agora o rio esta doente — e ele tambem."
+                },
+                new FalaDialogo
+                {
+                    personagem = "Lia",
+                    emocao = "esperanca",
+                    texto = "Se voce acalmar o Boto, talvez ele volte a aparecer nas noites claras. Eu ainda espero."
+                }
+            });
+    }
+
+    static void GarantirPescadorDaIara()
+    {
+        CriarNpcEditor(
+            "PescadorDaIara",
+            new Vector3(6.5f, 1.2f, 0f),
+            new Color(0.35f, 0.65f, 1f),
+            new Vector3(1.1f, 1.7f, 1f),
+            new[]
+            {
+                new FalaDialogo
+                {
+                    personagem = "Seu Zeca",
+                    emocao = "assustado",
+                    texto = "A Iara protegia a gente! Com o canto dela, as piranhas se afastavam e a rede vinha cheia."
+                },
+                new FalaDialogo
+                {
+                    personagem = "Seu Zeca",
+                    emocao = "raiva",
+                    texto = "Agora ela arrasta pescador pro fundo. A agua ta preta da poluicao do Barao — a corrupcao pegou nela tambem."
+                },
+                new FalaDialogo
+                {
+                    personagem = "Seu Zeca",
+                    emocao = "serio",
+                    texto = "Leve Tacaca de oferenda e cuidado com o canto. So a Gota de Quartzo dela abre o caminho ate o Curupira."
+                }
+            });
+    }
+
+    static void CriarNpcEditor(string nome, Vector3 posicao, Color cor, Vector3 escala, FalaDialogo[] falas)
+    {
+        if (GameObject.Find(nome) != null) return;
+
+        var go = new GameObject(nome);
+        Undo.RegisterCreatedObjectUndo(go, "Criar " + nome);
+        go.transform.position = posicao;
+        go.transform.localScale = escala;
 
         var sr = go.AddComponent<SpriteRenderer>();
         sr.sprite = CarregarSpriteQuadrado();
-        sr.color = new Color(0.85f, 0.65f, 0.45f);
+        sr.color = cor;
+        sr.sortingOrder = 2;
 
         var col = go.AddComponent<BoxCollider2D>();
         col.isTrigger = true;
-        col.size = new Vector2(2.5f, 2f);
+        col.size = new Vector2(2.2f, 1.4f);
 
         var npc = go.AddComponent<NpcDialogo>();
-        npc.falas = new[]
-        {
-            new FalaDialogo
-            {
-                personagem = "Dona Nair",
-                emocao = "preocupada",
-                texto = "Bento! A vila esta acinzentada... o Barao enlouqueceu o Curupira e poluiu as aguas."
-            },
-            new FalaDialogo
-            {
-                personagem = "Dona Nair",
-                emocao = "saudade",
-                texto = "Seu avo deixou o amuleto com voce por um motivo. A Visao Espectral ainda dorme nele."
-            },
-            new FalaDialogo
-            {
-                personagem = "Dona Nair",
-                emocao = "esperanca",
-                texto = "Vou te ensinar o Tacaca: jambu, tucupi e goma. Serve de oferenda ao Boto e a Iara — e te protege da paralisia."
-            }
-        };
+        npc.falas = falas;
     }
 
     static Sprite CarregarSpriteQuadrado()
