@@ -16,6 +16,8 @@ Para colar/espelhar no Notion. Status: `Backlog` | `Em desenvolvimento` | `Concl
 | C08 | Vida, dano, invencibilidade, checkpoint e zona de morte | Base |
 | C09 | HUD de vida (protótipo OnGUI) | Base |
 | C10 | Sistema de diálogo + Dona Nair (placeholder) | Narrativa |
+| C11 | NPC Lia (Namorada do Boto) — pistas sobre o Boto | Narrativa |
+| C12 | NPC Seu Zeca (pescador) — pistas sobre a Iara | Narrativa |
 
 ## Em desenvolvimento
 
@@ -35,11 +37,11 @@ _(vazio)_
 | ID | Tarefa | Depende de |
 |---|---|---|
 | N02 | Expandir falas Dona Nair + retratos reais | C10 |
-| N03 | NPC Namorada do Boto (pista + epílogo feliz/apaixonada) | C10 |
-| N04 | NPC Pescador / testemunha da Iara | C10 |
+| N03b | Epílogo da Lia (feliz/apaixonada após purificar Boto) | C11, H10 |
+| N04b | Epílogo do Seu Zeca após purificar Iara | C12, H11 |
 | N05 | Caderno de Campo (páginas, rascunhos, abrir no boss) | C10, I01 |
 | N06 | Diário do avô na Mesa de Pesquisa | N05, B10 |
-| N07 | Sequência pós-restauração (Dona Nair, crianças, pescadores, namorada) | N02–N04, H01 |
+| N07 | Sequência pós-restauração (Dona Nair, crianças, pescadores, namorada) | N02, N03b, N04b, H01 |
 
 ### Épico: Inventário e economia
 | ID | Tarefa | Depende de |
