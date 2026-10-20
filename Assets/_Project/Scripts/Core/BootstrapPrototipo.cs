@@ -18,6 +18,9 @@ public static class BootstrapPrototipo
         GarantirComponente<HudAlquimia>("HudAlquimia");
         GarantirComponente<HudBuffs>("HudBuffs");
         GarantirComponente<HudMunicao>("HudMunicao");
+        GarantirComponente<HudEnergiaEspiritual>("HudEnergiaEspiritual");
+        GarantirComponente<CadernoCampo>("CadernoCampo");
+        GarantirComponente<HudCaderno>("HudCaderno");
         GarantirComponente<GerenciadorDialogo>("GerenciadorDialogo");
         GarantirCheckpoint();
         GarantirZonaMorte();
@@ -28,8 +31,9 @@ public static class BootstrapPrototipo
         GarantirBarcaEEstacoes();
         GarantirCombatePrototipo();
         GarantirMunicaoInicial();
+        GarantirObjetosEspectrais();
 
-        Debug.Log("[Lendas] Bootstrap: Facao (J), Besta (segurar K), Barca, inventario (I).");
+        Debug.Log("[Lendas] Bootstrap: Caderno (Tab/C), Visao (V), Facao (J), Besta (K).");
     }
 
     static void GarantirBentoComponentes()
@@ -46,6 +50,45 @@ public static class BootstrapPrototipo
             bento.gameObject.AddComponent<BentoFacao>();
         if (bento.GetComponent<BentoBesta>() == null)
             bento.gameObject.AddComponent<BentoBesta>();
+        if (bento.GetComponent<BentoVisaoEspectral>() == null)
+            bento.gameObject.AddComponent<BentoVisaoEspectral>();
+    }
+
+    static void GarantirObjetosEspectrais()
+    {
+        if (GameObject.Find("PistaEspectral") == null)
+        {
+            var go = CriarMarcador("PistaEspectral", new Vector3(-4.5f, 2.2f, 0f),
+                new Color(0.45f, 0.75f, 1f, 0.85f), new Vector3(0.6f, 0.6f, 1f));
+            var col = go.GetComponent<BoxCollider2D>();
+            col.isTrigger = true;
+            col.size = new Vector2(1.5f, 1.5f);
+            var pista = go.AddComponent<ObjetoEspectral>();
+            pista.tipo = TipoObjetoEspectral.Pista;
+            pista.textoPista = "Marca do avo: \"O novelo de cipo acalma o Curupira.\"";
+            pista.idPaginaCaderno = CatalogoPaginasCap1.IdCurupira;
+        }
+        else
+        {
+            var pistaExistente = GameObject.Find("PistaEspectral").GetComponent<ObjetoEspectral>();
+            if (pistaExistente != null) pistaExistente.idPaginaCaderno = CatalogoPaginasCap1.IdCurupira;
+        }
+
+        if (GameObject.Find("PlataformaEspectral") == null)
+        {
+            var go = CriarMarcador("PlataformaEspectral", new Vector3(18f, 2.5f, 0f),
+                new Color(0.4f, 0.7f, 1f, 0.75f), new Vector3(2.2f, 0.35f, 1f));
+            var col = go.GetComponent<BoxCollider2D>();
+            col.isTrigger = false;
+            col.size = new Vector2(1f, 1f);
+
+            // Camada Chao, se existir — para o pe do Bento detectar
+            int camadaChao = LayerMask.NameToLayer("Chao");
+            if (camadaChao >= 0) go.layer = camadaChao;
+
+            var plat = go.AddComponent<ObjetoEspectral>();
+            plat.tipo = TipoObjetoEspectral.Plataforma;
+        }
     }
 
     static void GarantirMunicaoInicial()
@@ -206,6 +249,7 @@ public static class BootstrapPrototipo
             new Vector3(-3.5f, 1.2f, 0f),
             new Color(1f, 0.75f, 0.2f),
             new Vector3(1.1f, 1.8f, 1f),
+            new[] { CatalogoPaginasCap1.IdTacaca },
             new[]
             {
                 new FalaDialogo
@@ -236,6 +280,7 @@ public static class BootstrapPrototipo
             new Vector3(2.5f, 1.2f, 0f),
             new Color(1f, 0.45f, 0.7f),
             new Vector3(1f, 1.6f, 1f),
+            new[] { CatalogoPaginasCap1.IdBoto },
             new[]
             {
                 new FalaDialogo
@@ -266,6 +311,7 @@ public static class BootstrapPrototipo
             new Vector3(6.5f, 1.2f, 0f),
             new Color(0.35f, 0.65f, 1f),
             new Vector3(1.1f, 1.7f, 1f),
+            new[] { CatalogoPaginasCap1.IdIara },
             new[]
             {
                 new FalaDialogo
@@ -289,9 +335,15 @@ public static class BootstrapPrototipo
             });
     }
 
-    static void CriarNpc(string nome, Vector3 posicao, Color cor, Vector3 escala, FalaDialogo[] falas)
+    static void CriarNpc(string nome, Vector3 posicao, Color cor, Vector3 escala, string[] paginasCaderno, FalaDialogo[] falas)
     {
-        if (GameObject.Find(nome) != null) return;
+        var existente = GameObject.Find(nome);
+        if (existente != null)
+        {
+            var npcExistente = existente.GetComponent<NpcDialogo>();
+            if (npcExistente != null) npcExistente.paginasAoConversar = paginasCaderno;
+            return;
+        }
 
         var go = CriarMarcador(nome, posicao, cor, escala);
         var col = go.GetComponent<BoxCollider2D>();
@@ -299,6 +351,7 @@ public static class BootstrapPrototipo
 
         var npc = go.AddComponent<NpcDialogo>();
         npc.falas = falas;
+        npc.paginasAoConversar = paginasCaderno;
     }
 
     static GameObject CriarMarcador(string nome, Vector3 posicao, Color cor, Vector3 escala)

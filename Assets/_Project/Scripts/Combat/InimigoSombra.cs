@@ -69,6 +69,7 @@ public class InimigoSombra : MonoBehaviour, IRecebeDano
 
         CorrupcaoAtual = Mathf.Max(0f, CorrupcaoAtual - reducao);
         AtualizarCor();
+        CadernoCampo.Instancia?.Desbloquear(CatalogoPaginasCap1.IdSombras);
         Debug.Log($"[Lendas] Sombra corrupcao: {CorrupcaoAtual:0}%");
 
         if (CorrupcaoAtual <= 0f)

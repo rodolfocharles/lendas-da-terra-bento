@@ -28,6 +28,8 @@ Para colar/espelhar no Notion. Status: `Backlog` | `Em desenvolvimento` | `Concl
 | X01 | Facão (combo curto + cortar vegetação) | Combate |
 | X02 | Besta com mira em arco + munição | Combate |
 | X03 | Inimigo Sombra (purificação) | Combate |
+| X07 | Visão Espectral (revelar pistas/plataformas) | Combate |
+| N05 | Caderno de Campo (páginas, rascunhos, abrir no boss) | Narrativa |
 
 ## Em desenvolvimento
 
@@ -49,7 +51,6 @@ _(vazio)_
 | N02 | Expandir falas Dona Nair + retratos reais | C10 |
 | N03b | Epílogo da Lia (feliz/apaixonada após purificar Boto) | C11, H10 |
 | N04b | Epílogo do Seu Zeca após purificar Iara | C12, H11 |
-| N05 | Caderno de Campo (páginas, rascunhos, abrir no boss) | C10, I01 |
 | N06 | Diário do avô na Mesa de Pesquisa | N05, B10 |
 | N07 | Sequência pós-restauração (Dona Nair, crianças, pescadores, namorada) | N02, N03b, N04b, H01 |
 
@@ -66,7 +67,6 @@ _(vazio)_
 | X04 | Capanga / máquina do Barão (vida) | X01 |
 | X05 | Chicote em combate (desarmar, puxar, desequilibrar) | C03, X01 |
 | X06 | Chicote em puzzle (puxar alavanca) | C03 |
-| X07 | Visão Espectral (revelar pistas/plataformas) | — |
 | X08 | 1–2 puzzles estilo Indy (placeholder) | X06, X07 |
 | X09 | Layout fase Cap. 1 (blocos: vila, rio, arena) | B01 |
 

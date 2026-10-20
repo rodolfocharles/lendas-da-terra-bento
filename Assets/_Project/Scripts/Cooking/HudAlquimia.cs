@@ -129,6 +129,8 @@ public class HudAlquimia : MonoBehaviour
         }
 
         inventario.Adicionar(receita.resultado, receita.quantidadeResultado);
+        if (receita.id == CatalogoReceitasAlquimia.IdNovelo)
+            CadernoCampo.Instancia?.Desbloquear(CatalogoPaginasCap1.IdNovelo);
         Debug.Log($"[Lendas] Alquimia: preparou {receita.nomeExibicao}");
         return true;
     }

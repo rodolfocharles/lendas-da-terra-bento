@@ -180,11 +180,11 @@ Pisos falsos, pedras, dardos, luz/espelhos em ruínas (Marajoara, jesuítas, qui
 3. ~~Vida, dano, checkpoint, zona de morte~~ ✅
 4. UI básica (energia, corrupção) — vida ✅ protótipo
 5. ~~Diálogo base + Dona Nair + Lia + Seu Zeca~~ ✅
-6. Inventário + economia (escambo, moeda, fundo com teto)
-7. Combate (facão, besta, Sombra) + chicote de combate/puzzle
-8. Caderno de Campo + Mesa de Pesquisa
-9. Visão Espectral
-10. Barca (Fogão, Alquimia, salvamento) + receitas Norte
+6. Inventário + economia (escambo, moeda, fundo com teto) — inventário ✅
+7. Combate (facão, besta, Sombra) + chicote de combate/puzzle — facão/besta/Sombra ✅
+8. ~~Caderno de Campo~~ ✅ (Mesa de Pesquisa / diário do avô pendente)
+9. ~~Visão Espectral~~ ✅
+10. Barca (Fogão, Alquimia, salvamento) + receitas Norte — Fogão/Alquimia ✅
 11. Encontros Boto + Iara
 12. Resgate da fauna
 13. Chefe Curupira + restauração + epílogo

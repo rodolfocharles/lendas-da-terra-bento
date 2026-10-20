@@ -127,6 +127,8 @@ public class HudFogao : MonoBehaviour
         }
 
         inventario.Adicionar(receita.resultado, receita.quantidadeResultado);
+        if (receita.id == CatalogoReceitasNorte.IdTacaca)
+            CadernoCampo.Instancia?.Desbloquear(CatalogoPaginasCap1.IdTacaca);
         Debug.Log($"[Lendas] Fogao: preparou {receita.nomeExibicao}");
         return true;
     }

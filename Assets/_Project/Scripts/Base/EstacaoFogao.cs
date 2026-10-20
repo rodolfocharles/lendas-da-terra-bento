@@ -24,7 +24,7 @@ public class EstacaoFogao : MonoBehaviour
         if (!jogadorProximo) return;
         if (exigirDentroDaBarca && (BarcaRio.Instancia == null || !BarcaRio.Instancia.JogadorDentro)) return;
         if (GerenciadorDialogo.Instancia != null && GerenciadorDialogo.Instancia.EmDialogo) return;
-        if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto) return;
+        if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto) return;
         if (!Input.GetKeyDown(teclaUsar)) return;
 
         HudFogao.Abrir();
@@ -45,7 +45,7 @@ public class EstacaoFogao : MonoBehaviour
         if (!jogadorProximo) return;
         if (exigirDentroDaBarca && (BarcaRio.Instancia == null || !BarcaRio.Instancia.JogadorDentro)) return;
         if (GerenciadorDialogo.Instancia != null && GerenciadorDialogo.Instancia.EmDialogo) return;
-        if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto) return;
+        if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto) return;
 
         Vector3 tela = Camera.main != null
             ? Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 1.1f)

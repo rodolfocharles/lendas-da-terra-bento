@@ -42,7 +42,7 @@ public class BarcaRio : MonoBehaviour
         // So sai/entra na passagem (trigger). Perto do Fogao, o E fica com a estacao.
         if (!jogadorProximo) return;
         if (GerenciadorDialogo.Instancia != null && GerenciadorDialogo.Instancia.EmDialogo) return;
-        if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto) return;
+        if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto) return;
         if (EstacaoTemPrioridade()) return;
         if (!Input.GetKeyDown(teclaEntrar)) return;
 
@@ -101,7 +101,7 @@ public class BarcaRio : MonoBehaviour
     void OnGUI()
     {
         if (GerenciadorDialogo.Instancia != null && GerenciadorDialogo.Instancia.EmDialogo) return;
-        if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto) return;
+        if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto) return;
 
         if (!jogadorProximo || EstacaoTemPrioridade()) return;
         string dica = JogadorDentro ? "[E] Sair da Barca" : "[E] Entrar na Barca";

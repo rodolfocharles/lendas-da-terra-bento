@@ -125,6 +125,7 @@ public static class ConfiguradorPrototipo
         if (raiz.GetComponent<SistemaBuffs>() == null) raiz.AddComponent<SistemaBuffs>();
         if (raiz.GetComponent<BentoFacao>() == null) raiz.AddComponent<BentoFacao>();
         if (raiz.GetComponent<BentoBesta>() == null) raiz.AddComponent<BentoBesta>();
+        if (raiz.GetComponent<BentoVisaoEspectral>() == null) raiz.AddComponent<BentoVisaoEspectral>();
 
         var junta = raiz.GetComponent<DistanceJoint2D>();
         junta.enabled = false;
@@ -157,6 +158,8 @@ public static class ConfiguradorPrototipo
         GarantirHudAlquimia();
         GarantirHudBuffs();
         GarantirHudMunicao();
+        GarantirHudEnergiaEspiritual();
+        GarantirCaderno();
         GarantirGerenciadorDialogo();
         GarantirCheckpointInicial();
         GarantirZonaMorte();
@@ -166,6 +169,7 @@ public static class ConfiguradorPrototipo
         GarantirColetaveisNorte();
         GarantirBarcaEEstacoes();
         GarantirCombatePrototipo();
+        GarantirObjetosEspectrais();
 
         var cena = EditorSceneManager.GetActiveScene();
         EditorSceneManager.MarkSceneDirty(cena);
@@ -227,6 +231,78 @@ public static class ConfiguradorPrototipo
         var go = new GameObject("HudMunicao");
         Undo.RegisterCreatedObjectUndo(go, "Criar HudMunicao");
         go.AddComponent<HudMunicao>();
+    }
+
+    static void GarantirHudEnergiaEspiritual()
+    {
+        if (Object.FindFirstObjectByType<HudEnergiaEspiritual>() != null) return;
+        var go = new GameObject("HudEnergiaEspiritual");
+        Undo.RegisterCreatedObjectUndo(go, "Criar HudEnergiaEspiritual");
+        go.AddComponent<HudEnergiaEspiritual>();
+    }
+
+    static void GarantirCaderno()
+    {
+        if (Object.FindFirstObjectByType<CadernoCampo>() == null)
+        {
+            var go = new GameObject("CadernoCampo");
+            Undo.RegisterCreatedObjectUndo(go, "Criar CadernoCampo");
+            go.AddComponent<CadernoCampo>();
+        }
+
+        if (Object.FindFirstObjectByType<HudCaderno>() == null)
+        {
+            var go = new GameObject("HudCaderno");
+            Undo.RegisterCreatedObjectUndo(go, "Criar HudCaderno");
+            go.AddComponent<HudCaderno>();
+        }
+    }
+
+    static void GarantirObjetosEspectrais()
+    {
+        if (GameObject.Find("PistaEspectral") == null)
+        {
+            var go = new GameObject("PistaEspectral");
+            Undo.RegisterCreatedObjectUndo(go, "Criar PistaEspectral");
+            go.transform.position = new Vector3(-4.5f, 2.2f, 0f);
+            go.transform.localScale = new Vector3(0.6f, 0.6f, 1f);
+
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = CarregarSpriteQuadrado();
+            sr.color = new Color(0.45f, 0.75f, 1f, 0.85f);
+            sr.sortingOrder = 3;
+
+            var col = go.AddComponent<BoxCollider2D>();
+            col.isTrigger = true;
+            col.size = new Vector2(1.5f, 1.5f);
+            var pista = go.AddComponent<ObjetoEspectral>();
+            pista.tipo = TipoObjetoEspectral.Pista;
+            pista.textoPista = "Marca do avo: \"O novelo de cipo acalma o Curupira.\"";
+            pista.idPaginaCaderno = CatalogoPaginasCap1.IdCurupira;
+        }
+
+        if (GameObject.Find("PlataformaEspectral") == null)
+        {
+            var go = new GameObject("PlataformaEspectral");
+            Undo.RegisterCreatedObjectUndo(go, "Criar PlataformaEspectral");
+            go.transform.position = new Vector3(18f, 2.5f, 0f);
+            go.transform.localScale = new Vector3(2.2f, 0.35f, 1f);
+
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = CarregarSpriteQuadrado();
+            sr.color = new Color(0.4f, 0.7f, 1f, 0.75f);
+            sr.sortingOrder = 1;
+
+            var col = go.AddComponent<BoxCollider2D>();
+            col.isTrigger = false;
+            col.size = new Vector2(1f, 1f);
+
+            int camadaChao = LayerMask.NameToLayer("Chao");
+            if (camadaChao >= 0) go.layer = camadaChao;
+
+            var plat = go.AddComponent<ObjetoEspectral>();
+            plat.tipo = TipoObjetoEspectral.Plataforma;
+        }
     }
 
     static void GarantirColetaveisNorte()
@@ -455,6 +531,7 @@ public static class ConfiguradorPrototipo
             new Vector3(-3.5f, 1.2f, 0f),
             new Color(1f, 0.75f, 0.2f),
             new Vector3(1.1f, 1.8f, 1f),
+            new[] { CatalogoPaginasCap1.IdTacaca },
             new[]
             {
                 new FalaDialogo
@@ -485,6 +562,7 @@ public static class ConfiguradorPrototipo
             new Vector3(2.5f, 1.2f, 0f),
             new Color(1f, 0.45f, 0.7f),
             new Vector3(1f, 1.6f, 1f),
+            new[] { CatalogoPaginasCap1.IdBoto },
             new[]
             {
                 new FalaDialogo
@@ -515,6 +593,7 @@ public static class ConfiguradorPrototipo
             new Vector3(6.5f, 1.2f, 0f),
             new Color(0.35f, 0.65f, 1f),
             new Vector3(1.1f, 1.7f, 1f),
+            new[] { CatalogoPaginasCap1.IdIara },
             new[]
             {
                 new FalaDialogo
@@ -538,9 +617,15 @@ public static class ConfiguradorPrototipo
             });
     }
 
-    static void CriarNpcEditor(string nome, Vector3 posicao, Color cor, Vector3 escala, FalaDialogo[] falas)
+    static void CriarNpcEditor(string nome, Vector3 posicao, Color cor, Vector3 escala, string[] paginasCaderno, FalaDialogo[] falas)
     {
-        if (GameObject.Find(nome) != null) return;
+        var existente = GameObject.Find(nome);
+        if (existente != null)
+        {
+            var npcExistente = existente.GetComponent<NpcDialogo>();
+            if (npcExistente != null) npcExistente.paginasAoConversar = paginasCaderno;
+            return;
+        }
 
         var go = new GameObject(nome);
         Undo.RegisterCreatedObjectUndo(go, "Criar " + nome);
@@ -558,6 +643,7 @@ public static class ConfiguradorPrototipo
 
         var npc = go.AddComponent<NpcDialogo>();
         npc.falas = falas;
+        npc.paginasAoConversar = paginasCaderno;
     }
 
     static Sprite CarregarSpriteQuadrado()
