@@ -36,7 +36,7 @@ public class HudVida : MonoBehaviour
 
         var dica = new GUIStyle(GUI.skin.label) { fontSize = 14 };
         dica.normal.textColor = new Color(0.85f, 0.85f, 0.8f);
-        GUI.Label(new Rect(16, Screen.height - 28, 420, 24),
-            "Facao: J ou clique esquerdo  |  Chicote: botao direito / E", dica);
+        GUI.Label(new Rect(16, Screen.height - 28, 520, 24),
+            "Facao: J/clique esq.  |  Besta: segurar K  |  Chicote: botao dir./E", dica);
     }
 }

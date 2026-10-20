@@ -26,6 +26,8 @@ Para colar/espelhar no Notion. Status: `Backlog` | `Em desenvolvimento` | `Concl
 | B14 | Sistema de buffs temporários de comida | Bases |
 | B13 | Bancada de Alquimia (flechas + Novelo Encantado) | Bases |
 | X01 | Facão (combo curto + cortar vegetação) | Combate |
+| X02 | Besta com mira em arco + munição | Combate |
+| X03 | Inimigo Sombra (purificação) | Combate |
 
 ## Em desenvolvimento
 
@@ -61,8 +63,6 @@ _(vazio)_
 ### Épico: Combate e exploração
 | ID | Tarefa | Depende de |
 |---|---|---|
-| X02 | Besta com mira em arco + munição | C02 |
-| X03 | Inimigo Sombra (purificação) | X02, B03 |
 | X04 | Capanga / máquina do Barão (vida) | X01 |
 | X05 | Chicote em combate (desarmar, puxar, desequilibrar) | C03, X01 |
 | X06 | Chicote em puzzle (puxar alavanca) | C03 |

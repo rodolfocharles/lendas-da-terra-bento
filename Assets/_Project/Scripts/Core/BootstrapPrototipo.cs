@@ -17,6 +17,7 @@ public static class BootstrapPrototipo
         GarantirComponente<HudFogao>("HudFogao");
         GarantirComponente<HudAlquimia>("HudAlquimia");
         GarantirComponente<HudBuffs>("HudBuffs");
+        GarantirComponente<HudMunicao>("HudMunicao");
         GarantirComponente<GerenciadorDialogo>("GerenciadorDialogo");
         GarantirCheckpoint();
         GarantirZonaMorte();
@@ -26,8 +27,9 @@ public static class BootstrapPrototipo
         GarantirColetaveisNorte();
         GarantirBarcaEEstacoes();
         GarantirCombatePrototipo();
+        GarantirMunicaoInicial();
 
-        Debug.Log("[Lendas] Bootstrap: Facao (J / clique esq.), Barca, inventario (I).");
+        Debug.Log("[Lendas] Bootstrap: Facao (J), Besta (segurar K), Barca, inventario (I).");
     }
 
     static void GarantirBentoComponentes()
@@ -42,6 +44,17 @@ public static class BootstrapPrototipo
             bento.gameObject.AddComponent<SistemaBuffs>();
         if (bento.GetComponent<BentoFacao>() == null)
             bento.gameObject.AddComponent<BentoFacao>();
+        if (bento.GetComponent<BentoBesta>() == null)
+            bento.gameObject.AddComponent<BentoBesta>();
+    }
+
+    static void GarantirMunicaoInicial()
+    {
+        CatalogoItensNorte.Garantir();
+        var inventario = InventarioBento.Instancia ?? Object.FindFirstObjectByType<InventarioBento>();
+        if (inventario == null) return;
+        if (inventario.QuantidadePorId(CatalogoItensNorte.IdFlechasPurificadoras) > 0) return;
+        inventario.Adicionar(CatalogoItensNorte.FlechasPurificadoras, 5);
     }
 
     static void GarantirCombatePrototipo()
@@ -72,6 +85,16 @@ public static class BootstrapPrototipo
             var inimigo = go.AddComponent<InimigoSimples>();
             inimigo.vidaMaxima = 3;
             inimigo.danoContato = 1;
+        }
+
+        if (GameObject.Find("SombraTreino") == null)
+        {
+            var go = CriarMarcador("SombraTreino", new Vector3(15.5f, 1.8f, 0f),
+                new Color(0.55f, 0.25f, 0.75f, 0.9f), new Vector3(1.1f, 1.4f, 1f));
+            var col = go.GetComponent<BoxCollider2D>();
+            col.isTrigger = true;
+            col.size = new Vector2(1f, 1f);
+            go.AddComponent<InimigoSombra>();
         }
     }
 

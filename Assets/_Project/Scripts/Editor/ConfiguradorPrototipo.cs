@@ -124,6 +124,7 @@ public static class ConfiguradorPrototipo
         if (raiz.GetComponent<InventarioBento>() == null) raiz.AddComponent<InventarioBento>();
         if (raiz.GetComponent<SistemaBuffs>() == null) raiz.AddComponent<SistemaBuffs>();
         if (raiz.GetComponent<BentoFacao>() == null) raiz.AddComponent<BentoFacao>();
+        if (raiz.GetComponent<BentoBesta>() == null) raiz.AddComponent<BentoBesta>();
 
         var junta = raiz.GetComponent<DistanceJoint2D>();
         junta.enabled = false;
@@ -155,6 +156,7 @@ public static class ConfiguradorPrototipo
         GarantirHudFogao();
         GarantirHudAlquimia();
         GarantirHudBuffs();
+        GarantirHudMunicao();
         GarantirGerenciadorDialogo();
         GarantirCheckpointInicial();
         GarantirZonaMorte();
@@ -217,6 +219,14 @@ public static class ConfiguradorPrototipo
         var go = new GameObject("HudBuffs");
         Undo.RegisterCreatedObjectUndo(go, "Criar HudBuffs");
         go.AddComponent<HudBuffs>();
+    }
+
+    static void GarantirHudMunicao()
+    {
+        if (Object.FindFirstObjectByType<HudMunicao>() != null) return;
+        var go = new GameObject("HudMunicao");
+        Undo.RegisterCreatedObjectUndo(go, "Criar HudMunicao");
+        go.AddComponent<HudMunicao>();
     }
 
     static void GarantirColetaveisNorte()
@@ -357,6 +367,24 @@ public static class ConfiguradorPrototipo
             var inimigo = go.AddComponent<InimigoSimples>();
             inimigo.vidaMaxima = 3;
             inimigo.danoContato = 1;
+        }
+
+        if (GameObject.Find("SombraTreino") == null)
+        {
+            var go = new GameObject("SombraTreino");
+            Undo.RegisterCreatedObjectUndo(go, "Criar SombraTreino");
+            go.transform.position = new Vector3(15.5f, 1.8f, 0f);
+            go.transform.localScale = new Vector3(1.1f, 1.4f, 1f);
+
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = CarregarSpriteQuadrado();
+            sr.color = new Color(0.55f, 0.25f, 0.75f, 0.9f);
+            sr.sortingOrder = 2;
+
+            var col = go.AddComponent<BoxCollider2D>();
+            col.isTrigger = true;
+            col.size = new Vector2(1f, 1f);
+            go.AddComponent<InimigoSombra>();
         }
     }
 

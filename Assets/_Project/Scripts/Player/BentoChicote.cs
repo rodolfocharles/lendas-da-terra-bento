@@ -24,6 +24,7 @@ public class BentoChicote : MonoBehaviour
     private DistanceJoint2D junta;
     private LineRenderer linha;
     private BentoMovimento movimento;
+    private BentoBesta besta;
     private Transform pontoAtual;
     private GameObject[] pontosGancho;
 
@@ -33,6 +34,7 @@ public class BentoChicote : MonoBehaviour
         junta = GetComponent<DistanceJoint2D>();
         linha = GetComponent<LineRenderer>();
         movimento = GetComponent<BentoMovimento>();
+        besta = GetComponent<BentoBesta>();
 
         junta.enabled = false;
         junta.autoConfigureDistance = false;
@@ -52,6 +54,9 @@ public class BentoChicote : MonoBehaviour
 
     void Update()
     {
+        if (besta == null) besta = GetComponent<BentoBesta>();
+        if (besta != null && besta.Mirando) return;
+
         if (Input.GetKeyDown(teclaChicote) || Input.GetMouseButtonDown(1))
         {
             if (Balancando) Soltar(false);

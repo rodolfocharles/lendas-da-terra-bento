@@ -25,6 +25,7 @@ public class BentoFacao : MonoBehaviour
 
     private BentoMovimento movimento;
     private BentoChicote chicote;
+    private BentoBesta besta;
     private BentoVida vida;
     private bool atacando;
     private int indiceCombo;
@@ -37,6 +38,7 @@ public class BentoFacao : MonoBehaviour
     {
         movimento = GetComponent<BentoMovimento>();
         chicote = GetComponent<BentoChicote>();
+        besta = GetComponent<BentoBesta>();
         vida = GetComponent<BentoVida>();
     }
 
@@ -60,6 +62,8 @@ public class BentoFacao : MonoBehaviour
         if (!movimento.ControleAtivo) return false;
         if (vida != null && vida.EstaMorto) return false;
         if (chicote != null && chicote.Balancando) return false;
+        if (besta == null) besta = GetComponent<BentoBesta>();
+        if (besta != null && besta.Mirando) return false;
         if (GerenciadorDialogo.Instancia != null && GerenciadorDialogo.Instancia.EmDialogo) return false;
         if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto) return false;
         return true;
