@@ -18,6 +18,14 @@ Para colar/espelhar no Notion. Status: `Backlog` | `Em desenvolvimento` | `Concl
 | C10 | Sistema de diálogo + Dona Nair (placeholder) | Narrativa |
 | C11 | NPC Lia (Namorada do Boto) — pistas sobre o Boto | Narrativa |
 | C12 | NPC Seu Zeca (pescador) — pistas sobre a Iara | Narrativa |
+| I01 | Inventário (itens, ingredientes, reagentes) | Inventário |
+| I05 | Ingredientes Norte: Jambu, Tucupi, Goma de Tapioca | Inventário |
+| B10 | Barca navegável (entrar/sair, estações) | Bases |
+| B11 | Fogão a Lenha — Tacacá (oferenda + buff Treme) | Bases |
+| B12 | Fogão — Pato no Tucupi | Bases |
+| B14 | Sistema de buffs temporários de comida | Bases |
+| B13 | Bancada de Alquimia (flechas + Novelo Encantado) | Bases |
+| X01 | Facão (combo curto + cortar vegetação) | Combate |
 
 ## Em desenvolvimento
 
@@ -46,16 +54,13 @@ _(vazio)_
 ### Épico: Inventário e economia
 | ID | Tarefa | Depende de |
 |---|---|---|
-| I01 | Inventário (itens, ingredientes, reagentes) | — |
 | I02 | Escambo com NPCs | I01, C10 |
 | I03 | Feira / mercador com moeda | I01 |
 | I04 | Fundo de pesquisa com teto por fase | I03 |
-| I05 | Ingredientes Norte: Jambu, Tucupi, Goma de Tapioca | I01 |
 
 ### Épico: Combate e exploração
 | ID | Tarefa | Depende de |
 |---|---|---|
-| X01 | Facão (combo curto + cortar vegetação) | C02 |
 | X02 | Besta com mira em arco + munição | C02 |
 | X03 | Inimigo Sombra (purificação) | X02, B03 |
 | X04 | Capanga / máquina do Barão (vida) | X01 |
@@ -66,13 +71,7 @@ _(vazio)_
 | X09 | Layout fase Cap. 1 (blocos: vila, rio, arena) | B01 |
 
 ### Épico: Bases e culinária
-| ID | Tarefa | Depende de |
-|---|---|---|
-| B10 | Barca navegável (entrar/sair, estações) | B01 |
-| B11 | Fogão a Lenha — Tacacá (oferenda + buff Treme) | B10, I05, N02 |
-| B12 | Fogão — Pato no Tucupi | B11 |
-| B13 | Bancada de Alquimia (flechas + Novelo Encantado) | B10, I01 |
-| B14 | Sistema de buffs temporários de comida | B11, B02 |
+_(estações da Barca concluídas no protótipo; Mesa de Pesquisa entra com N06)_
 
 ### Épico: Encontros Cap. 1
 | ID | Tarefa | Depende de |

@@ -23,7 +23,59 @@ public static class ConfiguradorPrototipo
         ConfigurarPrefabBento(camadaChao, camadaJogador);
         ConfigurarCena(camadaChao, camadaGancho);
 
-        Debug.Log("[Lendas] Prototipo configurado: camadas, vida, checkpoint, zona de morte, dialogo e HUD.");
+        Debug.Log("[Lendas] Prototipo configurado: inventario, Barca, Fogao, dialogo e HUD.");
+    }
+
+    [MenuItem("Lendas/Criar Itens Norte (ScriptableObjects)")]
+    static void CriarItensNorteAssets()
+    {
+        const string pasta = "Assets/_Project/Data/Itens";
+        if (!AssetDatabase.IsValidFolder("Assets/_Project"))
+            AssetDatabase.CreateFolder("Assets", "_Project");
+        if (!AssetDatabase.IsValidFolder("Assets/_Project/Data"))
+            AssetDatabase.CreateFolder("Assets/_Project", "Data");
+        if (!AssetDatabase.IsValidFolder(pasta))
+            AssetDatabase.CreateFolder("Assets/_Project/Data", "Itens");
+
+        CriarOuAtualizarItem(pasta + "/Jambu.asset", CatalogoItensNorte.IdJambu, "Jambu",
+            "Folha anestesiante do Norte. Ingrediente do Tacaca.", CategoriaItem.Ingrediente);
+        CriarOuAtualizarItem(pasta + "/Tucupi.asset", CatalogoItensNorte.IdTucupi, "Tucupi",
+            "Caldo amarelo da mandioca brava. Base do Tacaca e do Pato no Tucupi.", CategoriaItem.Ingrediente);
+        CriarOuAtualizarItem(pasta + "/GomaDeTapioca.asset", CatalogoItensNorte.IdGoma, "Goma de Tapioca",
+            "Goma que da o ponto do Tacaca.", CategoriaItem.Ingrediente);
+        CriarOuAtualizarItem(pasta + "/Tacaca.asset", CatalogoItensNorte.IdTacaca, "Tacaca",
+            "Oferenda ao Boto e a Iara. Concede o buff Treme.", CategoriaItem.Comida);
+        CriarOuAtualizarItem(pasta + "/PatoNoTucupi.asset", CatalogoItensNorte.IdPatoNoTucupi, "Pato no Tucupi",
+            "Prato tipico do Norte. Variacao do buff Treme.", CategoriaItem.Comida);
+        CriarOuAtualizarItem(pasta + "/Cipo.asset", CatalogoItensNorte.IdCipo, "Cipo",
+            "Fibra da mata. Base do Novelo Encantado.", CategoriaItem.Reagente);
+        CriarOuAtualizarItem(pasta + "/Resina.asset", CatalogoItensNorte.IdResina, "Resina",
+            "Seiva endurecida. Usada em flechas e no novelo.", CategoriaItem.Reagente);
+        CriarOuAtualizarItem(pasta + "/FlechasPurificadoras.asset", CatalogoItensNorte.IdFlechasPurificadoras, "Flechas Purificadoras",
+            "Municao da Besta Espiritual contra Sombras.", CategoriaItem.Item);
+        CriarOuAtualizarItem(pasta + "/NoveloEncantado.asset", CatalogoItensNorte.IdNoveloEncantado, "Novelo Encantado",
+            "Novelo de cipo ritual. Fraqueza do Curupira.", CategoriaItem.Reliquia);
+
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        Debug.Log("[Lendas] Itens Norte criados em " + pasta);
+    }
+
+    static void CriarOuAtualizarItem(string caminho, string id, string nome, string descricao, CategoriaItem categoria)
+    {
+        var item = AssetDatabase.LoadAssetAtPath<ItemDados>(caminho);
+        if (item == null)
+        {
+            item = ScriptableObject.CreateInstance<ItemDados>();
+            AssetDatabase.CreateAsset(item, caminho);
+        }
+
+        item.id = id;
+        item.nomeExibicao = nome;
+        item.descricao = descricao;
+        item.categoria = categoria;
+        item.empilhamentoMaximo = 99;
+        EditorUtility.SetDirty(item);
     }
 
     static int GarantirCamada(string nome)
@@ -69,6 +121,9 @@ public static class ConfiguradorPrototipo
 
         if (raiz.GetComponent<BentoChicote>() == null) raiz.AddComponent<BentoChicote>();
         if (raiz.GetComponent<BentoVida>() == null) raiz.AddComponent<BentoVida>();
+        if (raiz.GetComponent<InventarioBento>() == null) raiz.AddComponent<InventarioBento>();
+        if (raiz.GetComponent<SistemaBuffs>() == null) raiz.AddComponent<SistemaBuffs>();
+        if (raiz.GetComponent<BentoFacao>() == null) raiz.AddComponent<BentoFacao>();
 
         var junta = raiz.GetComponent<DistanceJoint2D>();
         junta.enabled = false;
@@ -96,12 +151,19 @@ public static class ConfiguradorPrototipo
         AplicarCamadaPorTag("Gancho", camadaGancho);
 
         GarantirHud();
+        GarantirHudInventario();
+        GarantirHudFogao();
+        GarantirHudAlquimia();
+        GarantirHudBuffs();
         GarantirGerenciadorDialogo();
         GarantirCheckpointInicial();
         GarantirZonaMorte();
         GarantirDonaNair();
         GarantirNamoradaDoBoto();
         GarantirPescadorDaIara();
+        GarantirColetaveisNorte();
+        GarantirBarcaEEstacoes();
+        GarantirCombatePrototipo();
 
         var cena = EditorSceneManager.GetActiveScene();
         EditorSceneManager.MarkSceneDirty(cena);
@@ -123,6 +185,200 @@ public static class ConfiguradorPrototipo
         var go = new GameObject("HudVida");
         Undo.RegisterCreatedObjectUndo(go, "Criar HudVida");
         go.AddComponent<HudVida>();
+    }
+
+    static void GarantirHudInventario()
+    {
+        if (Object.FindFirstObjectByType<HudInventario>() != null) return;
+        var go = new GameObject("HudInventario");
+        Undo.RegisterCreatedObjectUndo(go, "Criar HudInventario");
+        go.AddComponent<HudInventario>();
+    }
+
+    static void GarantirHudFogao()
+    {
+        if (Object.FindFirstObjectByType<HudFogao>() != null) return;
+        var go = new GameObject("HudFogao");
+        Undo.RegisterCreatedObjectUndo(go, "Criar HudFogao");
+        go.AddComponent<HudFogao>();
+    }
+
+    static void GarantirHudAlquimia()
+    {
+        if (Object.FindFirstObjectByType<HudAlquimia>() != null) return;
+        var go = new GameObject("HudAlquimia");
+        Undo.RegisterCreatedObjectUndo(go, "Criar HudAlquimia");
+        go.AddComponent<HudAlquimia>();
+    }
+
+    static void GarantirHudBuffs()
+    {
+        if (Object.FindFirstObjectByType<HudBuffs>() != null) return;
+        var go = new GameObject("HudBuffs");
+        Undo.RegisterCreatedObjectUndo(go, "Criar HudBuffs");
+        go.AddComponent<HudBuffs>();
+    }
+
+    static void GarantirColetaveisNorte()
+    {
+        CriarItensNorteAssets();
+        var jambu = AssetDatabase.LoadAssetAtPath<ItemDados>("Assets/_Project/Data/Itens/Jambu.asset");
+        var tucupi = AssetDatabase.LoadAssetAtPath<ItemDados>("Assets/_Project/Data/Itens/Tucupi.asset");
+        var goma = AssetDatabase.LoadAssetAtPath<ItemDados>("Assets/_Project/Data/Itens/GomaDeTapioca.asset");
+        var cipo = AssetDatabase.LoadAssetAtPath<ItemDados>("Assets/_Project/Data/Itens/Cipo.asset");
+        var resina = AssetDatabase.LoadAssetAtPath<ItemDados>("Assets/_Project/Data/Itens/Resina.asset");
+
+        if (GameObject.Find("Coletavel_Jambu") == null)
+            CriarColetavelEditor("Coletavel_Jambu", new Vector3(-1f, 1.1f, 0f), new Color(0.35f, 0.75f, 0.25f), jambu, 2);
+        if (GameObject.Find("Coletavel_Tucupi") == null)
+            CriarColetavelEditor("Coletavel_Tucupi", new Vector3(0.5f, 1.1f, 0f), new Color(0.95f, 0.8f, 0.15f), tucupi, 3);
+        if (GameObject.Find("Coletavel_Goma") == null)
+            CriarColetavelEditor("Coletavel_Goma", new Vector3(4f, 1.1f, 0f), new Color(0.95f, 0.95f, 0.9f), goma, 1);
+        if (GameObject.Find("Coletavel_Cipo") == null)
+            CriarColetavelEditor("Coletavel_Cipo", new Vector3(-2.2f, 1.1f, 0f), new Color(0.55f, 0.7f, 0.35f), cipo, 3);
+        if (GameObject.Find("Coletavel_Resina") == null)
+            CriarColetavelEditor("Coletavel_Resina", new Vector3(5.2f, 1.1f, 0f), new Color(0.7f, 0.4f, 0.15f), resina, 2);
+    }
+
+    static void GarantirBarcaEEstacoes()
+    {
+        var barca = Object.FindFirstObjectByType<BarcaRio>();
+        if (barca == null)
+        {
+            var barcaGo = new GameObject("BarcaRio");
+            Undo.RegisterCreatedObjectUndo(barcaGo, "Criar BarcaRio");
+            barcaGo.transform.position = new Vector3(-11f, 1.2f, 0f);
+            barcaGo.transform.localScale = new Vector3(3.2f, 1.4f, 1f);
+
+            var sr = barcaGo.AddComponent<SpriteRenderer>();
+            sr.sprite = CarregarSpriteQuadrado();
+            sr.color = new Color(0.45f, 0.3f, 0.18f);
+            sr.sortingOrder = 1;
+
+            var colBarca = barcaGo.AddComponent<BoxCollider2D>();
+            colBarca.isTrigger = true;
+            colBarca.size = new Vector2(1.4f, 1.6f);
+
+            var interior = new GameObject("PontoInteriorBarca");
+            Undo.RegisterCreatedObjectUndo(interior, "Criar PontoInteriorBarca");
+            interior.transform.SetParent(barcaGo.transform);
+            interior.transform.localPosition = new Vector3(0f, 0.8f, 0f);
+
+            var saida = new GameObject("PontoSaidaBarca");
+            Undo.RegisterCreatedObjectUndo(saida, "Criar PontoSaidaBarca");
+            saida.transform.SetParent(barcaGo.transform);
+            saida.transform.localPosition = new Vector3(2.2f, 0f, 0f);
+
+            barca = barcaGo.AddComponent<BarcaRio>();
+            barca.pontoInterior = interior.transform;
+            barca.pontoSaida = saida.transform;
+        }
+
+        if (Object.FindFirstObjectByType<EstacaoFogao>() == null)
+        {
+            var fogaoGo = new GameObject("FogaoALenha");
+            Undo.RegisterCreatedObjectUndo(fogaoGo, "Criar FogaoALenha");
+            fogaoGo.transform.SetParent(barca.transform);
+            fogaoGo.transform.position = new Vector3(-11.6f, 2.2f, 0f);
+            fogaoGo.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
+
+            var srFogao = fogaoGo.AddComponent<SpriteRenderer>();
+            srFogao.sprite = CarregarSpriteQuadrado();
+            srFogao.color = new Color(0.85f, 0.25f, 0.1f);
+            srFogao.sortingOrder = 2;
+
+            var colFogao = fogaoGo.AddComponent<BoxCollider2D>();
+            colFogao.isTrigger = true;
+            colFogao.size = new Vector2(1.4f, 1.4f);
+            fogaoGo.AddComponent<EstacaoFogao>();
+        }
+
+        if (Object.FindFirstObjectByType<EstacaoAlquimia>() == null)
+        {
+            var alquimiaGo = new GameObject("BancadaAlquimia");
+            Undo.RegisterCreatedObjectUndo(alquimiaGo, "Criar BancadaAlquimia");
+            alquimiaGo.transform.SetParent(barca.transform);
+            alquimiaGo.transform.position = new Vector3(-10.2f, 2.2f, 0f);
+            alquimiaGo.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
+
+            var srAlq = alquimiaGo.AddComponent<SpriteRenderer>();
+            srAlq.sprite = CarregarSpriteQuadrado();
+            srAlq.color = new Color(0.55f, 0.35f, 0.85f);
+            srAlq.sortingOrder = 2;
+
+            var colAlq = alquimiaGo.AddComponent<BoxCollider2D>();
+            colAlq.isTrigger = true;
+            colAlq.size = new Vector2(1.4f, 1.4f);
+            alquimiaGo.AddComponent<EstacaoAlquimia>();
+        }
+    }
+
+    static void GarantirCombatePrototipo()
+    {
+        if (GameObject.Find("Vegetacao_Cipo") == null)
+        {
+            var go = new GameObject("Vegetacao_Cipo");
+            Undo.RegisterCreatedObjectUndo(go, "Criar Vegetacao_Cipo");
+            go.transform.position = new Vector3(9f, 1.2f, 0f);
+            go.transform.localScale = new Vector3(1.2f, 1.6f, 1f);
+
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = CarregarSpriteQuadrado();
+            sr.color = new Color(0.2f, 0.55f, 0.2f);
+            sr.sortingOrder = 2;
+
+            var col = go.AddComponent<BoxCollider2D>();
+            col.isTrigger = false;
+            col.size = new Vector2(1f, 1f);
+            go.AddComponent<VegetacaoCortavel>();
+        }
+
+        if (GameObject.Find("CapangaTreino") == null)
+        {
+            var go = new GameObject("CapangaTreino");
+            Undo.RegisterCreatedObjectUndo(go, "Criar CapangaTreino");
+            go.transform.position = new Vector3(12f, 1.3f, 0f);
+            go.transform.localScale = new Vector3(1f, 1.6f, 1f);
+
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = CarregarSpriteQuadrado();
+            sr.color = new Color(0.55f, 0.2f, 0.2f);
+            sr.sortingOrder = 2;
+
+            var col = go.AddComponent<BoxCollider2D>();
+            col.isTrigger = false;
+            col.size = new Vector2(1f, 1f);
+
+            var rb = go.AddComponent<Rigidbody2D>();
+            rb.freezeRotation = true;
+            rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+            rb.gravityScale = 1.5f;
+
+            var inimigo = go.AddComponent<InimigoSimples>();
+            inimigo.vidaMaxima = 3;
+            inimigo.danoContato = 1;
+        }
+    }
+
+    static void CriarColetavelEditor(string nome, Vector3 posicao, Color cor, ItemDados item, int quantidade = 1)
+    {
+        var go = new GameObject(nome);
+        Undo.RegisterCreatedObjectUndo(go, "Criar " + nome);
+        go.transform.position = posicao;
+        go.transform.localScale = new Vector3(0.55f, 0.55f, 1f);
+
+        var sr = go.AddComponent<SpriteRenderer>();
+        sr.sprite = CarregarSpriteQuadrado();
+        sr.color = cor;
+        sr.sortingOrder = 2;
+
+        var col = go.AddComponent<BoxCollider2D>();
+        col.isTrigger = true;
+        col.size = new Vector2(1.2f, 1.2f);
+
+        var coletavel = go.AddComponent<ColetavelItem>();
+        coletavel.item = item;
+        coletavel.quantidade = quantidade;
     }
 
     static void GarantirGerenciadorDialogo()
