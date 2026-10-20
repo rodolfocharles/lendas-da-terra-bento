@@ -21,6 +21,7 @@ public static class BootstrapPrototipo
         GarantirComponente<HudEnergiaEspiritual>("HudEnergiaEspiritual");
         GarantirComponente<CadernoCampo>("CadernoCampo");
         GarantirComponente<HudCaderno>("HudCaderno");
+        GarantirComponente<HudPesquisa>("HudPesquisa");
         GarantirComponente<GerenciadorDialogo>("GerenciadorDialogo");
         GarantirCheckpoint();
         GarantirZonaMorte();
@@ -33,7 +34,7 @@ public static class BootstrapPrototipo
         GarantirMunicaoInicial();
         GarantirObjetosEspectrais();
 
-        Debug.Log("[Lendas] Bootstrap: Caderno (Tab/C), Visao (V), Facao (J), Besta (K).");
+        Debug.Log("[Lendas] Bootstrap: Barca (Fogao/Alquimia/Pesquisa), Caderno (Tab/C).");
     }
 
     static void GarantirBentoComponentes()
@@ -209,6 +210,16 @@ public static class BootstrapPrototipo
             var colAlq = alquimiaGo.GetComponent<BoxCollider2D>();
             colAlq.size = new Vector2(1.4f, 1.4f);
             alquimiaGo.AddComponent<EstacaoAlquimia>();
+        }
+
+        if (Object.FindFirstObjectByType<EstacaoPesquisa>() == null)
+        {
+            var pesquisaGo = CriarMarcador("MesaPesquisa", new Vector3(-10.9f, 3.05f, 0f),
+                new Color(0.9f, 0.82f, 0.55f), new Vector3(0.75f, 0.55f, 1f));
+            pesquisaGo.transform.SetParent(barca.transform, true);
+            var colPesq = pesquisaGo.GetComponent<BoxCollider2D>();
+            colPesq.size = new Vector2(1.4f, 1.4f);
+            pesquisaGo.AddComponent<EstacaoPesquisa>();
         }
     }
 

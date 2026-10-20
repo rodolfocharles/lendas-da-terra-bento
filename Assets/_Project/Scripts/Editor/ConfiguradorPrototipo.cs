@@ -256,6 +256,13 @@ public static class ConfiguradorPrototipo
             Undo.RegisterCreatedObjectUndo(go, "Criar HudCaderno");
             go.AddComponent<HudCaderno>();
         }
+
+        if (Object.FindFirstObjectByType<HudPesquisa>() == null)
+        {
+            var go = new GameObject("HudPesquisa");
+            Undo.RegisterCreatedObjectUndo(go, "Criar HudPesquisa");
+            go.AddComponent<HudPesquisa>();
+        }
     }
 
     static void GarantirObjetosEspectrais()
@@ -396,6 +403,25 @@ public static class ConfiguradorPrototipo
             colAlq.isTrigger = true;
             colAlq.size = new Vector2(1.4f, 1.4f);
             alquimiaGo.AddComponent<EstacaoAlquimia>();
+        }
+
+        if (Object.FindFirstObjectByType<EstacaoPesquisa>() == null)
+        {
+            var pesquisaGo = new GameObject("MesaPesquisa");
+            Undo.RegisterCreatedObjectUndo(pesquisaGo, "Criar MesaPesquisa");
+            pesquisaGo.transform.SetParent(barca.transform);
+            pesquisaGo.transform.position = new Vector3(-10.9f, 3.05f, 0f);
+            pesquisaGo.transform.localScale = new Vector3(0.75f, 0.55f, 1f);
+
+            var srPesq = pesquisaGo.AddComponent<SpriteRenderer>();
+            srPesq.sprite = CarregarSpriteQuadrado();
+            srPesq.color = new Color(0.9f, 0.82f, 0.55f);
+            srPesq.sortingOrder = 2;
+
+            var colPesq = pesquisaGo.AddComponent<BoxCollider2D>();
+            colPesq.isTrigger = true;
+            colPesq.size = new Vector2(1.4f, 1.4f);
+            pesquisaGo.AddComponent<EstacaoPesquisa>();
         }
     }
 

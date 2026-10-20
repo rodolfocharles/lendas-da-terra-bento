@@ -30,6 +30,7 @@ Para colar/espelhar no Notion. Status: `Backlog` | `Em desenvolvimento` | `Concl
 | X03 | Inimigo Sombra (purificação) | Combate |
 | X07 | Visão Espectral (revelar pistas/plataformas) | Combate |
 | N05 | Caderno de Campo (páginas, rascunhos, abrir no boss) | Narrativa |
+| N06 | Diário do avô na Mesa de Pesquisa | Narrativa |
 
 ## Em desenvolvimento
 
@@ -51,7 +52,6 @@ _(vazio)_
 | N02 | Expandir falas Dona Nair + retratos reais | C10 |
 | N03b | Epílogo da Lia (feliz/apaixonada após purificar Boto) | C11, H10 |
 | N04b | Epílogo do Seu Zeca após purificar Iara | C12, H11 |
-| N06 | Diário do avô na Mesa de Pesquisa | N05, B10 |
 | N07 | Sequência pós-restauração (Dona Nair, crianças, pescadores, namorada) | N02, N03b, N04b, H01 |
 
 ### Épico: Inventário e economia
@@ -71,7 +71,7 @@ _(vazio)_
 | X09 | Layout fase Cap. 1 (blocos: vila, rio, arena) | B01 |
 
 ### Épico: Bases e culinária
-_(estações da Barca concluídas no protótipo; Mesa de Pesquisa entra com N06)_
+_(Fogão, Alquimia e Mesa de Pesquisa no protótipo)_
 
 ### Épico: Encontros Cap. 1
 | ID | Tarefa | Depende de |

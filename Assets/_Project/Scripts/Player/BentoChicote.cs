@@ -56,7 +56,7 @@ public class BentoChicote : MonoBehaviour
     {
         if (besta == null) besta = GetComponent<BentoBesta>();
         if (besta != null && besta.Mirando) return;
-        if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto) return;
+        if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto || HudPesquisa.Aberto) return;
         if (movimento != null && !movimento.ControleAtivo && !Balancando) return;
 
         if (Input.GetKeyDown(teclaChicote) || Input.GetMouseButtonDown(1))

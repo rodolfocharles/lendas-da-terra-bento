@@ -182,7 +182,7 @@ Pisos falsos, pedras, dardos, luz/espelhos em ruínas (Marajoara, jesuítas, qui
 5. ~~Diálogo base + Dona Nair + Lia + Seu Zeca~~ ✅
 6. Inventário + economia (escambo, moeda, fundo com teto) — inventário ✅
 7. Combate (facão, besta, Sombra) + chicote de combate/puzzle — facão/besta/Sombra ✅
-8. ~~Caderno de Campo~~ ✅ (Mesa de Pesquisa / diário do avô pendente)
+8. ~~Caderno de Campo + Mesa de Pesquisa (diário do avô)~~ ✅
 9. ~~Visão Espectral~~ ✅
 10. Barca (Fogão, Alquimia, salvamento) + receitas Norte — Fogão/Alquimia ✅
 11. Encontros Boto + Iara

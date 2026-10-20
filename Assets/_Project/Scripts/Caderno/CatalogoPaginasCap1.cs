@@ -12,6 +12,8 @@ public static class CatalogoPaginasCap1
     public const string IdCurupira = "ritual_curupira";
     public const string IdSombras = "bestiario_sombra";
     public const string IdNovelo = "ritual_novelo";
+    public const string IdDiarioAvoAmuleto = "diario_avo_amuleto";
+    public const string IdDiarioAvoCurupira = "diario_avo_curupira";
 
     public static List<PaginaCaderno> Criar()
     {
@@ -59,7 +61,19 @@ public static class CatalogoPaginasCap1
                 "Novelo Encantado",
                 CategoriaPagina.Ritual,
                 "2× cipo + resina na Bancada de Alquimia. Item ritual do chefe. Sem ele, o Curupira nao se deixa purificar.",
-                "Bancada de Alquimia")
+                "Bancada de Alquimia"),
+            new PaginaCaderno(
+                IdDiarioAvoAmuleto,
+                "Diario do avo — o amuleto",
+                CategoriaPagina.Diario,
+                "O amuleto nao e arma: e um olho. Segure a visao ate o mundo de papel mostrar o que o Barão escondeu. As marcas azuis sao pistas que eu deixei pra voce.",
+                "Diario do avo"),
+            new PaginaCaderno(
+                IdDiarioAvoCurupira,
+                "Diario do avo — Curupira",
+                CategoriaPagina.Ritual,
+                "O Curupira nao cai por forca. Enrole o novelo de cipo encantado nos focos da corrupcao. Enquanto as Sombras vierem, a corrupcao nao desce. Purifique, nao extermine.",
+                "Diario do avo")
         };
     }
 }

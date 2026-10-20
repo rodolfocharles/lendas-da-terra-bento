@@ -76,7 +76,7 @@ public class BentoVisaoEspectral : MonoBehaviour
         if (vida != null && vida.EstaMorto) return false;
         if (besta != null && besta.Mirando) return false;
         if (GerenciadorDialogo.Instancia != null && GerenciadorDialogo.Instancia.EmDialogo) return false;
-        if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto) return false;
+        if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto || HudPesquisa.Aberto) return false;
         return true;
     }
 

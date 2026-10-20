@@ -19,7 +19,7 @@ public class NpcDialogo : MonoBehaviour
     void Update()
     {
         if (!jogadorProximo) return;
-        if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto) return;
+        if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto || HudPesquisa.Aberto) return;
         if (GerenciadorDialogo.Instancia != null && GerenciadorDialogo.Instancia.EmDialogo) return;
         if (Input.GetKeyDown(teclaInteragir))
         {
@@ -41,7 +41,7 @@ public class NpcDialogo : MonoBehaviour
     void OnGUI()
     {
         if (!jogadorProximo) return;
-        if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto) return;
+        if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto || HudPesquisa.Aberto) return;
         if (GerenciadorDialogo.Instancia != null && GerenciadorDialogo.Instancia.EmDialogo) return;
 
         Vector3 tela = Camera.main != null
