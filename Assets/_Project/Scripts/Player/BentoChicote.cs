@@ -18,6 +18,10 @@ public class BentoChicote : MonoBehaviour
     public float forcaPuloSoltar = 8f;
     public float multiplicadorImpulso = 1.2f;
 
+    [Header("Puxao (combate / puzzle)")]
+    public float duracaoLinhaPuxao = 0.18f;
+    public float cooldownPuxao = 0.35f;
+
     public bool Balancando => pontoAtual != null;
 
     private Rigidbody2D rb;
@@ -27,6 +31,9 @@ public class BentoChicote : MonoBehaviour
     private BentoBesta besta;
     private Transform pontoAtual;
     private GameObject[] pontosGancho;
+    private Transform puxaoVisual;
+    private float fimPuxaoVisual;
+    private float proximoPuxao;
 
     void Awake()
     {
@@ -89,14 +96,86 @@ public class BentoChicote : MonoBehaviour
 
     void LateUpdate()
     {
-        if (!Balancando) return;
+        if (Balancando)
+        {
+            linha.enabled = true;
+            linha.SetPosition(0, transform.position);
+            linha.SetPosition(1, pontoAtual.position);
+            return;
+        }
 
-        linha.SetPosition(0, transform.position);
-        linha.SetPosition(1, pontoAtual.position);
+        if (puxaoVisual != null && Time.time < fimPuxaoVisual)
+        {
+            linha.enabled = true;
+            linha.SetPosition(0, transform.position);
+            linha.SetPosition(1, puxaoVisual.position);
+            return;
+        }
+
+        if (!Balancando && linha.enabled && puxaoVisual == null)
+            linha.enabled = false;
+        else if (puxaoVisual != null && Time.time >= fimPuxaoVisual)
+        {
+            puxaoVisual = null;
+            if (!Balancando) linha.enabled = false;
+        }
     }
 
     void TentarAgarrar()
     {
+        if (TentarPuxarAlvo()) return;
+        TentarBalancar();
+    }
+
+    bool TentarPuxarAlvo()
+    {
+        if (Time.time < proximoPuxao) return false;
+
+        var hits = Physics2D.OverlapCircleAll(rb.position, alcance);
+        IAlvoChicote melhor = null;
+        float melhorScore = float.MaxValue;
+        Vector2 frente = movimento != null && movimento.OlhandoDireita ? Vector2.right : Vector2.left;
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            var col = hits[i];
+            if (col == null) continue;
+            if (col.transform == transform || col.transform.IsChildOf(transform)) continue;
+
+            var alvo = col.GetComponent<IAlvoChicote>() ?? col.GetComponentInParent<IAlvoChicote>();
+            if (alvo == null || !alvo.PodeSerPuxado) continue;
+
+            Vector2 delta = (Vector2)alvo.Transforme.position - rb.position;
+            float dist = delta.magnitude;
+            if (dist < 0.4f || dist > alcance) continue;
+
+            float alinhamento = Vector2.Dot(delta.normalized, frente);
+            // Prefere o que esta a frente, mas aceita um pouco atras
+            if (alinhamento < -0.15f) continue;
+
+            float score = dist - alinhamento * 1.5f;
+            if (score < melhorScore)
+            {
+                melhorScore = score;
+                melhor = alvo;
+            }
+        }
+
+        if (melhor == null) return false;
+
+        melhor.AoSerPuxado(rb.position);
+        puxaoVisual = melhor.Transforme;
+        fimPuxaoVisual = Time.time + duracaoLinhaPuxao;
+        proximoPuxao = Time.time + cooldownPuxao;
+        linha.enabled = true;
+        return true;
+    }
+
+    void TentarBalancar()
+    {
+        if (pontosGancho == null || pontosGancho.Length == 0)
+            pontosGancho = GameObject.FindGameObjectsWithTag(tagGancho);
+
         Transform melhor = null;
         float menorDistancia = alcance;
 

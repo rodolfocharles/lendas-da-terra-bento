@@ -31,6 +31,8 @@ Para colar/espelhar no Notion. Status: `Backlog` | `Em desenvolvimento` | `Concl
 | X07 | Visão Espectral (revelar pistas/plataformas) | Combate |
 | N05 | Caderno de Campo (páginas, rascunhos, abrir no boss) | Narrativa |
 | N06 | Diário do avô na Mesa de Pesquisa | Narrativa |
+| X05 | Chicote em combate (desarmar, puxar, desequilibrar) | Combate |
+| X06 | Chicote em puzzle (puxar alavanca) | Combate |
 
 ## Em desenvolvimento
 
@@ -65,8 +67,6 @@ _(vazio)_
 | ID | Tarefa | Depende de |
 |---|---|---|
 | X04 | Capanga / máquina do Barão (vida) | X01 |
-| X05 | Chicote em combate (desarmar, puxar, desequilibrar) | C03, X01 |
-| X06 | Chicote em puzzle (puxar alavanca) | C03 |
 | X08 | 1–2 puzzles estilo Indy (placeholder) | X06, X07 |
 | X09 | Layout fase Cap. 1 (blocos: vila, rio, arena) | B01 |
 

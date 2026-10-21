@@ -488,6 +488,48 @@ public static class ConfiguradorPrototipo
             col.size = new Vector2(1f, 1f);
             go.AddComponent<InimigoSombra>();
         }
+
+        if (GameObject.Find("BarreiraAlavanca") == null)
+        {
+            var barreira = new GameObject("BarreiraAlavanca");
+            Undo.RegisterCreatedObjectUndo(barreira, "Criar BarreiraAlavanca");
+            barreira.transform.position = new Vector3(21.5f, 1.6f, 0f);
+            barreira.transform.localScale = new Vector3(0.5f, 2.4f, 1f);
+
+            var srB = barreira.AddComponent<SpriteRenderer>();
+            srB.sprite = CarregarSpriteQuadrado();
+            srB.color = new Color(0.4f, 0.32f, 0.22f);
+            srB.sortingOrder = 2;
+
+            var colB = barreira.AddComponent<BoxCollider2D>();
+            colB.isTrigger = false;
+            colB.size = new Vector2(1f, 1f);
+            int camadaChao = LayerMask.NameToLayer("Chao");
+            if (camadaChao >= 0) barreira.layer = camadaChao;
+            barreira.AddComponent<BarreiraPuzzle>();
+        }
+
+        if (GameObject.Find("AlavancaChicote") == null)
+        {
+            var go = new GameObject("AlavancaChicote");
+            Undo.RegisterCreatedObjectUndo(go, "Criar AlavancaChicote");
+            go.transform.position = new Vector3(18.8f, 1.4f, 0f);
+            go.transform.localScale = new Vector3(0.4f, 1.2f, 1f);
+
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = CarregarSpriteQuadrado();
+            sr.color = new Color(0.75f, 0.55f, 0.2f);
+            sr.sortingOrder = 2;
+
+            var col = go.AddComponent<BoxCollider2D>();
+            col.isTrigger = true;
+            col.size = new Vector2(1.4f, 1.4f);
+
+            var alavanca = go.AddComponent<AlavancaChicote>();
+            var barreira = GameObject.Find("BarreiraAlavanca");
+            if (barreira != null)
+                alavanca.barreiras = new[] { barreira };
+        }
     }
 
     static void CriarColetavelEditor(string nome, Vector3 posicao, Color cor, ItemDados item, int quantidade = 1)

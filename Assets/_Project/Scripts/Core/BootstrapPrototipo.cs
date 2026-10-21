@@ -140,6 +140,43 @@ public static class BootstrapPrototipo
             col.size = new Vector2(1f, 1f);
             go.AddComponent<InimigoSombra>();
         }
+
+        GarantirPuzzleAlavanca();
+    }
+
+    static void GarantirPuzzleAlavanca()
+    {
+        if (GameObject.Find("BarreiraAlavanca") == null)
+        {
+            var barreira = CriarMarcador("BarreiraAlavanca", new Vector3(21.5f, 1.6f, 0f),
+                new Color(0.4f, 0.32f, 0.22f), new Vector3(0.5f, 2.4f, 1f));
+            var colB = barreira.GetComponent<BoxCollider2D>();
+            colB.isTrigger = false;
+            colB.size = new Vector2(1f, 1f);
+            int camadaChao = LayerMask.NameToLayer("Chao");
+            if (camadaChao >= 0) barreira.layer = camadaChao;
+            barreira.AddComponent<BarreiraPuzzle>();
+        }
+
+        if (GameObject.Find("AlavancaChicote") == null)
+        {
+            var go = CriarMarcador("AlavancaChicote", new Vector3(18.8f, 1.4f, 0f),
+                new Color(0.75f, 0.55f, 0.2f), new Vector3(0.4f, 1.2f, 1f));
+            var col = go.GetComponent<BoxCollider2D>();
+            col.isTrigger = true;
+            col.size = new Vector2(1.4f, 1.4f);
+            var alavanca = go.AddComponent<AlavancaChicote>();
+            var barreira = GameObject.Find("BarreiraAlavanca");
+            if (barreira != null)
+                alavanca.barreiras = new[] { barreira };
+        }
+        else
+        {
+            var alavanca = GameObject.Find("AlavancaChicote").GetComponent<AlavancaChicote>();
+            var barreira = GameObject.Find("BarreiraAlavanca");
+            if (alavanca != null && barreira != null && (alavanca.barreiras == null || alavanca.barreiras.Length == 0))
+                alavanca.barreiras = new[] { barreira };
+        }
     }
 
     static void GarantirColetaveisNorte()
