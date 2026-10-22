@@ -4,7 +4,7 @@ using UnityEngine;
 /// Inimigo com vida (placeholder de Capanga). Contato causa dano ao Bento.
 /// </summary>
 [RequireComponent(typeof(Collider2D))]
-public class InimigoSimples : MonoBehaviour, IRecebeDano
+public class InimigoSimples : MonoBehaviour, IRecebeDano, IAlvoChicote
 {
     [Header("Vida")]
     public int vidaMaxima = 3;
@@ -13,9 +13,16 @@ public class InimigoSimples : MonoBehaviour, IRecebeDano
 
     [Header("Knockback")]
     public float forcaEmpurrao = 4f;
+    public float forcaPuxaoChicote = 9f;
+    public float tempoAtordoado = 1.2f;
+
+    public Transform Transforme => transform;
+    public bool PodeSerPuxado => vidaAtual > 0 && Time.time >= proximoPuxao;
 
     private int vidaAtual;
     private float proximoDanoContato;
+    private float atordoadoAte;
+    private float proximoPuxao;
     private SpriteRenderer sprite;
     private Color corOriginal;
 
@@ -30,6 +37,9 @@ public class InimigoSimples : MonoBehaviour, IRecebeDano
     {
         if (vidaAtual <= 0 || quantidade <= 0) return;
         if (tipo == TipoDano.CorteVegetacao) return;
+
+        if (Time.time < atordoadoAte)
+            quantidade += 1;
 
         vidaAtual -= quantidade;
         Debug.Log($"[Lendas] {name} recebeu {quantidade} de dano ({vidaAtual}/{vidaMaxima})");
@@ -62,8 +72,26 @@ public class InimigoSimples : MonoBehaviour, IRecebeDano
         TentarDanoContato(other);
     }
 
+    public void AoSerPuxado(Vector2 origemBento)
+    {
+        if (!PodeSerPuxado) return;
+        proximoPuxao = Time.time + 0.6f;
+        atordoadoAte = Time.time + tempoAtordoado;
+
+        var rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            Vector2 dir = (origemBento - (Vector2)transform.position).normalized;
+            rb.linearVelocity = dir * forcaPuxaoChicote + Vector2.up * 2.5f;
+        }
+
+        Debug.Log($"[Lendas] {name} puxado pelo chicote (atordoado).");
+        if (sprite != null) StartCoroutine(Piscar());
+    }
+
     void TentarDanoContato(Collider2D other)
     {
+        if (Time.time < atordoadoAte) return;
         if (Time.time < proximoDanoContato) return;
         var vida = other.GetComponent<BentoVida>() ?? other.GetComponentInParent<BentoVida>();
         if (vida == null) return;

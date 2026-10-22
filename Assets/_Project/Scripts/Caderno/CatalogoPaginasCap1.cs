@@ -8,10 +8,16 @@ public static class CatalogoPaginasCap1
     public const string IdExpedicao = "expedicao_norte";
     public const string IdTacaca = "receita_tacaca";
     public const string IdBoto = "pista_boto";
+    public const string IdBotoAcalmado = "boto_acalmado";
+    public const string IdEssenciaAguas = "essencia_aguas";
     public const string IdIara = "pista_iara";
+    public const string IdIaraPurificada = "iara_purificada";
     public const string IdCurupira = "ritual_curupira";
     public const string IdSombras = "bestiario_sombra";
     public const string IdNovelo = "ritual_novelo";
+    public const string IdDiarioAvoAmuleto = "diario_avo_amuleto";
+    public const string IdDiarioAvoCurupira = "diario_avo_curupira";
+    public const string IdRuinaMarajoara = "pista_ruina";
 
     public static List<PaginaCaderno> Criar()
     {
@@ -34,14 +40,32 @@ public static class CatalogoPaginasCap1
                 IdBoto,
                 "Boto-Cor-de-Rosa",
                 CategoriaPagina.Pista,
-                "Lia espera o 'rapaz bonito' das noites. Os mais velhos dizem que e o Boto. O rio doente o corrompeu. Tacaca como oferenda pode acalma-lo.",
-                "Lia"),
+                "Entidade espiritual: a poluicao nao o contamina, mas a dor dos animais o deixa bravo e incontrolavel. Seu Zeca empresta a canoa. Tres flechas purificadoras acalmam; a oferenda pede Tacaca e o retrato de Lia.",
+                "Lia e Seu Zeca"),
+            new PaginaCaderno(
+                IdBotoAcalmado,
+                "Boto acalmado",
+                CategoriaPagina.Pista,
+                "O Tacaca e a foto de Lia devolveram o rosa ao Boto. O rio ainda esta doente, mas ele abriu o igarape e enviou a Essencia das Aguas ao amuleto.",
+                "Bento"),
+            new PaginaCaderno(
+                IdEssenciaAguas,
+                "Essencia das Aguas",
+                CategoriaPagina.Ritual,
+                "Energia espiritual do Boto no amuleto. Nao ocupa a bolsa. Vai ser precisa na conclusao da fase, junto da Gota de Quartzo da Iara.",
+                "Amuleto"),
             new PaginaCaderno(
                 IdIara,
                 "Iara",
                 CategoriaPagina.Pista,
                 "Protegia pescadores; agora, corrompida, arrasta gente ao fundo. Cuidado com o canto. A Gota de Quartzo dela abre o caminho ate o Curupira.",
                 "Seu Zeca"),
+            new PaginaCaderno(
+                IdIaraPurificada,
+                "Gota de Quartzo",
+                CategoriaPagina.Ritual,
+                "O Treme segurou o canto. O Tacaca de oferenda acalmou a Iara. A Gota de Quartzo abre o caminho ate o Curupira.",
+                "Bento"),
             new PaginaCaderno(
                 IdSombras,
                 "Sombras da corrupcao",
@@ -59,7 +83,25 @@ public static class CatalogoPaginasCap1
                 "Novelo Encantado",
                 CategoriaPagina.Ritual,
                 "2× cipo + resina na Bancada de Alquimia. Item ritual do chefe. Sem ele, o Curupira nao se deixa purificar.",
-                "Bancada de Alquimia")
+                "Bancada de Alquimia"),
+            new PaginaCaderno(
+                IdDiarioAvoAmuleto,
+                "Diario do avo — o amuleto",
+                CategoriaPagina.Diario,
+                "O amuleto nao e arma: e um olho. Segure a visao ate o mundo de papel mostrar o que o Barão escondeu. As marcas azuis sao pistas que eu deixei pra voce.",
+                "Diario do avo"),
+            new PaginaCaderno(
+                IdDiarioAvoCurupira,
+                "Diario do avo — Curupira",
+                CategoriaPagina.Ritual,
+                "O Curupira nao cai por forca. Enrole o novelo de cipo encantado nos focos da corrupcao. Enquanto as Sombras vierem, a corrupcao nao desce. Purifique, nao extermine.",
+                "Diario do avo"),
+            new PaginaCaderno(
+                IdRuinaMarajoara,
+                "Ruina — pisos e alavanca",
+                CategoriaPagina.Pista,
+                "Pisos identicos: so o amuleto mostra o verdadeiro (verde) e o falso (vermelho). A alavanca do chicote abre a grade. O avo deixou a marca Marajoara no fim.",
+                "Reliquia da ruina")
         };
     }
 }

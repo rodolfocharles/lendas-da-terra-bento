@@ -30,7 +30,7 @@ public class HudCaderno : MonoBehaviour
     void Update()
     {
         if (GerenciadorDialogo.Instancia != null && GerenciadorDialogo.Instancia.EmDialogo) return;
-        if (HudFogao.Aberto || HudAlquimia.Aberto) return;
+        if (HudFogao.Aberto || HudAlquimia.Aberto || HudPesquisa.Aberto) return;
         if (HudInventario.Aberto) return;
 
         if (Input.GetKeyDown(teclaAbrir) || Input.GetKeyDown(teclaAlternativa))

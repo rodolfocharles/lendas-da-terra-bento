@@ -42,7 +42,7 @@ public class BarcaRio : MonoBehaviour
         // So sai/entra na passagem (trigger). Perto do Fogao, o E fica com a estacao.
         if (!jogadorProximo) return;
         if (GerenciadorDialogo.Instancia != null && GerenciadorDialogo.Instancia.EmDialogo) return;
-        if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto) return;
+        if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto || HudPesquisa.Aberto) return;
         if (EstacaoTemPrioridade()) return;
         if (!Input.GetKeyDown(teclaEntrar)) return;
 
@@ -55,7 +55,9 @@ public class BarcaRio : MonoBehaviour
         var fogao = Object.FindFirstObjectByType<EstacaoFogao>();
         if (fogao != null && fogao.JogadorProximo) return true;
         var alquimia = Object.FindFirstObjectByType<EstacaoAlquimia>();
-        return alquimia != null && alquimia.JogadorProximo;
+        if (alquimia != null && alquimia.JogadorProximo) return true;
+        var pesquisa = Object.FindFirstObjectByType<EstacaoPesquisa>();
+        return pesquisa != null && pesquisa.JogadorProximo;
     }
 
     void Entrar()
@@ -101,7 +103,7 @@ public class BarcaRio : MonoBehaviour
     void OnGUI()
     {
         if (GerenciadorDialogo.Instancia != null && GerenciadorDialogo.Instancia.EmDialogo) return;
-        if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto) return;
+        if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto || HudPesquisa.Aberto) return;
 
         if (!jogadorProximo || EstacaoTemPrioridade()) return;
         string dica = JogadorDentro ? "[E] Sair da Barca" : "[E] Entrar na Barca";

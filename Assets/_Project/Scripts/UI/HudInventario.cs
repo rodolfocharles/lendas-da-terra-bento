@@ -27,7 +27,7 @@ public class HudInventario : MonoBehaviour
     void Update()
     {
         if (GerenciadorDialogo.Instancia != null && GerenciadorDialogo.Instancia.EmDialogo) return;
-        if (HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto) return;
+        if (HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto || HudPesquisa.Aberto) return;
         if (!Input.GetKeyDown(teclaAbrir)) return;
 
         Aberto = !Aberto;

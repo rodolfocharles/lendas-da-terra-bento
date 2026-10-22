@@ -45,6 +45,13 @@ public class BentoMovimento : MonoBehaviour
     void Update()
     {
         movimentoHorizontal = Input.GetAxisRaw("Horizontal");
+        AtualizarDirecao();
+
+        if (CanoaRio.JogadorDentro)
+        {
+            podeCortarPulo = false;
+            return;
+        }
 
         bool apertouPulo = Input.GetButtonDown("Jump") && Time.frameCount != quadroPuloConsumido;
         // Logo apos o pulo o checador ainda toca o chao; so conta como apoiado se nao estiver subindo
@@ -76,7 +83,6 @@ public class BentoMovimento : MonoBehaviour
             podeCortarPulo = false;
         }
 
-        AtualizarDirecao();
     }
 
     void FixedUpdate()
@@ -86,6 +92,7 @@ public class BentoMovimento : MonoBehaviour
             noChao = Physics2D.OverlapCircle(checadorChao.position, raioChecagem, camadaChao);
         }
 
+        if (CanoaRio.JogadorDentro) return;
         if (!ControleAtivo) return;
 
         float alvo = movimentoHorizontal * velocidade;

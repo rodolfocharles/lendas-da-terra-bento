@@ -5,7 +5,7 @@ using UnityEngine;
 /// Flechas espirituais sao eficazes; facao quase nao afeta.
 /// </summary>
 [RequireComponent(typeof(Collider2D))]
-public class InimigoSombra : MonoBehaviour, IRecebeDano
+public class InimigoSombra : MonoBehaviour, IRecebeDano, IAlvoChicote
 {
     [Header("Corrupcao")]
     [Range(0f, 100f)]
@@ -25,7 +25,12 @@ public class InimigoSombra : MonoBehaviour, IRecebeDano
     public bool Purificada { get; private set; }
     public float ProgressoCorrupcao => corrupcaoMaxima <= 0f ? 0f : CorrupcaoAtual / corrupcaoMaxima;
 
+    public Transform Transforme => transform;
+    public bool PodeSerPuxado => !Purificada && !sumindo && Time.time >= proximoPuxao;
+
     private float proximoDanoContato;
+    private float proximoPuxao;
+    private float atordoadoAte;
     private SpriteRenderer sprite;
     private Color corCorrupta;
     private Vector3 posicaoBase;
@@ -36,15 +41,36 @@ public class InimigoSombra : MonoBehaviour, IRecebeDano
         CorrupcaoAtual = corrupcaoMaxima;
         sprite = GetComponent<SpriteRenderer>();
         corCorrupta = sprite != null ? sprite.color : new Color(0.55f, 0.25f, 0.75f);
+    }
+
+    void Start()
+    {
         posicaoBase = transform.position;
     }
 
     void Update()
     {
         if (Purificada || sumindo) return;
+        if (Time.time < atordoadoAte) return;
 
         float y = Mathf.Sin(Time.time * velocidadeFlutuar) * amplitudeFlutuar;
         transform.position = posicaoBase + Vector3.up * y;
+    }
+
+    public void AoSerPuxado(Vector2 origemBento)
+    {
+        if (!PodeSerPuxado) return;
+        proximoPuxao = Time.time + 0.7f;
+        atordoadoAte = Time.time + 0.8f;
+
+        Vector2 dir = (origemBento - (Vector2)transform.position).normalized;
+        posicaoBase += (Vector3)(dir * 0.8f);
+        transform.position = posicaoBase;
+
+        CorrupcaoAtual = Mathf.Max(0f, CorrupcaoAtual - 12f);
+        AtualizarCor();
+        Debug.Log($"[Lendas] Sombra desequilibrada pelo chicote ({CorrupcaoAtual:0}%).");
+        if (CorrupcaoAtual <= 0f) IniciarPurificacao();
     }
 
     public void ReceberDano(int quantidade, Vector2 origem, TipoDano tipo)
@@ -128,6 +154,7 @@ public class InimigoSombra : MonoBehaviour, IRecebeDano
     void TentarDanoContato(Collider2D other)
     {
         if (Purificada || sumindo) return;
+        if (Time.time < atordoadoAte) return;
         if (Time.time < proximoDanoContato) return;
         var vida = other.GetComponent<BentoVida>() ?? other.GetComponentInParent<BentoVida>();
         if (vida == null) return;

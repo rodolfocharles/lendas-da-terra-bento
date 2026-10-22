@@ -25,7 +25,7 @@ public class ColetavelItem : MonoBehaviour
     {
         if (!exigirTecla || !jogadorProximo) return;
         if (GerenciadorDialogo.Instancia != null && GerenciadorDialogo.Instancia.EmDialogo) return;
-        if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto) return;
+        if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto || HudPesquisa.Aberto) return;
         if (Input.GetKeyDown(teclaColetar)) TentarColetar();
     }
 
@@ -63,7 +63,7 @@ public class ColetavelItem : MonoBehaviour
     {
         if (!exigirTecla || !jogadorProximo) return;
         if (GerenciadorDialogo.Instancia != null && GerenciadorDialogo.Instancia.EmDialogo) return;
-        if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto) return;
+        if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto || HudPesquisa.Aberto) return;
 
         Vector3 tela = Camera.main != null
             ? Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 0.8f)

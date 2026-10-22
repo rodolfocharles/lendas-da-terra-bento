@@ -23,7 +23,9 @@ public class HudEnergiaEspiritual : MonoBehaviour
         float largura = 160f;
         float altura = 14f;
 
-        GUI.Box(new Rect(x, y, largura, altura + 18f), "");
+        bool essencia = AmuletoAncestral.Instancia != null && AmuletoAncestral.Instancia.TemEssenciaDasAguas;
+        float extra = essencia ? 16f : 0f;
+        GUI.Box(new Rect(x, y, largura, altura + 18f + extra), "");
         var titulo = new GUIStyle(GUI.skin.label) { fontSize = 13, fontStyle = FontStyle.Bold };
         titulo.normal.textColor = BentoVisaoEspectral.Ativa
             ? new Color(0.6f, 0.95f, 1f)
@@ -35,6 +37,13 @@ public class HudEnergiaEspiritual : MonoBehaviour
         GUI.color = new Color(0.25f, 0.55f, 0.85f, 0.95f);
         GUI.DrawTexture(new Rect(x + 4f, y + 18f, (largura - 8f) * fill, 10f), Texture2D.whiteTexture);
         GUI.color = Color.white;
+
+        if (essencia)
+        {
+            var frag = new GUIStyle(GUI.skin.label) { fontSize = 11 };
+            frag.normal.textColor = new Color(0.95f, 0.7f, 0.85f);
+            GUI.Label(new Rect(x + 4f, y + 28f, largura - 8f, 16f), "Essencia das Aguas", frag);
+        }
 
         // Leve tom azulado na tela enquanto a visao esta ativa
         if (BentoVisaoEspectral.Ativa)
