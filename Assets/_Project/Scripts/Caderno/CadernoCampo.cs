@@ -25,6 +25,18 @@ public class CadernoCampo : MonoBehaviour
         Instancia = this;
         if (paginas.Count == 0)
             paginas = CatalogoPaginasCap1.Criar();
+        else
+            MesclarCatalogo();
+    }
+
+    void MesclarCatalogo()
+    {
+        var catalogo = CatalogoPaginasCap1.Criar();
+        for (int i = 0; i < catalogo.Count; i++)
+        {
+            if (Buscar(catalogo[i].id) == null)
+                paginas.Add(catalogo[i]);
+        }
     }
 
     void OnDestroy()

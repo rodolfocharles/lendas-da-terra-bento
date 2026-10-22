@@ -5,8 +5,12 @@ public class NpcDialogo : MonoBehaviour
 {
     public KeyCode teclaInteragir = KeyCode.E;
     public FalaDialogo[] falas;
+    [Tooltip("Falas depois que o item de conversa ja foi entregue.")]
+    public FalaDialogo[] falasAposEntrega;
     [Tooltip("Paginas do Caderno desbloqueadas ao conversar.")]
     public string[] paginasAoConversar;
+    [Tooltip("Item entregue uma vez ao conversar (chave, foto).")]
+    public string idItemAoConversar;
 
     private bool jogadorProximo;
 
@@ -24,7 +28,8 @@ public class NpcDialogo : MonoBehaviour
         if (Input.GetKeyDown(teclaInteragir))
         {
             AnotarCaderno();
-            GerenciadorDialogo.Instancia?.Iniciar(falas);
+            bool jaTinhaItem = EntregarItemSeHouver();
+            GerenciadorDialogo.Instancia?.Iniciar(EscolherFalas(jaTinhaItem));
         }
     }
 
@@ -58,5 +63,27 @@ public class NpcDialogo : MonoBehaviour
         if (paginasAoConversar == null || CadernoCampo.Instancia == null) return;
         for (int i = 0; i < paginasAoConversar.Length; i++)
             CadernoCampo.Instancia.Desbloquear(paginasAoConversar[i]);
+    }
+
+    bool EntregarItemSeHouver()
+    {
+        if (string.IsNullOrWhiteSpace(idItemAoConversar)) return false;
+
+        CatalogoItensNorte.Garantir();
+        var inventario = InventarioBento.Instancia ?? FindFirstObjectByType<InventarioBento>();
+        if (inventario == null) return false;
+        if (inventario.TemPorId(idItemAoConversar)) return true;
+
+        var item = CatalogoItensNorte.PorId(idItemAoConversar);
+        if (item == null) return false;
+        inventario.Adicionar(item, 1);
+        return false;
+    }
+
+    FalaDialogo[] EscolherFalas(bool jaTinhaItem)
+    {
+        if (jaTinhaItem && falasAposEntrega != null && falasAposEntrega.Length > 0)
+            return falasAposEntrega;
+        return falas;
     }
 }

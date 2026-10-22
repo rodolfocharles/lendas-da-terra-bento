@@ -105,7 +105,7 @@ Estações: **Fogão a Lenha**, **Bancada de Alquimia**, **Mesa de Pesquisa**. B
 |---|---|---|
 | *(base)* | Visão Espectral | Pegadas, símbolos, auras, pontos fracos de puzzle |
 | **Curupira** | Passo Invertido | Ver caminhos falsos; vegetação cresce como plataformas |
-| **Boto** | *(a definir — nado/mergulho)* | Travessia aquática |
+| **Boto** | **Essência das Águas** | Energia espiritual no amuleto; necessária na conclusão da fase (com a Gota de Quartzo da Iara) |
 | **Iara** | Gota de Quartzo Purificador | Mecanismos de água; purificar fluídos; ecos sob a água |
 | **Boitatá** | Gema da Chama Fria | Luz no escuro; manipular fogo sem queimar |
 | **Saci** | Fragmento do Redemoinho | Vento: mover objetos, cataventos, pressão |
@@ -150,7 +150,7 @@ Pisos falsos, pedras, dardos, luz/espelhos em ruínas (Marajoara, jesuítas, qui
 1. **Chegada de Barca.** Vila acinzentada: fumaça e incêndio ao fundo, água poluída, pesca e banho proibidos (Barão + corrupção). Dona Nair recebe Bento: avô, amuleto, receita do Tacacá (oferenda a Boto/Iara + buff).
 2. **Exploração** com chicote, facão e Visão Espectral; Sombras; momentos de afeto.
 3. **Pistas.** Namorada do Boto + pescador da Iara alimentam o Caderno; Mesa de Pesquisa + diário do avô revelam o **Novelo de Cipó** para o Curupira.
-4. **Rio: Boto + Iara.** Boto corrompido bloqueia o rio (puzzle); Iara, guardiã secundária, entrega a **Gota de Quartzo** (necessária para a arena). Tacacá como oferenda.
+4. **Rio: Boto + Iara.** Seu Zeca empresta a **canoa** (chave no cais). O Boto é entidade espiritual: a poluição não o contamina, mas a dor dos animais o deixa incontrolável e ele tenta afundar o caíco. **Três flechas purificadoras** acalmam; a oferenda completa é **Tacacá + foto da Lia** (sem a foto, o Tacacá não é consumido e o caminho não abre). O Boto envia a **Essência das Águas** ao amuleto e libera a passagem. Iara, guardiã secundária, entrega a **Gota de Quartzo** (necessária para a arena). Tacacá também é oferenda à Iara.
 5. **Feira e escambo.** Cipó, resina, jambu, tucupi, goma; fundo de pesquisa com teto; moeda na feira.
 6. **Preparo na Barca.** Novelo Encantado, flechas, Tacacá/Pato no Tucupi.
 7. **Resgate da fauna** nas armadilhas do Barão.
@@ -169,7 +169,7 @@ Pisos falsos, pedras, dardos, luz/espelhos em ruínas (Marajoara, jesuítas, qui
 ### Nomes ainda abertos
 - Nome do **amuleto** e do **avô**.
 - Se o Barão tem cena direta no Cap. 1 ou só a Fortaleza ao fundo.
-- Fragmento exato do **Boto**.
+- Como a **Essência das Águas** e a **Gota de Quartzo** se combinam no ritual final da fase.
 
 ---
 
@@ -185,7 +185,7 @@ Pisos falsos, pedras, dardos, luz/espelhos em ruínas (Marajoara, jesuítas, qui
 8. ~~Caderno de Campo + Mesa de Pesquisa (diário do avô)~~ ✅
 9. ~~Visão Espectral~~ ✅
 10. Barca (Fogão, Alquimia, salvamento) + receitas Norte — Fogão/Alquimia ✅
-11. Encontros Boto + Iara
+11. ~~Encontros Boto + Iara~~ ✅ (Boto: canoa, 3 flechas, Tacacá + foto da Lia, Essência das Águas)
 12. Resgate da fauna
 13. Chefe Curupira + restauração + epílogo
 14. Mapa Geral (mínimo: Norte liberado)

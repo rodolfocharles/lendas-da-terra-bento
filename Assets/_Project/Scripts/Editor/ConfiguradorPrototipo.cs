@@ -23,7 +23,7 @@ public static class ConfiguradorPrototipo
         ConfigurarPrefabBento(camadaChao, camadaJogador);
         ConfigurarCena(camadaChao, camadaGancho);
 
-        Debug.Log("[Lendas] Prototipo configurado: inventario, Barca, Fogao, dialogo e HUD.");
+        Debug.Log("[Lendas] Prototipo configurado: layout Barca / Vila / Mata / Ruinas.");
     }
 
     [MenuItem("Lendas/Criar Itens Norte (ScriptableObjects)")]
@@ -55,13 +55,21 @@ public static class ConfiguradorPrototipo
             "Municao da Besta Espiritual contra Sombras.", CategoriaItem.Item);
         CriarOuAtualizarItem(pasta + "/NoveloEncantado.asset", CatalogoItensNorte.IdNoveloEncantado, "Novelo Encantado",
             "Novelo de cipo ritual. Fraqueza do Curupira.", CategoriaItem.Reliquia);
+        CriarOuAtualizarItem(pasta + "/MarcaMarajoara.asset", CatalogoItensNorte.IdMarcaMarajoara, "Marca Marajoara",
+            "Placa de ceramica da ruina. Pisos falsos e alavancas: o avo ja passou por aqui.", CategoriaItem.Reliquia);
+        CriarOuAtualizarItem(pasta + "/GotaDeQuartzo.asset", CatalogoItensNorte.IdGotaDeQuartzo, "Gota de Quartzo",
+            "Lagrima purificada da Iara. Abre o caminho ate a arena do Curupira.", CategoriaItem.Reliquia);
+        CriarOuAtualizarItem(pasta + "/ChaveDaCanoa.asset", CatalogoItensNorte.IdChaveDaCanoa, "Chave da Canoa",
+            "Chave que Seu Zeca deixou para o caico no cais.", CategoriaItem.Item, 1);
+        CriarOuAtualizarItem(pasta + "/FotoDaLia.asset", CatalogoItensNorte.IdFotoDaLia, "Foto da Lia",
+            "Retrato que Lia mandou ao Boto: para ele lembrar das noites no igarape.", CategoriaItem.Reliquia, 1);
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
         Debug.Log("[Lendas] Itens Norte criados em " + pasta);
     }
 
-    static void CriarOuAtualizarItem(string caminho, string id, string nome, string descricao, CategoriaItem categoria)
+    static void CriarOuAtualizarItem(string caminho, string id, string nome, string descricao, CategoriaItem categoria, int empilhamentoMaximo = 99)
     {
         var item = AssetDatabase.LoadAssetAtPath<ItemDados>(caminho);
         if (item == null)
@@ -74,7 +82,7 @@ public static class ConfiguradorPrototipo
         item.nomeExibicao = nome;
         item.descricao = descricao;
         item.categoria = categoria;
-        item.empilhamentoMaximo = 99;
+        item.empilhamentoMaximo = Mathf.Max(1, empilhamentoMaximo);
         EditorUtility.SetDirty(item);
     }
 
@@ -126,6 +134,7 @@ public static class ConfiguradorPrototipo
         if (raiz.GetComponent<BentoFacao>() == null) raiz.AddComponent<BentoFacao>();
         if (raiz.GetComponent<BentoBesta>() == null) raiz.AddComponent<BentoBesta>();
         if (raiz.GetComponent<BentoVisaoEspectral>() == null) raiz.AddComponent<BentoVisaoEspectral>();
+        if (raiz.GetComponent<AmuletoAncestral>() == null) raiz.AddComponent<AmuletoAncestral>();
 
         var junta = raiz.GetComponent<DistanceJoint2D>();
         junta.enabled = false;
@@ -170,6 +179,9 @@ public static class ConfiguradorPrototipo
         GarantirBarcaEEstacoes();
         GarantirCombatePrototipo();
         GarantirObjetosEspectrais();
+        GarantirPuzzlesIndy();
+        GarantirBlocosCap1();
+        LayoutPrototipo.Aplicar();
 
         var cena = EditorSceneManager.GetActiveScene();
         EditorSceneManager.MarkSceneDirty(cena);
@@ -271,7 +283,7 @@ public static class ConfiguradorPrototipo
         {
             var go = new GameObject("PistaEspectral");
             Undo.RegisterCreatedObjectUndo(go, "Criar PistaEspectral");
-            go.transform.position = new Vector3(-4.5f, 2.2f, 0f);
+            go.transform.position = LayoutPrototipo.PistaEspectral;
             go.transform.localScale = new Vector3(0.6f, 0.6f, 1f);
 
             var sr = go.AddComponent<SpriteRenderer>();
@@ -292,7 +304,7 @@ public static class ConfiguradorPrototipo
         {
             var go = new GameObject("PlataformaEspectral");
             Undo.RegisterCreatedObjectUndo(go, "Criar PlataformaEspectral");
-            go.transform.position = new Vector3(18f, 2.5f, 0f);
+            go.transform.position = LayoutPrototipo.PlataformaEspectral;
             go.transform.localScale = new Vector3(2.2f, 0.35f, 1f);
 
             var sr = go.AddComponent<SpriteRenderer>();
@@ -322,15 +334,21 @@ public static class ConfiguradorPrototipo
         var resina = AssetDatabase.LoadAssetAtPath<ItemDados>("Assets/_Project/Data/Itens/Resina.asset");
 
         if (GameObject.Find("Coletavel_Jambu") == null)
-            CriarColetavelEditor("Coletavel_Jambu", new Vector3(-1f, 1.1f, 0f), new Color(0.35f, 0.75f, 0.25f), jambu, 2);
+            CriarColetavelEditor("Coletavel_Jambu", LayoutPrototipo.Jambu, new Color(0.35f, 0.75f, 0.25f), jambu, 2);
         if (GameObject.Find("Coletavel_Tucupi") == null)
-            CriarColetavelEditor("Coletavel_Tucupi", new Vector3(0.5f, 1.1f, 0f), new Color(0.95f, 0.8f, 0.15f), tucupi, 3);
+            CriarColetavelEditor("Coletavel_Tucupi", LayoutPrototipo.Tucupi, new Color(0.95f, 0.8f, 0.15f), tucupi, 3);
         if (GameObject.Find("Coletavel_Goma") == null)
-            CriarColetavelEditor("Coletavel_Goma", new Vector3(4f, 1.1f, 0f), new Color(0.95f, 0.95f, 0.9f), goma, 1);
+            CriarColetavelEditor("Coletavel_Goma", LayoutPrototipo.Goma, new Color(0.95f, 0.95f, 0.9f), goma, 1);
         if (GameObject.Find("Coletavel_Cipo") == null)
-            CriarColetavelEditor("Coletavel_Cipo", new Vector3(-2.2f, 1.1f, 0f), new Color(0.55f, 0.7f, 0.35f), cipo, 3);
+            CriarColetavelEditor("Coletavel_Cipo", LayoutPrototipo.Cipo, new Color(0.55f, 0.7f, 0.35f), cipo, 3);
         if (GameObject.Find("Coletavel_Resina") == null)
-            CriarColetavelEditor("Coletavel_Resina", new Vector3(5.2f, 1.1f, 0f), new Color(0.7f, 0.4f, 0.15f), resina, 2);
+            CriarColetavelEditor("Coletavel_Resina", LayoutPrototipo.Resina, new Color(0.7f, 0.4f, 0.15f), resina, 2);
+        if (GameObject.Find("Coletavel_Jambu_Rio") == null)
+            CriarColetavelEditor("Coletavel_Jambu_Rio", LayoutPrototipo.JambuRio, new Color(0.35f, 0.75f, 0.25f), jambu, 1);
+        if (GameObject.Find("Coletavel_Tucupi_Rio") == null)
+            CriarColetavelEditor("Coletavel_Tucupi_Rio", LayoutPrototipo.TucupiRio, new Color(0.95f, 0.8f, 0.15f), tucupi, 1);
+        if (GameObject.Find("Coletavel_Goma_Rio") == null)
+            CriarColetavelEditor("Coletavel_Goma_Rio", LayoutPrototipo.GomaRio, new Color(0.95f, 0.95f, 0.9f), goma, 1);
     }
 
     static void GarantirBarcaEEstacoes()
@@ -340,8 +358,8 @@ public static class ConfiguradorPrototipo
         {
             var barcaGo = new GameObject("BarcaRio");
             Undo.RegisterCreatedObjectUndo(barcaGo, "Criar BarcaRio");
-            barcaGo.transform.position = new Vector3(-11f, 1.2f, 0f);
-            barcaGo.transform.localScale = new Vector3(3.2f, 1.4f, 1f);
+            barcaGo.transform.position = LayoutPrototipo.Barca;
+            barcaGo.transform.localScale = new Vector3(6.5f, 1.7f, 1f);
 
             var sr = barcaGo.AddComponent<SpriteRenderer>();
             sr.sprite = CarregarSpriteQuadrado();
@@ -355,12 +373,12 @@ public static class ConfiguradorPrototipo
             var interior = new GameObject("PontoInteriorBarca");
             Undo.RegisterCreatedObjectUndo(interior, "Criar PontoInteriorBarca");
             interior.transform.SetParent(barcaGo.transform);
-            interior.transform.localPosition = new Vector3(0f, 0.8f, 0f);
+            interior.transform.localPosition = new Vector3(0f, 0.55f, 0f);
 
             var saida = new GameObject("PontoSaidaBarca");
             Undo.RegisterCreatedObjectUndo(saida, "Criar PontoSaidaBarca");
             saida.transform.SetParent(barcaGo.transform);
-            saida.transform.localPosition = new Vector3(2.2f, 0f, 0f);
+            saida.transform.localPosition = new Vector3(0.7f, 0.12f, 0f);
 
             barca = barcaGo.AddComponent<BarcaRio>();
             barca.pontoInterior = interior.transform;
@@ -371,9 +389,8 @@ public static class ConfiguradorPrototipo
         {
             var fogaoGo = new GameObject("FogaoALenha");
             Undo.RegisterCreatedObjectUndo(fogaoGo, "Criar FogaoALenha");
-            fogaoGo.transform.SetParent(barca.transform);
-            fogaoGo.transform.position = new Vector3(-11.6f, 2.2f, 0f);
-            fogaoGo.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
+            fogaoGo.transform.position = LayoutPrototipo.Fogao;
+            fogaoGo.transform.localScale = new Vector3(0.75f, 0.75f, 1f);
 
             var srFogao = fogaoGo.AddComponent<SpriteRenderer>();
             srFogao.sprite = CarregarSpriteQuadrado();
@@ -390,9 +407,8 @@ public static class ConfiguradorPrototipo
         {
             var alquimiaGo = new GameObject("BancadaAlquimia");
             Undo.RegisterCreatedObjectUndo(alquimiaGo, "Criar BancadaAlquimia");
-            alquimiaGo.transform.SetParent(barca.transform);
-            alquimiaGo.transform.position = new Vector3(-10.2f, 2.2f, 0f);
-            alquimiaGo.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
+            alquimiaGo.transform.position = LayoutPrototipo.Alquimia;
+            alquimiaGo.transform.localScale = new Vector3(0.75f, 0.75f, 1f);
 
             var srAlq = alquimiaGo.AddComponent<SpriteRenderer>();
             srAlq.sprite = CarregarSpriteQuadrado();
@@ -409,9 +425,8 @@ public static class ConfiguradorPrototipo
         {
             var pesquisaGo = new GameObject("MesaPesquisa");
             Undo.RegisterCreatedObjectUndo(pesquisaGo, "Criar MesaPesquisa");
-            pesquisaGo.transform.SetParent(barca.transform);
-            pesquisaGo.transform.position = new Vector3(-10.9f, 3.05f, 0f);
-            pesquisaGo.transform.localScale = new Vector3(0.75f, 0.55f, 1f);
+            pesquisaGo.transform.position = LayoutPrototipo.Pesquisa;
+            pesquisaGo.transform.localScale = new Vector3(0.8f, 0.6f, 1f);
 
             var srPesq = pesquisaGo.AddComponent<SpriteRenderer>();
             srPesq.sprite = CarregarSpriteQuadrado();
@@ -431,7 +446,7 @@ public static class ConfiguradorPrototipo
         {
             var go = new GameObject("Vegetacao_Cipo");
             Undo.RegisterCreatedObjectUndo(go, "Criar Vegetacao_Cipo");
-            go.transform.position = new Vector3(9f, 1.2f, 0f);
+            go.transform.position = LayoutPrototipo.Vegetacao;
             go.transform.localScale = new Vector3(1.2f, 1.6f, 1f);
 
             var sr = go.AddComponent<SpriteRenderer>();
@@ -449,7 +464,7 @@ public static class ConfiguradorPrototipo
         {
             var go = new GameObject("CapangaTreino");
             Undo.RegisterCreatedObjectUndo(go, "Criar CapangaTreino");
-            go.transform.position = new Vector3(12f, 1.3f, 0f);
+            go.transform.position = LayoutPrototipo.Capanga;
             go.transform.localScale = new Vector3(1f, 1.6f, 1f);
 
             var sr = go.AddComponent<SpriteRenderer>();
@@ -475,7 +490,7 @@ public static class ConfiguradorPrototipo
         {
             var go = new GameObject("SombraTreino");
             Undo.RegisterCreatedObjectUndo(go, "Criar SombraTreino");
-            go.transform.position = new Vector3(15.5f, 1.8f, 0f);
+            go.transform.position = LayoutPrototipo.Sombra;
             go.transform.localScale = new Vector3(1.1f, 1.4f, 1f);
 
             var sr = go.AddComponent<SpriteRenderer>();
@@ -493,7 +508,7 @@ public static class ConfiguradorPrototipo
         {
             var barreira = new GameObject("BarreiraAlavanca");
             Undo.RegisterCreatedObjectUndo(barreira, "Criar BarreiraAlavanca");
-            barreira.transform.position = new Vector3(21.5f, 1.6f, 0f);
+            barreira.transform.position = LayoutPrototipo.Barreira;
             barreira.transform.localScale = new Vector3(0.5f, 2.4f, 1f);
 
             var srB = barreira.AddComponent<SpriteRenderer>();
@@ -513,7 +528,7 @@ public static class ConfiguradorPrototipo
         {
             var go = new GameObject("AlavancaChicote");
             Undo.RegisterCreatedObjectUndo(go, "Criar AlavancaChicote");
-            go.transform.position = new Vector3(18.8f, 1.4f, 0f);
+            go.transform.position = LayoutPrototipo.Alavanca;
             go.transform.localScale = new Vector3(0.4f, 1.2f, 1f);
 
             var sr = go.AddComponent<SpriteRenderer>();
@@ -530,6 +545,103 @@ public static class ConfiguradorPrototipo
             if (barreira != null)
                 alavanca.barreiras = new[] { barreira };
         }
+    }
+
+    static void GarantirPuzzlesIndy()
+    {
+        CriarItensNorteAssets();
+        int camadaChao = LayerMask.NameToLayer("Chao");
+        var sprite = CarregarSpriteQuadrado();
+
+        if (GameObject.Find("PlataformaEspectral_2") == null)
+        {
+            var go = new GameObject("PlataformaEspectral_2");
+            Undo.RegisterCreatedObjectUndo(go, "Criar PlataformaEspectral_2");
+            go.transform.position = LayoutPrototipo.PlataformaEspectral2;
+            go.transform.localScale = new Vector3(1.6f, 0.32f, 1f);
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = sprite;
+            sr.color = new Color(0.4f, 0.7f, 1f, 0.75f);
+            sr.sortingOrder = 1;
+            var col = go.AddComponent<BoxCollider2D>();
+            col.isTrigger = false;
+            if (camadaChao >= 0) go.layer = camadaChao;
+            var plat = go.AddComponent<ObjetoEspectral>();
+            plat.tipo = TipoObjetoEspectral.Plataforma;
+        }
+
+        CriarPisoPuzzleEditor("PisoFalso_A", LayoutPrototipo.PisoA, false, camadaChao, sprite);
+        CriarPisoPuzzleEditor("PisoFalso_B", LayoutPrototipo.PisoB, true, camadaChao, sprite);
+        CriarPisoPuzzleEditor("PisoFalso_C", LayoutPrototipo.PisoC, false, camadaChao, sprite);
+
+        if (GameObject.Find("PisoChegadaRuina") == null)
+        {
+            var go = new GameObject("PisoChegadaRuina");
+            Undo.RegisterCreatedObjectUndo(go, "Criar PisoChegadaRuina");
+            go.transform.position = LayoutPrototipo.PisoChegada;
+            go.transform.localScale = new Vector3(2.2f, 0.35f, 1f);
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = sprite;
+            sr.color = new Color(0.5f, 0.42f, 0.3f);
+            sr.sortingOrder = 1;
+            var col = go.AddComponent<BoxCollider2D>();
+            col.isTrigger = false;
+            if (camadaChao >= 0) go.layer = camadaChao;
+        }
+
+        if (GameObject.Find("PistaPisosFalsos") == null)
+        {
+            var go = new GameObject("PistaPisosFalsos");
+            Undo.RegisterCreatedObjectUndo(go, "Criar PistaPisosFalsos");
+            go.transform.position = LayoutPrototipo.PistaPisos;
+            go.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = sprite;
+            sr.color = new Color(0.45f, 0.75f, 1f, 0.85f);
+            sr.sortingOrder = 3;
+            var col = go.AddComponent<BoxCollider2D>();
+            col.isTrigger = true;
+            col.size = new Vector2(1.6f, 1.6f);
+            var pista = go.AddComponent<ObjetoEspectral>();
+            pista.tipo = TipoObjetoEspectral.Pista;
+            pista.textoPista = "Pisos mentem. O amuleto pinta o falso de vermelho.";
+        }
+
+        if (GameObject.Find("ReliquiaMarajoara") == null)
+        {
+            var go = new GameObject("ReliquiaMarajoara");
+            Undo.RegisterCreatedObjectUndo(go, "Criar ReliquiaMarajoara");
+            go.transform.position = LayoutPrototipo.Reliquia;
+            go.transform.localScale = new Vector3(0.45f, 0.45f, 1f);
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = sprite;
+            sr.color = new Color(0.85f, 0.7f, 0.25f);
+            sr.sortingOrder = 3;
+            var col = go.AddComponent<BoxCollider2D>();
+            col.isTrigger = true;
+            col.size = new Vector2(1.4f, 1.4f);
+            var rel = go.AddComponent<ReliquiaPuzzle>();
+            rel.item = AssetDatabase.LoadAssetAtPath<ItemDados>("Assets/_Project/Data/Itens/MarcaMarajoara.asset");
+            rel.idPaginaCaderno = CatalogoPaginasCap1.IdRuinaMarajoara;
+        }
+    }
+
+    static void CriarPisoPuzzleEditor(string nome, Vector3 posicao, bool seguro, int camadaChao, Sprite sprite)
+    {
+        if (GameObject.Find(nome) != null) return;
+        var go = new GameObject(nome);
+        Undo.RegisterCreatedObjectUndo(go, "Criar " + nome);
+        go.transform.position = posicao;
+        go.transform.localScale = new Vector3(1.35f, 0.32f, 1f);
+        var sr = go.AddComponent<SpriteRenderer>();
+        sr.sprite = sprite;
+        sr.color = new Color(0.48f, 0.4f, 0.28f);
+        sr.sortingOrder = 1;
+        var col = go.AddComponent<BoxCollider2D>();
+        col.isTrigger = false;
+        if (camadaChao >= 0) go.layer = camadaChao;
+        var piso = go.AddComponent<PisoFalso>();
+        piso.seguro = seguro;
     }
 
     static void CriarColetavelEditor(string nome, Vector3 posicao, Color cor, ItemDados item, int quantidade = 1)
@@ -563,20 +675,274 @@ public static class ConfiguradorPrototipo
 
     static void GarantirCheckpointInicial()
     {
-        if (Object.FindFirstObjectByType<Checkpoint>() != null) return;
+        CriarCheckpointEditor("CheckpointInicial", LayoutPrototipo.Checkpoint, true);
+    }
 
-        var go = new GameObject("CheckpointInicial");
-        Undo.RegisterCreatedObjectUndo(go, "Criar Checkpoint");
-        go.transform.position = new Vector3(-6f, 1f, 0f);
+    static void GarantirBlocosCap1()
+    {
+        var sprite = CarregarSpriteQuadrado();
+
+        CriarFaixaEditor("FaixaVila", LayoutPrototipo.ZonaVila.x, 40f, new Color(0.45f, 0.4f, 0.35f, 0.55f), sprite);
+        CriarFaixaEditor("FaixaRio", LayoutPrototipo.ZonaRio.x, 32f, new Color(0.2f, 0.45f, 0.65f, 0.55f), sprite);
+        CriarFaixaEditor("FaixaMata", LayoutPrototipo.ZonaMata.x, 36f, new Color(0.25f, 0.45f, 0.22f, 0.5f), sprite);
+        CriarFaixaEditor("FaixaRuinas", LayoutPrototipo.ZonaRuinas.x, 32f, new Color(0.55f, 0.45f, 0.28f, 0.5f), sprite);
+        CriarFaixaEditor("FaixaArena", LayoutPrototipo.ZonaArena.x, 28f, new Color(0.5f, 0.22f, 0.18f, 0.55f), sprite);
+
+        CriarZonaEditor("Zona_Vila", LayoutPrototipo.ZonaVila, "Vila", 38f);
+        CriarZonaEditor("Zona_Rio", LayoutPrototipo.ZonaRio, "Rio", 30f);
+        CriarZonaEditor("Zona_Mata", LayoutPrototipo.ZonaMata, "Mata", 34f);
+        CriarZonaEditor("Zona_Ruinas", LayoutPrototipo.ZonaRuinas, "Ruinas", 30f);
+        CriarZonaEditor("Zona_Arena", LayoutPrototipo.ZonaArena, "Arena", 26f);
+
+        if (GameObject.Find("AguaRio") == null)
+        {
+            var agua = new GameObject("AguaRio");
+            Undo.RegisterCreatedObjectUndo(agua, "Criar AguaRio");
+            agua.transform.position = LayoutPrototipo.AguaRio;
+            agua.transform.localScale = new Vector3(28f, 0.7f, 1f);
+            var srAgua = agua.AddComponent<SpriteRenderer>();
+            srAgua.sprite = sprite;
+            srAgua.color = new Color(0.15f, 0.4f, 0.7f, 0.85f);
+            srAgua.sortingOrder = 0;
+        }
+
+        GarantirCanoaECaisEditor(sprite);
+        GarantirEncontroBotoEditor(sprite);
+        GarantirEncontroIaraEditor(sprite);
+        CriarEncontroEditor("EncontroCurupira", LayoutPrototipo.Curupira,
+            new Color(0.95f, 0.4f, 0.12f), new Vector3(1.3f, 2.1f, 1f),
+            "Curupira (H01)", "Novelo nos focos + purificar Sombras.", sprite);
+
+        CriarCheckpointEditor("CheckpointRio", LayoutPrototipo.CheckpointRio, false);
+        CriarCheckpointEditor("CheckpointArena", LayoutPrototipo.CheckpointArena, false);
+
+        CriarFocoEditor("FocoCorrupcao_A", LayoutPrototipo.FocoA, sprite);
+        CriarFocoEditor("FocoCorrupcao_B", LayoutPrototipo.FocoB, sprite);
+        CriarFocoEditor("FocoCorrupcao_C", LayoutPrototipo.FocoC, sprite);
+
+        if (GameObject.Find("SombraArena") == null)
+        {
+            var go = new GameObject("SombraArena");
+            Undo.RegisterCreatedObjectUndo(go, "Criar SombraArena");
+            go.transform.position = LayoutPrototipo.SombraArena;
+            go.transform.localScale = new Vector3(1.1f, 1.4f, 1f);
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = sprite;
+            sr.color = new Color(0.55f, 0.25f, 0.75f, 0.9f);
+            sr.sortingOrder = 2;
+            var col = go.AddComponent<BoxCollider2D>();
+            col.isTrigger = true;
+            go.AddComponent<InimigoSombra>();
+        }
+    }
+
+    static void CriarZonaEditor(string nome, Vector3 posicao, string rotulo, float largura)
+    {
+        if (GameObject.Find(nome) != null) return;
+        var go = new GameObject(nome);
+        Undo.RegisterCreatedObjectUndo(go, "Criar " + nome);
+        go.transform.position = posicao;
+        var col = go.AddComponent<BoxCollider2D>();
+        col.isTrigger = true;
+        col.size = new Vector2(largura, 8f);
+        var zona = go.AddComponent<MarcadorZona>();
+        zona.nomeZona = rotulo;
+    }
+
+    static void CriarFaixaEditor(string nome, float x, float largura, Color cor, Sprite sprite)
+    {
+        if (GameObject.Find(nome) != null) return;
+        var go = new GameObject(nome);
+        Undo.RegisterCreatedObjectUndo(go, "Criar " + nome);
+        go.transform.position = new Vector3(x, 0.12f, 0f);
+        go.transform.localScale = new Vector3(largura, 0.22f, 1f);
+        var sr = go.AddComponent<SpriteRenderer>();
+        sr.sprite = sprite;
+        sr.color = cor;
+        sr.sortingOrder = 1;
+    }
+
+    static void GarantirCanoaECaisEditor(Sprite sprite)
+    {
+        GameObject barreira = GameObject.Find("BarreiraCais");
+        if (barreira == null)
+        {
+            barreira = new GameObject("BarreiraCais");
+            Undo.RegisterCreatedObjectUndo(barreira, "Criar BarreiraCais");
+            barreira.transform.position = LayoutPrototipo.BarreiraCais;
+            barreira.transform.localScale = new Vector3(0.8f, 5.2f, 1f);
+            var srB = barreira.AddComponent<SpriteRenderer>();
+            srB.sprite = sprite;
+            srB.color = new Color(0.4f, 0.28f, 0.16f);
+            srB.sortingOrder = 2;
+            var colB = barreira.AddComponent<BoxCollider2D>();
+            colB.isTrigger = false;
+            int camadaChao = LayerMask.NameToLayer("Chao");
+            if (camadaChao >= 0) barreira.layer = camadaChao;
+            barreira.AddComponent<BarreiraPuzzle>();
+        }
+
+        GameObject canoa = GameObject.Find("CanoaRio");
+        if (canoa == null)
+        {
+            canoa = new GameObject("CanoaRio");
+            Undo.RegisterCreatedObjectUndo(canoa, "Criar CanoaRio");
+            canoa.transform.position = LayoutPrototipo.CanoaCais;
+            canoa.transform.localScale = new Vector3(2.6f, 0.45f, 1f);
+            var sr = canoa.AddComponent<SpriteRenderer>();
+            sr.sprite = sprite;
+            sr.color = new Color(0.55f, 0.32f, 0.16f);
+            sr.sortingOrder = 3;
+            var col = canoa.AddComponent<BoxCollider2D>();
+            col.isTrigger = true;
+            col.size = new Vector2(1.1f, 1.8f);
+        }
+
+        if (canoa.GetComponent<CanoaRio>() == null)
+            canoa.AddComponent<CanoaRio>();
+    }
+
+    static void GarantirEncontroBotoEditor(Sprite sprite)
+    {
+        GameObject barreira = GameObject.Find("BarreiraRioBoto");
+        if (barreira == null)
+        {
+            barreira = new GameObject("BarreiraRioBoto");
+            Undo.RegisterCreatedObjectUndo(barreira, "Criar BarreiraRioBoto");
+            barreira.transform.position = LayoutPrototipo.BarreiraBoto;
+            barreira.transform.localScale = new Vector3(0.8f, 5.2f, 1f);
+            var srB = barreira.AddComponent<SpriteRenderer>();
+            srB.sprite = sprite;
+            srB.color = new Color(0.35f, 0.12f, 0.32f);
+            srB.sortingOrder = 2;
+            var colB = barreira.AddComponent<BoxCollider2D>();
+            colB.isTrigger = false;
+            int camadaChao = LayerMask.NameToLayer("Chao");
+            if (camadaChao >= 0) barreira.layer = camadaChao;
+            barreira.AddComponent<BarreiraPuzzle>();
+        }
+
+        GameObject boto = GameObject.Find("BloqueioBoto");
+        if (boto == null)
+        {
+            boto = new GameObject("BloqueioBoto");
+            Undo.RegisterCreatedObjectUndo(boto, "Criar BloqueioBoto");
+            boto.transform.position = LayoutPrototipo.BloqueioBoto;
+            boto.transform.localScale = new Vector3(1.4f, 1.6f, 1f);
+            var sr = boto.AddComponent<SpriteRenderer>();
+            sr.sprite = sprite;
+            sr.color = new Color(0.55f, 0.2f, 0.45f);
+            sr.sortingOrder = 2;
+            var col = boto.AddComponent<BoxCollider2D>();
+            col.isTrigger = true;
+            col.size = new Vector2(2.2f, 1.8f);
+        }
+
+        var placeholder = boto.GetComponent<MarcadorEncontro>();
+        if (placeholder != null) Object.DestroyImmediate(placeholder);
+
+        var encontro = boto.GetComponent<EncontroBoto>();
+        if (encontro == null) encontro = boto.AddComponent<EncontroBoto>();
+        encontro.barreiras = new[] { barreira };
+    }
+
+    static void GarantirEncontroIaraEditor(Sprite sprite)
+    {
+        GameObject barreira = GameObject.Find("BarreiraRioIara");
+        if (barreira == null)
+        {
+            barreira = new GameObject("BarreiraRioIara");
+            Undo.RegisterCreatedObjectUndo(barreira, "Criar BarreiraRioIara");
+            barreira.transform.position = LayoutPrototipo.BarreiraIara;
+            barreira.transform.localScale = new Vector3(0.8f, 5.2f, 1f);
+            var srB = barreira.AddComponent<SpriteRenderer>();
+            srB.sprite = sprite;
+            srB.color = new Color(0.08f, 0.28f, 0.38f);
+            srB.sortingOrder = 2;
+            var colB = barreira.AddComponent<BoxCollider2D>();
+            colB.isTrigger = false;
+            int camadaChao = LayerMask.NameToLayer("Chao");
+            if (camadaChao >= 0) barreira.layer = camadaChao;
+            barreira.AddComponent<BarreiraPuzzle>();
+        }
+
+        GameObject iara = GameObject.Find("EncontroIara");
+        if (iara == null)
+        {
+            iara = new GameObject("EncontroIara");
+            Undo.RegisterCreatedObjectUndo(iara, "Criar EncontroIara");
+            iara.transform.position = LayoutPrototipo.Iara;
+            iara.transform.localScale = new Vector3(1.2f, 1.7f, 1f);
+            var sr = iara.AddComponent<SpriteRenderer>();
+            sr.sprite = sprite;
+            sr.color = new Color(0.12f, 0.35f, 0.42f);
+            sr.sortingOrder = 2;
+            var col = iara.AddComponent<BoxCollider2D>();
+            col.isTrigger = true;
+            col.size = new Vector2(1.8f, 1.4f);
+        }
+
+        var placeholder = iara.GetComponent<MarcadorEncontro>();
+        if (placeholder != null) Object.DestroyImmediate(placeholder);
+
+        var encontro = iara.GetComponent<EncontroIara>();
+        if (encontro == null) encontro = iara.AddComponent<EncontroIara>();
+        encontro.barreiras = new[] { barreira };
+    }
+
+    static void CriarEncontroEditor(string nome, Vector3 posicao, Color cor, Vector3 escala, string titulo, string dica, Sprite sprite)
+    {
+        if (GameObject.Find(nome) != null) return;
+        var go = new GameObject(nome);
+        Undo.RegisterCreatedObjectUndo(go, "Criar " + nome);
+        go.transform.position = posicao;
+        go.transform.localScale = escala;
+        var sr = go.AddComponent<SpriteRenderer>();
+        sr.sprite = sprite;
+        sr.color = cor;
+        sr.sortingOrder = 2;
+        var col = go.AddComponent<BoxCollider2D>();
+        col.isTrigger = true;
+        col.size = new Vector2(1.6f, 1.4f);
+        var enc = go.AddComponent<MarcadorEncontro>();
+        enc.titulo = titulo;
+        enc.dica = dica;
+    }
+
+    static void CriarCheckpointEditor(string nome, Vector3 posicao, bool iniciar)
+    {
+        if (GameObject.Find(nome) != null) return;
+        var go = new GameObject(nome);
+        Undo.RegisterCreatedObjectUndo(go, "Criar " + nome);
+        go.transform.position = posicao;
         var col = go.AddComponent<BoxCollider2D>();
         col.isTrigger = true;
         col.size = new Vector2(2f, 2f);
         var checkpoint = go.AddComponent<Checkpoint>();
-        checkpoint.ativarAoIniciar = true;
-
+        checkpoint.ativarAoIniciar = iniciar;
         var sr = go.AddComponent<SpriteRenderer>();
         sr.sprite = CarregarSpriteQuadrado();
         sr.color = new Color(0.3f, 0.9f, 0.4f, 0.7f);
+    }
+
+    static void CriarFocoEditor(string nome, Vector3 posicao, Sprite sprite)
+    {
+        if (GameObject.Find(nome) != null) return;
+        var go = new GameObject(nome);
+        Undo.RegisterCreatedObjectUndo(go, "Criar " + nome);
+        go.transform.position = posicao;
+        go.transform.localScale = new Vector3(0.55f, 0.9f, 1f);
+        var sr = go.AddComponent<SpriteRenderer>();
+        sr.sprite = sprite;
+        sr.color = new Color(0.7f, 0.2f, 0.85f, 0.9f);
+        sr.sortingOrder = 3;
+        var col = go.AddComponent<BoxCollider2D>();
+        col.isTrigger = true;
+        col.size = new Vector2(1.4f, 1.4f);
+        var foco = go.AddComponent<ObjetoEspectral>();
+        foco.tipo = TipoObjetoEspectral.Pista;
+        foco.textoPista = "Foco da corrupcao. O novelo de cipo se encaixa aqui.";
+        foco.idPaginaCaderno = CatalogoPaginasCap1.IdCurupira;
     }
 
     static void GarantirZonaMorte()
@@ -585,10 +951,10 @@ public static class ConfiguradorPrototipo
 
         var go = new GameObject("ZonaMorte");
         Undo.RegisterCreatedObjectUndo(go, "Criar ZonaMorte");
-        go.transform.position = new Vector3(0f, -12f, 0f);
+        go.transform.position = new Vector3(27f, -12f, 0f);
         var col = go.AddComponent<BoxCollider2D>();
         col.isTrigger = true;
-        col.size = new Vector2(80f, 4f);
+        col.size = new Vector2(160f, 4f);
         go.AddComponent<ZonaMorte>();
     }
 
@@ -596,7 +962,7 @@ public static class ConfiguradorPrototipo
     {
         CriarNpcEditor(
             "DonaNair",
-            new Vector3(-3.5f, 1.2f, 0f),
+            LayoutPrototipo.DonaNair,
             new Color(1f, 0.75f, 0.2f),
             new Vector3(1.1f, 1.8f, 1f),
             new[] { CatalogoPaginasCap1.IdTacaca },
@@ -627,7 +993,7 @@ public static class ConfiguradorPrototipo
     {
         CriarNpcEditor(
             "NamoradaDoBoto",
-            new Vector3(2.5f, 1.2f, 0f),
+            LayoutPrototipo.Lia,
             new Color(1f, 0.45f, 0.7f),
             new Vector3(1f, 1.6f, 1f),
             new[] { CatalogoPaginasCap1.IdBoto },
@@ -643,13 +1009,23 @@ public static class ConfiguradorPrototipo
                 {
                     personagem = "Lia",
                     emocao = "confidente",
-                    texto = "Os mais velhos dizem que aquele rapaz e o Boto. Agora o rio esta doente — e ele tambem."
+                    texto = "Os mais velhos dizem que aquele rapaz e o Boto. A poluicao nao pega nele — e espirito — mas os peixes sofrem, e isso o deixou bravo."
                 },
                 new FalaDialogo
                 {
                     personagem = "Lia",
                     emocao = "esperanca",
-                    texto = "Se voce acalmar o Boto, talvez ele volte a aparecer nas noites claras. Eu ainda espero."
+                    texto = "Leva este retrato. Se voce o encontrar, mostra pra ele. Quero que lembre das noites claras. Eu ainda espero."
+                }
+            },
+            CatalogoItensNorte.IdFotoDaLia,
+            new[]
+            {
+                new FalaDialogo
+                {
+                    personagem = "Lia",
+                    emocao = "esperanca",
+                    texto = "Voce ja tem meu retrato. Mostra pro rapaz do rio. Eu continuo na beira, esperando as noites claras."
                 }
             });
     }
@@ -658,60 +1034,76 @@ public static class ConfiguradorPrototipo
     {
         CriarNpcEditor(
             "PescadorDaIara",
-            new Vector3(6.5f, 1.2f, 0f),
+            LayoutPrototipo.Zeca,
             new Color(0.35f, 0.65f, 1f),
             new Vector3(1.1f, 1.7f, 1f),
-            new[] { CatalogoPaginasCap1.IdIara },
+            new[] { CatalogoPaginasCap1.IdIara, CatalogoPaginasCap1.IdBoto },
             new[]
             {
                 new FalaDialogo
                 {
                     personagem = "Seu Zeca",
-                    emocao = "assustado",
-                    texto = "A Iara protegia a gente! Com o canto dela, as piranhas se afastavam e a rede vinha cheia."
-                },
-                new FalaDialogo
-                {
-                    personagem = "Seu Zeca",
-                    emocao = "raiva",
-                    texto = "Agora ela arrasta pescador pro fundo. A agua ta preta da poluicao do Barao — a corrupcao pegou nela tambem."
+                    emocao = "preocupado",
+                    texto = "O Boto ta investindo contra tudo que flutua. Nao e a poluicao que pega nele — e entidade. Mas os peixes tao morrendo, e isso o deixou bravo e triste."
                 },
                 new FalaDialogo
                 {
                     personagem = "Seu Zeca",
                     emocao = "serio",
-                    texto = "Leve Tacaca de oferenda e cuidado com o canto. So a Gota de Quartzo dela abre o caminho ate o Curupira."
+                    texto = "Toma a chave do meu caico, no cais. Tres flechas purificadoras acalmam o rapaz. Depois, Tacaca de oferenda — e fala com a Lia na vila. Ele lembra dela."
+                },
+                new FalaDialogo
+                {
+                    personagem = "Seu Zeca",
+                    emocao = "aviso",
+                    texto = "Mais adiante ta a Iara. O canto arrasta gente pro fundo. Leva Tacaca e cuidado. So a Gota de Quartzo dela abre o caminho ate o Curupira."
+                }
+            },
+            CatalogoItensNorte.IdChaveDaCanoa,
+            new[]
+            {
+                new FalaDialogo
+                {
+                    personagem = "Seu Zeca",
+                    emocao = "serio",
+                    texto = "A chave ja ta com voce. Solta o caico no cais, acalma o Boto com tres flechas e nao esquece a Lia. A Iara espera mais rio abaixo."
                 }
             });
     }
 
-    static void CriarNpcEditor(string nome, Vector3 posicao, Color cor, Vector3 escala, string[] paginasCaderno, FalaDialogo[] falas)
+    static void CriarNpcEditor(string nome, Vector3 posicao, Color cor, Vector3 escala, string[] paginasCaderno, FalaDialogo[] falas, string idItem = null, FalaDialogo[] falasApos = null)
     {
         var existente = GameObject.Find(nome);
+        NpcDialogo npc;
         if (existente != null)
         {
-            var npcExistente = existente.GetComponent<NpcDialogo>();
-            if (npcExistente != null) npcExistente.paginasAoConversar = paginasCaderno;
-            return;
+            npc = existente.GetComponent<NpcDialogo>();
+        }
+        else
+        {
+            var go = new GameObject(nome);
+            Undo.RegisterCreatedObjectUndo(go, "Criar " + nome);
+            go.transform.position = posicao;
+            go.transform.localScale = escala;
+
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = CarregarSpriteQuadrado();
+            sr.color = cor;
+            sr.sortingOrder = 2;
+
+            var col = go.AddComponent<BoxCollider2D>();
+            col.isTrigger = true;
+            col.size = new Vector2(2.2f, 1.4f);
+
+            npc = go.AddComponent<NpcDialogo>();
         }
 
-        var go = new GameObject(nome);
-        Undo.RegisterCreatedObjectUndo(go, "Criar " + nome);
-        go.transform.position = posicao;
-        go.transform.localScale = escala;
-
-        var sr = go.AddComponent<SpriteRenderer>();
-        sr.sprite = CarregarSpriteQuadrado();
-        sr.color = cor;
-        sr.sortingOrder = 2;
-
-        var col = go.AddComponent<BoxCollider2D>();
-        col.isTrigger = true;
-        col.size = new Vector2(2.2f, 1.4f);
-
-        var npc = go.AddComponent<NpcDialogo>();
+        if (npc == null) return;
         npc.falas = falas;
         npc.paginasAoConversar = paginasCaderno;
+        npc.idItemAoConversar = idItem;
+        npc.falasAposEntrega = falasApos;
+        EditorUtility.SetDirty(npc);
     }
 
     static Sprite CarregarSpriteQuadrado()

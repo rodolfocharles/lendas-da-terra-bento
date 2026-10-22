@@ -66,7 +66,11 @@ public class BentoChicote : MonoBehaviour
         if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto || HudPesquisa.Aberto) return;
         if (movimento != null && !movimento.ControleAtivo && !Balancando) return;
 
-        if (Input.GetKeyDown(teclaChicote) || Input.GetMouseButtonDown(1))
+        bool apertouE = Input.GetKeyDown(teclaChicote);
+        if (CanoaRio.JogadorDentro) return;
+        if (apertouE && (EncontroBoto.CapturaTeclaE || EncontroIara.CapturaTeclaE || CanoaRio.CapturaTeclaE))
+            apertouE = false;
+        if (apertouE || Input.GetMouseButtonDown(1))
         {
             if (Balancando) Soltar(false);
             else TentarAgarrar();
@@ -173,8 +177,7 @@ public class BentoChicote : MonoBehaviour
 
     void TentarBalancar()
     {
-        if (pontosGancho == null || pontosGancho.Length == 0)
-            pontosGancho = GameObject.FindGameObjectsWithTag(tagGancho);
+        pontosGancho = GameObject.FindGameObjectsWithTag(tagGancho);
 
         Transform melhor = null;
         float menorDistancia = alcance;

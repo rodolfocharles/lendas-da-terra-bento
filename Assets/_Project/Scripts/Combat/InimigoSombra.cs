@@ -41,6 +41,10 @@ public class InimigoSombra : MonoBehaviour, IRecebeDano, IAlvoChicote
         CorrupcaoAtual = corrupcaoMaxima;
         sprite = GetComponent<SpriteRenderer>();
         corCorrupta = sprite != null ? sprite.color : new Color(0.55f, 0.25f, 0.75f);
+    }
+
+    void Start()
+    {
         posicaoBase = transform.position;
     }
 
