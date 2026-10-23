@@ -8,6 +8,7 @@ using UnityEngine;
 public class AmuletoAncestral : MonoBehaviour
 {
     public const string IdEssenciaDasAguas = "essencia_aguas";
+    public const string IdPassoInvertido = "passo_invertido";
 
     public static AmuletoAncestral Instancia { get; private set; }
 
@@ -16,6 +17,7 @@ public class AmuletoAncestral : MonoBehaviour
     readonly HashSet<string> fragmentos = new HashSet<string>();
 
     public bool TemEssenciaDasAguas => Tem(IdEssenciaDasAguas);
+    public bool TemPassoInvertido => Tem(IdPassoInvertido);
 
     void Awake()
     {

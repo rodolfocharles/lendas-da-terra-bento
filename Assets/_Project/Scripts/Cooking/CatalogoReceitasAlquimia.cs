@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// Receitas da Bancada de Alquimia (Cap. 1).
@@ -22,7 +23,8 @@ public static class CatalogoReceitasAlquimia
     public static void Garantir()
     {
         CatalogoItensNorte.Garantir();
-        if (receitas.Count > 0) return;
+        if (CatalogoValido()) return;
+        receitas.Clear();
 
         receitas.Add(new ReceitaDados(
             IdFlechas,
@@ -41,5 +43,15 @@ public static class CatalogoReceitasAlquimia
             1,
             new RequisitoIngrediente(CatalogoItensNorte.IdCipo, 2),
             new RequisitoIngrediente(CatalogoItensNorte.IdResina)));
+    }
+
+    static bool CatalogoValido()
+    {
+        if (receitas.Count == 0) return false;
+        for (int i = 0; i < receitas.Count; i++)
+        {
+            if (receitas[i] == null || receitas[i].resultado == null) return false;
+        }
+        return true;
     }
 }

@@ -16,6 +16,7 @@ public class HudInventario : MonoBehaviour
     private Vector2 scroll;
     private string mensagem;
     private float mensagemAte;
+    private ItemDados comidaPendente;
 
     void Start()
     {
@@ -32,7 +33,11 @@ public class HudInventario : MonoBehaviour
 
         Aberto = !Aberto;
         if (movimento != null) movimento.ControleAtivo = !Aberto;
-        if (!Aberto) mensagem = "";
+        if (!Aberto)
+        {
+            mensagem = "";
+            comidaPendente = null;
+        }
     }
 
     void OnGUI()
@@ -100,14 +105,40 @@ public class HudInventario : MonoBehaviour
             if (CatalogoEfeitosComida.EhComidaConsumivel(entrada.item))
             {
                 if (GUI.Button(new Rect(largura - 120, linhaY + 16, 72, 28), "Comer"))
-                    TentarComer(entrada.item);
+                    PedirComer(entrada.item);
             }
         }
 
         GUI.EndScrollView();
 
-        if (!string.IsNullOrEmpty(mensagem) && Time.unscaledTime < mensagemAte)
+        if (comidaPendente != null)
+        {
+            GUI.Box(new Rect(x + 12, y + altura - 78, largura - 24, 66f), "");
+            GUI.Label(new Rect(x + 20, y + altura - 74, largura - 40, 36),
+                "E o ultimo Tacaca da bolsa. Ele tambem e oferenda. Comer mesmo?", aviso);
+            if (GUI.Button(new Rect(x + 20, y + altura - 38, 90, 24), "Comer"))
+            {
+                var item = comidaPendente;
+                comidaPendente = null;
+                TentarComer(item);
+            }
+            if (GUI.Button(new Rect(x + 118, y + altura - 38, 90, 24), "Guardar"))
+                comidaPendente = null;
+        }
+        else if (!string.IsNullOrEmpty(mensagem) && Time.unscaledTime < mensagemAte)
             GUI.Label(new Rect(x + 16, y + altura - 28, largura - 32, 24), mensagem, aviso);
+    }
+
+    void PedirComer(ItemDados item)
+    {
+        if (item != null && item.id == CatalogoItensNorte.IdTacaca
+            && inventario != null && inventario.QuantidadePorId(CatalogoItensNorte.IdTacaca) <= 1)
+        {
+            comidaPendente = item;
+            return;
+        }
+
+        TentarComer(item);
     }
 
     void TentarComer(ItemDados item)

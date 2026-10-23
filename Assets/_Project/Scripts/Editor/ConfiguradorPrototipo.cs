@@ -44,7 +44,7 @@ public static class ConfiguradorPrototipo
         CriarOuAtualizarItem(pasta + "/GomaDeTapioca.asset", CatalogoItensNorte.IdGoma, "Goma de Tapioca",
             "Goma que da o ponto do Tacaca.", CategoriaItem.Ingrediente);
         CriarOuAtualizarItem(pasta + "/Tacaca.asset", CatalogoItensNorte.IdTacaca, "Tacaca",
-            "Oferenda ao Boto e a Iara. Concede o buff Treme.", CategoriaItem.Comida);
+            "Oferenda ao Boto. Beber concede Treme contra o canto da Iara. Guarde um pra oferenda.", CategoriaItem.Comida);
         CriarOuAtualizarItem(pasta + "/PatoNoTucupi.asset", CatalogoItensNorte.IdPatoNoTucupi, "Pato no Tucupi",
             "Prato tipico do Norte. Variacao do buff Treme.", CategoriaItem.Comida);
         CriarOuAtualizarItem(pasta + "/Cipo.asset", CatalogoItensNorte.IdCipo, "Cipo",
@@ -63,6 +63,12 @@ public static class ConfiguradorPrototipo
             "Chave que Seu Zeca deixou para o caico no cais.", CategoriaItem.Item, 1);
         CriarOuAtualizarItem(pasta + "/FotoDaLia.asset", CatalogoItensNorte.IdFotoDaLia, "Foto da Lia",
             "Retrato que Lia mandou ao Boto: para ele lembrar das noites no igarape.", CategoriaItem.Reliquia, 1);
+        CriarOuAtualizarItem(pasta + "/FitasColoridas.asset", CatalogoItensNorte.IdFitasColoridas, "Fitas Coloridas",
+            "Oferenda de respeito a Iara. Dona Nair mandou para pedir licenca ao rio.", CategoriaItem.Reliquia, 1);
+        CriarOuAtualizarItem(pasta + "/Espelho.asset", CatalogoItensNorte.IdEspelho, "Espelho",
+            "Oferenda a Mae d'Agua. Lia mandou para ela admirar o reflexo nas pedras.", CategoriaItem.Reliquia, 1);
+        CriarOuAtualizarItem(pasta + "/PenteDeOsso.asset", CatalogoItensNorte.IdPenteDeOsso, "Pente de Osso",
+            "Oferenda de pescador. Seu Zeca pede licenca a Iara antes de remar trecho fundo.", CategoriaItem.Reliquia, 1);
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
@@ -709,16 +715,14 @@ public static class ConfiguradorPrototipo
         GarantirCanoaECaisEditor(sprite);
         GarantirEncontroBotoEditor(sprite);
         GarantirEncontroIaraEditor(sprite);
-        CriarEncontroEditor("EncontroCurupira", LayoutPrototipo.Curupira,
-            new Color(0.95f, 0.4f, 0.12f), new Vector3(1.3f, 2.1f, 1f),
-            "Curupira (H01)", "Novelo nos focos + purificar Sombras.", sprite);
+        GarantirEncontroCurupiraEditor(sprite);
 
         CriarCheckpointEditor("CheckpointRio", LayoutPrototipo.CheckpointRio, false);
         CriarCheckpointEditor("CheckpointArena", LayoutPrototipo.CheckpointArena, false);
 
-        CriarFocoEditor("FocoCorrupcao_A", LayoutPrototipo.FocoA, sprite);
-        CriarFocoEditor("FocoCorrupcao_B", LayoutPrototipo.FocoB, sprite);
-        CriarFocoEditor("FocoCorrupcao_C", LayoutPrototipo.FocoC, sprite);
+        GarantirFocoEditor("FocoCorrupcao_A", LayoutPrototipo.FocoA, sprite);
+        GarantirFocoEditor("FocoCorrupcao_B", LayoutPrototipo.FocoB, sprite);
+        GarantirFocoEditor("FocoCorrupcao_C", LayoutPrototipo.FocoC, sprite);
 
         if (GameObject.Find("SombraArena") == null)
         {
@@ -879,7 +883,7 @@ public static class ConfiguradorPrototipo
             sr.sortingOrder = 2;
             var col = iara.AddComponent<BoxCollider2D>();
             col.isTrigger = true;
-            col.size = new Vector2(1.8f, 1.4f);
+            col.size = new Vector2(2.4f, 2.2f);
         }
 
         var placeholder = iara.GetComponent<MarcadorEncontro>();
@@ -888,6 +892,50 @@ public static class ConfiguradorPrototipo
         var encontro = iara.GetComponent<EncontroIara>();
         if (encontro == null) encontro = iara.AddComponent<EncontroIara>();
         encontro.barreiras = new[] { barreira };
+    }
+
+    static void GarantirEncontroCurupiraEditor(Sprite sprite)
+    {
+        GameObject portao = GameObject.Find("BarreiraArenaCurupira");
+        if (portao == null)
+        {
+            portao = new GameObject("BarreiraArenaCurupira");
+            Undo.RegisterCreatedObjectUndo(portao, "Criar BarreiraArenaCurupira");
+            portao.transform.position = LayoutPrototipo.BarreiraArena;
+            portao.transform.localScale = new Vector3(0.8f, 5.2f, 1f);
+            var srP = portao.AddComponent<SpriteRenderer>();
+            srP.sprite = sprite;
+            srP.color = new Color(0.35f, 0.12f, 0.08f);
+            srP.sortingOrder = 2;
+            var colP = portao.AddComponent<BoxCollider2D>();
+            colP.isTrigger = false;
+            int camadaChao = LayerMask.NameToLayer("Chao");
+            if (camadaChao >= 0) portao.layer = camadaChao;
+            portao.AddComponent<BarreiraPuzzle>();
+        }
+
+        GameObject curupira = GameObject.Find("EncontroCurupira");
+        if (curupira == null)
+        {
+            curupira = new GameObject("EncontroCurupira");
+            Undo.RegisterCreatedObjectUndo(curupira, "Criar EncontroCurupira");
+            curupira.transform.position = LayoutPrototipo.Curupira;
+            curupira.transform.localScale = new Vector3(1.3f, 2.1f, 1f);
+            var sr = curupira.AddComponent<SpriteRenderer>();
+            sr.sprite = sprite;
+            sr.color = new Color(0.55f, 0.12f, 0.08f);
+            sr.sortingOrder = 2;
+            var col = curupira.AddComponent<BoxCollider2D>();
+            col.isTrigger = true;
+            col.size = new Vector2(1.6f, 1.4f);
+        }
+
+        var placeholder = curupira.GetComponent<MarcadorEncontro>();
+        if (placeholder != null) Object.DestroyImmediate(placeholder);
+
+        var encontro = curupira.GetComponent<EncontroCurupira>();
+        if (encontro == null) encontro = curupira.AddComponent<EncontroCurupira>();
+        encontro.portaoArena = portao;
     }
 
     static void CriarEncontroEditor(string nome, Vector3 posicao, Color cor, Vector3 escala, string titulo, string dica, Sprite sprite)
@@ -925,24 +973,31 @@ public static class ConfiguradorPrototipo
         sr.color = new Color(0.3f, 0.9f, 0.4f, 0.7f);
     }
 
-    static void CriarFocoEditor(string nome, Vector3 posicao, Sprite sprite)
+    static void GarantirFocoEditor(string nome, Vector3 posicao, Sprite sprite)
     {
-        if (GameObject.Find(nome) != null) return;
-        var go = new GameObject(nome);
-        Undo.RegisterCreatedObjectUndo(go, "Criar " + nome);
-        go.transform.position = posicao;
-        go.transform.localScale = new Vector3(0.55f, 0.9f, 1f);
-        var sr = go.AddComponent<SpriteRenderer>();
-        sr.sprite = sprite;
-        sr.color = new Color(0.7f, 0.2f, 0.85f, 0.9f);
-        sr.sortingOrder = 3;
-        var col = go.AddComponent<BoxCollider2D>();
-        col.isTrigger = true;
-        col.size = new Vector2(1.4f, 1.4f);
-        var foco = go.AddComponent<ObjetoEspectral>();
-        foco.tipo = TipoObjetoEspectral.Pista;
-        foco.textoPista = "Foco da corrupcao. O novelo de cipo se encaixa aqui.";
-        foco.idPaginaCaderno = CatalogoPaginasCap1.IdCurupira;
+        GameObject go = GameObject.Find(nome);
+        if (go == null)
+        {
+            go = new GameObject(nome);
+            Undo.RegisterCreatedObjectUndo(go, "Criar " + nome);
+            go.transform.position = posicao;
+            go.transform.localScale = new Vector3(0.55f, 0.9f, 1f);
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = sprite;
+            sr.color = new Color(0.7f, 0.2f, 0.85f, 0.9f);
+            sr.sortingOrder = 3;
+            var col = go.AddComponent<BoxCollider2D>();
+            col.isTrigger = true;
+            col.size = new Vector2(1.4f, 1.4f);
+            var espectral = go.AddComponent<ObjetoEspectral>();
+            espectral.tipo = TipoObjetoEspectral.Pista;
+            espectral.textoPista = "Foco da corrupcao. O novelo de cipo se encaixa aqui.";
+            espectral.idPaginaCaderno = CatalogoPaginasCap1.IdCurupira;
+            espectral.ocultarDica = true;
+        }
+
+        if (go.GetComponent<FocoCorrupcao>() == null)
+            go.AddComponent<FocoCorrupcao>();
     }
 
     static void GarantirZonaMorte()
@@ -965,7 +1020,7 @@ public static class ConfiguradorPrototipo
             LayoutPrototipo.DonaNair,
             new Color(1f, 0.75f, 0.2f),
             new Vector3(1.1f, 1.8f, 1f),
-            new[] { CatalogoPaginasCap1.IdTacaca },
+            new[] { CatalogoPaginasCap1.IdTacaca, CatalogoPaginasCap1.IdIara },
             new[]
             {
                 new FalaDialogo
@@ -983,8 +1038,24 @@ public static class ConfiguradorPrototipo
                 new FalaDialogo
                 {
                     personagem = "Dona Nair",
-                    emocao = "esperanca",
-                    texto = "Vou te ensinar o Tacaca: jambu, tucupi e goma. Serve de oferenda ao Boto e a Iara — e te protege da paralisia."
+                    emocao = "carinho",
+                    texto = "Fiz um Tacaca pra voce. Bebe quando o canto da Iara vier. Guarda outro pra oferenda ao Boto — o rio nao aceita cuia vazia."
+                },
+                new FalaDialogo
+                {
+                    personagem = "Dona Nair",
+                    emocao = "respeito",
+                    texto = "E leva estas fitas coloridas. A Mae d'Agua pede licenca, nao comida. Fitas, pente e espelho: pacto com o rio."
+                }
+            },
+            new[] { CatalogoItensNorte.IdTacaca, CatalogoItensNorte.IdFitasColoridas },
+            new[]
+            {
+                new FalaDialogo
+                {
+                    personagem = "Dona Nair",
+                    emocao = "serio",
+                    texto = "Tacaca pro Boto e pro Treme. Fitas pra Iara. Se faltar oferenda, fala com a Lia e o Seu Zeca."
                 }
             });
     }
@@ -996,7 +1067,7 @@ public static class ConfiguradorPrototipo
             LayoutPrototipo.Lia,
             new Color(1f, 0.45f, 0.7f),
             new Vector3(1f, 1.6f, 1f),
-            new[] { CatalogoPaginasCap1.IdBoto },
+            new[] { CatalogoPaginasCap1.IdBoto, CatalogoPaginasCap1.IdIara },
             new[]
             {
                 new FalaDialogo
@@ -1015,17 +1086,17 @@ public static class ConfiguradorPrototipo
                 {
                     personagem = "Lia",
                     emocao = "esperanca",
-                    texto = "Leva este retrato. Se voce o encontrar, mostra pra ele. Quero que lembre das noites claras. Eu ainda espero."
+                    texto = "Leva este retrato pro Boto. E este espelho pra Iara — ela se mira nas pedras. Pedir licenca ao rio e o que a vila ensina."
                 }
             },
-            CatalogoItensNorte.IdFotoDaLia,
+            new[] { CatalogoItensNorte.IdFotoDaLia, CatalogoItensNorte.IdEspelho },
             new[]
             {
                 new FalaDialogo
                 {
                     personagem = "Lia",
                     emocao = "esperanca",
-                    texto = "Voce ja tem meu retrato. Mostra pro rapaz do rio. Eu continuo na beira, esperando as noites claras."
+                    texto = "Retrato pro rapaz das noites. Espelho pra Mae d'Agua. Eu continuo na beira, esperando."
                 }
             });
     }
@@ -1050,28 +1121,28 @@ public static class ConfiguradorPrototipo
                 {
                     personagem = "Seu Zeca",
                     emocao = "serio",
-                    texto = "Toma a chave do meu caico, no cais. Tres flechas purificadoras acalmam o rapaz. Depois, Tacaca de oferenda — e fala com a Lia na vila. Ele lembra dela."
+                    texto = "Toma a chave do meu caico. Tres flechas acalmam o rapaz; Tacaca e o retrato da Lia completam a oferenda dele."
                 },
                 new FalaDialogo
                 {
                     personagem = "Seu Zeca",
-                    emocao = "aviso",
-                    texto = "Mais adiante ta a Iara. O canto arrasta gente pro fundo. Leva Tacaca e cuidado. So a Gota de Quartzo dela abre o caminho ate o Curupira."
+                    emocao = "respeito",
+                    texto = "Antes de remar trecho fundo, a gente pede licenca a Mae d'Agua. Leva meu pente de osso. Come Tacaca se o canto vier — sem Treme, ela puxa pro fundo."
                 }
             },
-            CatalogoItensNorte.IdChaveDaCanoa,
+            new[] { CatalogoItensNorte.IdChaveDaCanoa, CatalogoItensNorte.IdPenteDeOsso },
             new[]
             {
                 new FalaDialogo
                 {
                     personagem = "Seu Zeca",
                     emocao = "serio",
-                    texto = "A chave ja ta com voce. Solta o caico no cais, acalma o Boto com tres flechas e nao esquece a Lia. A Iara espera mais rio abaixo."
+                    texto = "Chave no cais, pente pra Iara. Coma o Treme na canoa. Nair tem fitas, Lia tem o espelho. E um pacto com o rio, nao um presente qualquer."
                 }
             });
     }
 
-    static void CriarNpcEditor(string nome, Vector3 posicao, Color cor, Vector3 escala, string[] paginasCaderno, FalaDialogo[] falas, string idItem = null, FalaDialogo[] falasApos = null)
+    static void CriarNpcEditor(string nome, Vector3 posicao, Color cor, Vector3 escala, string[] paginasCaderno, FalaDialogo[] falas, string[] idsItens = null, FalaDialogo[] falasApos = null)
     {
         var existente = GameObject.Find(nome);
         NpcDialogo npc;
@@ -1101,7 +1172,7 @@ public static class ConfiguradorPrototipo
         if (npc == null) return;
         npc.falas = falas;
         npc.paginasAoConversar = paginasCaderno;
-        npc.idItemAoConversar = idItem;
+        npc.idsItensAoConversar = idsItens;
         npc.falasAposEntrega = falasApos;
         EditorUtility.SetDirty(npc);
     }

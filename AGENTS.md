@@ -8,3 +8,5 @@
 - Ao mover scripts, mover junto o `.meta` para preservar o GUID.
 - Não editar `ProjectSettings/*.asset` ou cenas manualmente com o editor aberto; preferir ferramentas de editor (`MenuItem`).
 - Input atual: Input Manager antigo (Active Input Handling = Both). Migração para o Input System planejada para suporte a toque.
+- Play monta o protótipo via `BootstrapPrototipo` + `LayoutPrototipo` (não depende do menu `Lendas/` para testar).
+- Controles e regras do protótipo: `Docs/GDD.md` seção 12. Backlog: `Docs/Backlog.md`.

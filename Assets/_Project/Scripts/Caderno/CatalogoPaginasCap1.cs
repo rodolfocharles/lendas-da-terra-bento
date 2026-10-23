@@ -13,6 +13,8 @@ public static class CatalogoPaginasCap1
     public const string IdIara = "pista_iara";
     public const string IdIaraPurificada = "iara_purificada";
     public const string IdCurupira = "ritual_curupira";
+    public const string IdCurupiraPurificado = "curupira_purificado";
+    public const string IdPassoInvertido = "passo_invertido";
     public const string IdSombras = "bestiario_sombra";
     public const string IdNovelo = "ritual_novelo";
     public const string IdDiarioAvoAmuleto = "diario_avo_amuleto";
@@ -34,7 +36,7 @@ public static class CatalogoPaginasCap1
                 IdTacaca,
                 "Receita: Tacaca",
                 CategoriaPagina.Receita,
-                "Jambu + tucupi + goma. Oferenda ao Boto e a Iara. Buff Treme: resist. paralisia/veneno; aumenta o dano espiritual da besta.",
+                "Jambu + tucupi + goma. Dona Nair entrega o primeiro. Bebe um contra o canto da Iara (Treme); guarda outro pra oferenda ao Boto.",
                 "Dona Nair"),
             new PaginaCaderno(
                 IdBoto,
@@ -52,19 +54,19 @@ public static class CatalogoPaginasCap1
                 IdEssenciaAguas,
                 "Essencia das Aguas",
                 CategoriaPagina.Ritual,
-                "Energia espiritual do Boto no amuleto. Nao ocupa a bolsa. Vai ser precisa na conclusao da fase, junto da Gota de Quartzo da Iara.",
+                "Energia espiritual do Boto no amuleto. Nao ocupa a bolsa. No selo do Curupira, combina com a Gota de Quartzo da Iara.",
                 "Amuleto"),
             new PaginaCaderno(
                 IdIara,
                 "Iara",
                 CategoriaPagina.Pista,
-                "Protegia pescadores; agora, corrompida, arrasta gente ao fundo. Cuidado com o canto. A Gota de Quartzo dela abre o caminho ate o Curupira.",
-                "Seu Zeca"),
+                "Mae d'Agua. Sem Treme, o canto puxa da canoa. Oferenda de licenca: pente de osso (Zeca), espelho (Lia) e fitas (Nair). A Gota de Quartzo abre o caminho ate o Curupira.",
+                "Vila"),
             new PaginaCaderno(
                 IdIaraPurificada,
                 "Gota de Quartzo",
                 CategoriaPagina.Ritual,
-                "O Treme segurou o canto. O Tacaca de oferenda acalmou a Iara. A Gota de Quartzo abre o caminho ate o Curupira.",
+                "O Treme quebrou o canto. Pente, espelho e fitas pediram licenca. A Iara sentiu a Essencia das Aguas e entregou a Gota de Quartzo.",
                 "Bento"),
             new PaginaCaderno(
                 IdSombras,
@@ -76,8 +78,20 @@ public static class CatalogoPaginasCap1
                 IdCurupira,
                 "Curupira — fraqueza",
                 CategoriaPagina.Ritual,
-                "Marca do avo: o novelo de cipo acalma o Curupira. Visao Espectral para achar os focos. Purificar Sombras enquanto a corrupcao desce.",
+                "Marca do avo: o novelo de cipo acalma o Curupira. Visao Espectral para achar os focos. Purificar Sombras enquanto a corrupcao desce. A Gota abre a arena; Gota + Essencia selam o ritual.",
                 "Pista espectral"),
+            new PaginaCaderno(
+                IdCurupiraPurificado,
+                "Curupira purificado",
+                CategoriaPagina.Pista,
+                "O novelo nos focos, as Sombras e o selo da Gota com a Essencia das Aguas devolveram a forma tradicional: menino, cabelo de fogo, pes invertidos.",
+                "Bento"),
+            new PaginaCaderno(
+                IdPassoInvertido,
+                "Passo Invertido",
+                CategoriaPagina.Ritual,
+                "Fragmento do Curupira no amuleto. Ainda nao usei o passo: a mata deve mostrar caminhos falsos e fazer a vegetacao crescer como plataforma.",
+                "Amuleto"),
             new PaginaCaderno(
                 IdNovelo,
                 "Novelo Encantado",

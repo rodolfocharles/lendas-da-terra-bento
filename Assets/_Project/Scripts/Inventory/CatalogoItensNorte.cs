@@ -18,6 +18,9 @@ public static class CatalogoItensNorte
     public const string IdGotaDeQuartzo = "gota_quartzo";
     public const string IdChaveDaCanoa = "chave_canoa";
     public const string IdFotoDaLia = "foto_lia";
+    public const string IdFitasColoridas = "fitas_coloridas";
+    public const string IdEspelho = "espelho";
+    public const string IdPenteDeOsso = "pente_osso";
 
     public static ItemDados Jambu { get; private set; }
     public static ItemDados Tucupi { get; private set; }
@@ -32,6 +35,9 @@ public static class CatalogoItensNorte
     public static ItemDados GotaDeQuartzo { get; private set; }
     public static ItemDados ChaveDaCanoa { get; private set; }
     public static ItemDados FotoDaLia { get; private set; }
+    public static ItemDados FitasColoridas { get; private set; }
+    public static ItemDados Espelho { get; private set; }
+    public static ItemDados PenteDeOsso { get; private set; }
 
     public static void Garantir()
     {
@@ -42,7 +48,7 @@ public static class CatalogoItensNorte
         if (GomaDeTapioca == null)
             GomaDeTapioca = Criar(IdGoma, "Goma de Tapioca", "Goma que da o ponto do Tacaca.", CategoriaItem.Ingrediente);
         if (Tacaca == null)
-            Tacaca = Criar(IdTacaca, "Tacaca", "Oferenda ao Boto e a Iara. Concede o buff Treme.", CategoriaItem.Comida);
+            Tacaca = Criar(IdTacaca, "Tacaca", "Oferenda ao Boto. Beber concede Treme contra o canto da Iara. Guarde um pra oferenda.", CategoriaItem.Comida);
         if (PatoNoTucupi == null)
             PatoNoTucupi = Criar(IdPatoNoTucupi, "Pato no Tucupi", "Prato tipico do Norte. Variacao do buff Treme.", CategoriaItem.Comida);
         if (Cipo == null)
@@ -61,6 +67,12 @@ public static class CatalogoItensNorte
             ChaveDaCanoa = Criar(IdChaveDaCanoa, "Chave da Canoa", "Chave que Seu Zeca deixou para o caico no cais.", CategoriaItem.Item, 1);
         if (FotoDaLia == null)
             FotoDaLia = Criar(IdFotoDaLia, "Foto da Lia", "Retrato que Lia mandou ao Boto: para ele lembrar das noites no igarape.", CategoriaItem.Reliquia, 1);
+        if (FitasColoridas == null)
+            FitasColoridas = Criar(IdFitasColoridas, "Fitas Coloridas", "Oferenda de respeito a Iara. Dona Nair mandou para pedir licenca ao rio.", CategoriaItem.Reliquia, 1);
+        if (Espelho == null)
+            Espelho = Criar(IdEspelho, "Espelho", "Oferenda a Mae d'Agua. Lia mandou para ela admirar o reflexo nas pedras.", CategoriaItem.Reliquia, 1);
+        if (PenteDeOsso == null)
+            PenteDeOsso = Criar(IdPenteDeOsso, "Pente de Osso", "Oferenda de pescador. Seu Zeca pede licenca a Iara antes de remar trecho fundo.", CategoriaItem.Reliquia, 1);
     }
 
     public static ItemDados PorId(string id)
@@ -79,6 +91,9 @@ public static class CatalogoItensNorte
         if (id == IdGotaDeQuartzo) return GotaDeQuartzo;
         if (id == IdChaveDaCanoa) return ChaveDaCanoa;
         if (id == IdFotoDaLia) return FotoDaLia;
+        if (id == IdFitasColoridas) return FitasColoridas;
+        if (id == IdEspelho) return Espelho;
+        if (id == IdPenteDeOsso) return PenteDeOsso;
         return null;
     }
 

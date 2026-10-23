@@ -35,8 +35,12 @@ public static class LayoutPrototipo
     public static readonly Vector3 BloqueioBoto = new Vector3(36f, 1.5f, 0f);
     public static readonly Vector3 BarreiraBoto = new Vector3(40.2f, 2.6f, 0f);
     public static readonly Vector3 CaisIara = new Vector3(42.4f, 0.55f, 0f);
+    public const float InicioZonaIara = 41.5f;
+    public const float LimiteCanoaIara = 45.8f;
     public static readonly Vector3 GanchoRio = new Vector3(38f, 3.6f, 0f);
-    public static readonly Vector3 Iara = new Vector3(44f, 1.3f, 0f);
+    public static readonly Vector3 Iara = new Vector3(44.6f, 1.55f, 0f);
+    public static readonly Vector3 IaraAgua = new Vector3(43.2f, 0.7f, 0f);
+    public static readonly Vector3 CaisAposIara = new Vector3(47.2f, 0.55f, 0f);
     public static readonly Vector3 BarreiraIara = new Vector3(48.2f, 2.6f, 0f);
     public static readonly Vector3 JambuRio = new Vector3(38f, 0.85f, 0f);
     public static readonly Vector3 TucupiRio = new Vector3(39.4f, 0.85f, 0f);
@@ -61,6 +65,7 @@ public static class LayoutPrototipo
     public static readonly Vector3 PisoChegada = new Vector3(117.5f, 3.1f, 0f);
     public static readonly Vector3 Reliquia = new Vector3(117.5f, 3.9f, 0f);
 
+    public static readonly Vector3 BarreiraArena = new Vector3(121.5f, 2.6f, 0f);
     public static readonly Vector3 CheckpointArena = new Vector3(124f, 0.85f, 0f);
     public static readonly Vector3 FocoA = new Vector3(128f, 1.1f, 0f);
     public static readonly Vector3 SombraArena = new Vector3(131f, 1.3f, 0f);
@@ -126,10 +131,14 @@ public static class LayoutPrototipo
         Posicionar("Coletavel_Tucupi_Rio", TucupiRio);
         Posicionar("Coletavel_Goma_Rio", GomaRio);
         Posicionar("CheckpointArena", CheckpointArena);
+        Posicionar("BarreiraArenaCurupira", BarreiraArena);
+        var muroArena = GameObject.Find("BarreiraArenaCurupira");
+        if (muroArena != null) muroArena.transform.localScale = new Vector3(0.8f, 5.2f, 1f);
         Posicionar("FocoCorrupcao_A", FocoA);
         Posicionar("SombraArena", SombraArena);
         Posicionar("FocoCorrupcao_B", FocoB);
-        Posicionar("EncontroCurupira", Curupira);
+        if (!EncontroCurupira.Purificado)
+            Posicionar("EncontroCurupira", Curupira);
         Posicionar("FocoCorrupcao_C", FocoC);
 
         Posicionar("Zona_Vila", ZonaVila);

@@ -15,6 +15,8 @@ public class ObjetoEspectral : MonoBehaviour
     [TextArea(1, 3)]
     public string textoPista = "Simbolo antigo...";
     public string idPaginaCaderno;
+    public bool forcarVisivel;
+    public bool ocultarDica;
 
     private SpriteRenderer sprite;
     private Collider2D colisor;
@@ -39,12 +41,26 @@ public class ObjetoEspectral : MonoBehaviour
         BentoVisaoEspectral.VisaoAlterada -= Aplicar;
     }
 
+    public void DefinirCorVisivel(Color cor)
+    {
+        corVisivel = cor;
+        Aplicar(BentoVisaoEspectral.Ativa || forcarVisivel);
+    }
+
+    public void RevelarPermanente()
+    {
+        forcarVisivel = true;
+        Aplicar(true);
+    }
+
     void Aplicar(bool visaoAtiva)
     {
+        bool mostrar = visaoAtiva || forcarVisivel;
+
         if (sprite != null)
         {
             var c = corVisivel;
-            if (!visaoAtiva)
+            if (!mostrar)
             {
                 c.a = 0f;
                 sprite.color = c;
@@ -61,12 +77,12 @@ public class ObjetoEspectral : MonoBehaviour
         {
             // Pistas nao bloqueiam; plataformas so colidem quando reveladas
             if (tipo == TipoObjetoEspectral.Plataforma)
-                colisor.enabled = visaoAtiva;
+                colisor.enabled = mostrar;
             else
-                colisor.enabled = visaoAtiva; // trigger da pista
+                colisor.enabled = mostrar;
         }
 
-        if (!visaoAtiva) jogadorProximo = false;
+        if (!mostrar) jogadorProximo = false;
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -88,8 +104,9 @@ public class ObjetoEspectral : MonoBehaviour
 
     void OnGUI()
     {
-        if (tipo != TipoObjetoEspectral.Pista) return;
-        if (!BentoVisaoEspectral.Ativa || !jogadorProximo) return;
+        if (tipo != TipoObjetoEspectral.Pista || ocultarDica) return;
+        if (!BentoVisaoEspectral.Ativa && !forcarVisivel) return;
+        if (!jogadorProximo) return;
         if (Camera.main == null) return;
 
         Vector3 tela = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 0.9f);
