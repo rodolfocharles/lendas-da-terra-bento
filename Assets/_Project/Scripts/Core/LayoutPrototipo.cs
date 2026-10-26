@@ -27,6 +27,7 @@ public static class LayoutPrototipo
 
     public static readonly Vector3 CheckpointRio = new Vector3(20f, 0.85f, 0f);
     public static readonly Vector3 Zeca = new Vector3(24f, 1.4f, 0f);
+    public static readonly Vector3 ChaveCanoaCais = new Vector3(25.6f, 0.85f, 0f);
     public static readonly Vector3 CanoaCais = new Vector3(27.2f, 0.55f, 0f);
     public static readonly Vector3 BarreiraCais = new Vector3(29.0f, 2.6f, 0f);
     public static readonly Vector3 AguaRio = new Vector3(36f, -0.65f, 0f);
@@ -114,6 +115,7 @@ public static class LayoutPrototipo
 
         Posicionar("CheckpointRio", CheckpointRio);
         Posicionar("AguaRio", AguaRio);
+        Posicionar("Coletavel_ChaveCanoa", ChaveCanoaCais);
         if (!CanoaRio.JogadorDentro)
             Posicionar("CanoaRio", CanoaCais);
         Posicionar("BarreiraCais", BarreiraCais);

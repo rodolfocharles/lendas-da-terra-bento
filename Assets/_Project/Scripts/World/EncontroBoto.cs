@@ -4,8 +4,9 @@ using UnityEngine;
 
 /// <summary>
 /// Boto espiritual: a poluicao nao o contamina, mas a dor dos animais
-/// o deixa incontrolavel. Tres flechas purificadoras acalmam; Tacaca +
-/// foto da Lia completam a oferenda e enviam a Essencia das Aguas ao amuleto.
+/// o deixa incontrolavel. Na agua turva, Bento precisa usar a Visao Espectral (V)
+/// para enxergar a aura espiritual dele e acertar 3 flechas purificadoras.
+/// Tacaca + foto da Lia completam a oferenda e enviam a Essencia das Aguas ao amuleto.
 /// </summary>
 [RequireComponent(typeof(Collider2D))]
 public class EncontroBoto : MonoBehaviour, IRecebeDano
@@ -25,17 +26,24 @@ public class EncontroBoto : MonoBehaviour, IRecebeDano
     public int flechasParaAcalmar = 3;
     public float intervaloInvestida = 2.8f;
     public float velocidadeInvestida = 9f;
+    public float duracaoAuraAposVisao = 4.5f;
 
     int flechasAcertadas;
     SpriteRenderer sprite;
     bool jogadorProximo;
     bool investindo;
     float proximaInvestida;
+    float auraReveladaAte;
+    float avisoSemVisaoAte;
+    Color corAguaTurva = new Color(0.18f, 0.35f, 0.45f, 0.16f);
+    Color corAuraEspectral = new Color(1f, 0.35f, 0.85f, 0.98f);
     Color corBravo = new Color(0.55f, 0.2f, 0.45f);
     Color corCalmo = new Color(0.95f, 0.55f, 0.75f);
     Vector3 posicaoRepouso;
 
     public int FlechasAcertadas => flechasAcertadas;
+    public bool AuraVisivel =>
+        Acalmado || CaminhoLiberado || BentoVisaoEspectral.Ativa || Time.time < auraReveladaAte;
 
     void Awake()
     {
@@ -43,6 +51,7 @@ public class EncontroBoto : MonoBehaviour, IRecebeDano
         Acalmado = false;
         CaminhoLiberado = false;
         flechasAcertadas = 0;
+        auraReveladaAte = 0f;
         sprite = GetComponent<SpriteRenderer>();
         var col = GetComponent<Collider2D>();
         col.isTrigger = true;
@@ -72,10 +81,19 @@ public class EncontroBoto : MonoBehaviour, IRecebeDano
         if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto
             || HudCaderno.Aberto || HudPesquisa.Aberto) return;
 
-        if (!Acalmado && CanoaRio.JogadorDentro && CanoaNaZonaDeCombate() && !investindo)
+        if (!Acalmado)
         {
-            if (Time.time >= proximaInvestida)
-                StartCoroutine(Investir());
+            if (BentoVisaoEspectral.Ativa && CanoaRio.JogadorDentro && CanoaNaZonaDeCombate())
+                auraReveladaAte = Time.time + duracaoAuraAposVisao;
+
+            if (!investindo)
+                AplicarEstado();
+
+            if (CanoaRio.JogadorDentro && CanoaNaZonaDeCombate() && !investindo)
+            {
+                if (Time.time >= proximaInvestida)
+                    StartCoroutine(Investir());
+            }
         }
 
         if (!jogadorProximo || !Acalmado || !CanoaRio.JogadorDentro) return;
@@ -103,7 +121,12 @@ public class EncontroBoto : MonoBehaviour, IRecebeDano
             yield break;
         }
 
-        if (sprite != null) sprite.color = new Color(0.75f, 0.15f, 0.35f);
+        if (sprite != null)
+        {
+            sprite.color = AuraVisivel
+                ? corAuraEspectral
+                : new Color(0.55f, 0.2f, 0.45f, 0.55f);
+        }
 
         Vector3 alvo = canoa.transform.position + Vector3.up * 0.35f;
         while (Vector3.Distance(transform.position, alvo) > 0.35f)
@@ -114,6 +137,12 @@ public class EncontroBoto : MonoBehaviour, IRecebeDano
                 AplicarEstado();
                 yield break;
             }
+
+            if (BentoVisaoEspectral.Ativa)
+                auraReveladaAte = Time.time + duracaoAuraAposVisao;
+
+            if (sprite != null && AuraVisivel)
+                sprite.color = corAuraEspectral;
 
             transform.position = Vector3.MoveTowards(
                 transform.position, alvo, velocidadeInvestida * Time.deltaTime);
@@ -126,6 +155,9 @@ public class EncontroBoto : MonoBehaviour, IRecebeDano
         Vector3 volta = posicaoRepouso;
         while (Vector3.Distance(transform.position, volta) > 0.1f)
         {
+            if (BentoVisaoEspectral.Ativa)
+                auraReveladaAte = Time.time + duracaoAuraAposVisao;
+
             transform.position = Vector3.MoveTowards(
                 transform.position, volta, velocidadeInvestida * 0.7f * Time.deltaTime);
             yield return null;
@@ -145,13 +177,22 @@ public class EncontroBoto : MonoBehaviour, IRecebeDano
             return;
         }
 
+        if (!AuraVisivel)
+        {
+            avisoSemVisaoAte = Time.time + 3.2f;
+            Debug.Log("[Lendas] Agua turva! Use a Visao Espectral [V] para enxergar a aura do Boto antes de atirar.");
+            return;
+        }
+
         flechasAcertadas++;
+        auraReveladaAte = 0f;
+        avisoSemVisaoAte = 0f;
         Debug.Log($"[Lendas] Flecha no Boto ({flechasAcertadas}/{flechasParaAcalmar}).");
 
         if (flechasAcertadas >= flechasParaAcalmar)
             Acalmar();
-        else if (sprite != null)
-            sprite.color = Color.Lerp(corBravo, corCalmo, flechasAcertadas / (float)flechasParaAcalmar);
+        else
+            AplicarEstado();
     }
 
     void Acalmar()
@@ -170,7 +211,7 @@ public class EncontroBoto : MonoBehaviour, IRecebeDano
             {
                 personagem = "Boto",
                 emocao = "cansado",
-                texto = "As flechas dissipam a raiva. O Boto paira ao lado da canoa, ainda triste — a agua continua doente, mas ele ja nao tenta afundar o caico."
+                texto = "As flechas guiadas pelo amuleto dissipam a raiva. O Boto emerge da agua turva ao lado da canoa, ainda triste — mas ja nao tenta afundar o caico."
             },
             new FalaDialogo
             {
@@ -275,8 +316,12 @@ public class EncontroBoto : MonoBehaviour, IRecebeDano
     {
         if (sprite != null)
         {
-            if (CaminhoLiberado || Acalmado) sprite.color = corCalmo;
-            else sprite.color = Color.Lerp(corBravo, corCalmo, flechasAcertadas / (float)Mathf.Max(1, flechasParaAcalmar));
+            if (CaminhoLiberado || Acalmado)
+                sprite.color = corCalmo;
+            else if (AuraVisivel)
+                sprite.color = Color.Lerp(corAuraEspectral, corCalmo, flechasAcertadas / (float)Mathf.Max(1, flechasParaAcalmar));
+            else
+                sprite.color = corAguaTurva;
         }
 
         if (barreiras == null) return;
@@ -310,8 +355,15 @@ public class EncontroBoto : MonoBehaviour, IRecebeDano
 
         if (!Acalmado && CanoaRio.JogadorDentro && CanoaNaZonaDeCombate())
         {
-            GUI.Box(new Rect(tela.x - 140f, y - 28f, 280f, 32f),
-                $"Boto agitado  {flechasAcertadas}/{flechasParaAcalmar} flechas");
+            string textoCombate;
+            if (Time.time < avisoSemVisaoAte && !AuraVisivel)
+                textoCombate = $"Agua turva! Use [V] Visao Espectral para ver a aura ({flechasAcertadas}/{flechasParaAcalmar})";
+            else if (AuraVisivel)
+                textoCombate = $"Aura visivel! [K] Flecha Purificadora ({flechasAcertadas}/{flechasParaAcalmar})";
+            else
+                textoCombate = $"Agua turva — [V] Ver aura do Boto ({flechasAcertadas}/{flechasParaAcalmar} flechas)";
+
+            GUI.Box(new Rect(tela.x - 185f, y - 28f, 370f, 32f), textoCombate);
             return;
         }
 

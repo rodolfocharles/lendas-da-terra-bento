@@ -442,6 +442,27 @@ public static class BootstrapPrototipo
 
         if (canoa.GetComponent<CanoaRio>() == null)
             canoa.AddComponent<CanoaRio>();
+
+        CatalogoItensNorte.Garantir();
+        var inv = InventarioBento.Instancia ?? Object.FindFirstObjectByType<InventarioBento>();
+        bool jaTemChave = inv != null && inv.TemPorId(CatalogoItensNorte.IdChaveDaCanoa);
+        if (!jaTemChave && GameObject.Find("Coletavel_ChaveCanoa") == null)
+        {
+            var chaveGo = CriarMarcador("Coletavel_ChaveCanoa", LayoutPrototipo.ChaveCanoaCais,
+                new Color(0.55f, 0.9f, 1f, 0.95f), new Vector3(0.5f, 0.5f, 1f));
+            var colChave = chaveGo.GetComponent<BoxCollider2D>();
+            colChave.isTrigger = true;
+            colChave.size = new Vector2(1.4f, 1.4f);
+            chaveGo.GetComponent<SpriteRenderer>().sortingOrder = 4;
+
+            var coletavel = chaveGo.AddComponent<ColetavelItem>();
+            coletavel.item = CatalogoItensNorte.ChaveDaCanoa;
+            coletavel.quantidade = 1;
+
+            var espectral = chaveGo.AddComponent<ObjetoEspectral>();
+            espectral.tipo = TipoObjetoEspectral.Pista;
+            espectral.textoPista = "Brilho na lama: Chave da Canoa";
+        }
     }
 
     static void GarantirEncontroBoto()
@@ -731,7 +752,13 @@ public static class BootstrapPrototipo
                 {
                     personagem = "Seu Zeca",
                     emocao = "serio",
-                    texto = "Toma a chave do meu caico. Tres flechas acalmam o rapaz; Tacaca e o retrato da Lia completam a oferenda dele."
+                    texto = "Quando ele bateu no cais, a chave do meu caico caiu na lama! Use o amuleto do seu avo — a Visao Espectral [V] — ali na margem pra achar a chave."
+                },
+                new FalaDialogo
+                {
+                    personagem = "Seu Zeca",
+                    emocao = "aviso",
+                    texto = "Na agua turva, use tambem o [V] pra enxergar a aura espiritual do Boto e acertar tres flechas purificadoras. Depois, Tacaca e o retrato da Lia."
                 },
                 new FalaDialogo
                 {
@@ -740,14 +767,14 @@ public static class BootstrapPrototipo
                     texto = "Antes de remar trecho fundo, a gente pede licenca a Mae d'Agua. Leva meu pente de osso. Come Tacaca se o canto vier — sem Treme, ela puxa pro fundo."
                 }
             },
-            new[] { CatalogoItensNorte.IdChaveDaCanoa, CatalogoItensNorte.IdPenteDeOsso },
+            new[] { CatalogoItensNorte.IdPenteDeOsso },
             new[]
             {
                 new FalaDialogo
                 {
                     personagem = "Seu Zeca",
                     emocao = "serio",
-                    texto = "Chave no cais, pente pra Iara. Coma o Treme na canoa. Nair tem fitas, Lia tem o espelho. E um pacto com o rio, nao um presente qualquer."
+                    texto = "Segura [V] na beira do cais pra achar a chave na lama, e usa [V] na canoa pra ver a aura do Boto na agua turva. O pente da Iara ja ta com voce."
                 }
             });
     }

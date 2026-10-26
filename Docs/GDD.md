@@ -97,7 +97,7 @@ Estações: **Fogão a Lenha**, **Bancada de Alquimia**, **Mesa de Pesquisa**. B
 |---|---|
 | **Dona Nair** | Guia; Tacacá (Treme + oferenda ao Boto) e **fitas coloridas** para a Iara |
 | **Namorada do Boto (Lia)** | Retrato para o Boto e **espelho** para a Iara; após purificação: feliz, apaixonada |
-| **Pescador (Seu Zeca)** | Chave da canoa e **pente de osso**; testemunha do canto da Iara |
+| **Pescador (Seu Zeca)** | **Pente de osso**; indica onde caiu a chave da canoa no cais (Visão Espectral) e testemunha o canto da Iara |
 
 ---
 
@@ -153,7 +153,7 @@ Pisos falsos, pedras, dardos, luz/espelhos em ruínas (Marajoara, jesuítas, qui
 1. **Chegada de Barca.** Vila acinzentada: fumaça e incêndio ao fundo, água poluída, pesca e banho proibidos (Barão + corrupção). Dona Nair recebe Bento: avô, amuleto, receita do Tacacá (oferenda ao Boto + buff Treme) e **entrega o primeiro Tacacá pronto** mais **fitas coloridas** para a Iara. Lia dá o espelho; Seu Zeca, o pente de osso.
 2. **Exploração** com chicote, facão e Visão Espectral; Sombras; momentos de afeto.
 3. **Pistas.** Namorada do Boto + pescador da Iara alimentam o Caderno; Mesa de Pesquisa + diário do avô revelam o **Novelo de Cipó** para o Curupira.
-4. **Rio: Boto + Iara.** Seu Zeca empresta a **canoa** (chave no cais) e o **pente de osso**. O Boto é entidade espiritual: a poluição não o contamina, mas a dor dos animais o deixa incontrolável e ele tenta afundar o caíco. **Três flechas purificadoras** acalmam; a oferenda completa é **Tacacá + foto da Lia**. O Boto envia a **Essência das Águas** ao amuleto. Sem desembarcar, a **Iara** desce da margem e canta: sem Treme, puxa o Bento ao fundo; com Treme, sente o amuleto. A oferenda dela é **pente + espelho + fitas** (licença ao rio, não comida). Entrega a **Gota de Quartzo**.
+4. **Rio: Boto + Iara.** Seu Zeca entrega o **pente de osso** e conta que a **chave da canoa** caiu na lama do cais — Bento usa a **Visão Espectral (`V`)** para revelá-la. O Boto é entidade espiritual: a poluição não o contamina, mas a dor dos animais o deixa incontrolável e ele tenta afundar o caíco. Na água turva, Bento usa a **Visão Espectral (`V`)** para enxergar a aura do Boto e acertar **três flechas purificadoras**; a oferenda completa é **Tacacá + foto da Lia**. O Boto envia a **Essência das Águas** ao amuleto. Sem desembarcar, a **Iara** desce da margem e canta: sem Treme, puxa o Bento ao fundo; com Treme, sente o amuleto. A oferenda dela é **pente + espelho + fitas** (licença ao rio, não comida). Entrega a **Gota de Quartzo**.
 5. **Feira e escambo.** Cipó, resina, jambu, tucupi, goma; fundo de pesquisa com teto; moeda na feira.
 6. **Preparo na Barca.** Novelo Encantado, flechas, Tacacá/Pato no Tucupi.
 7. **Resgate da fauna** nas armadilhas do Barão.
@@ -228,9 +228,9 @@ Ao apertar Play, o `BootstrapPrototipo` monta a fase cinza. O `LayoutPrototipo` 
 
 ### Regras dos encontros (implementadas)
 
-**Canoa.** Precisa da chave de Seu Zeca. Três impactos do Boto afundam o caíco (respawn no checkpoint do rio). Só desembarca em cais.
+**Canoa.** Precisa da chave de Seu Zeca (revelada no cais com Visão Espectral `V`). Três impactos do Boto afundam o caíco (respawn no checkpoint do rio). Só desembarca em cais.
 
-**Boto.** Entidade espiritual: a poluição não o contamina; a dor dos animais o deixa incontrolável. Na zona, investe contra a canoa. **3 flechas purificadoras** acalmam. Oferenda: **Tacacá + foto da Lia** (E). Envia a **Essência das Águas** ao amuleto (não ocupa a bolsa).
+**Boto.** Entidade espiritual: a poluição não o contamina; a dor dos animais o deixa incontrolável. Na zona, investe contra a canoa oculto na água turva. **Visão Espectral (`V`)** revela sua aura espiritual para acertar **3 flechas purificadoras**. Oferenda: **Tacacá + foto da Lia** (E). Envia a **Essência das Águas** ao amuleto (não ocupa a bolsa).
 
 **Iara.** Sem desembarcar, desce da margem e canta. Sem Treme, em ~6 s puxa o Bento ao fundo. Com Treme (beber Tacacá ou Pato no inventário, inclusive com E durante o canto), ela para. Oferenda de licença: **pente + espelho + fitas** (não comida). Entrega a **Gota de Quartzo**.
 
@@ -246,7 +246,7 @@ Ao apertar Play, o `BootstrapPrototipo` monta a fase cinza. O `LayoutPrototipo` 
 |---|---|
 | Dona Nair | 1 Tacacá + fitas coloridas |
 | Lia | Foto da Lia + espelho |
-| Seu Zeca | Chave da canoa + pente de osso |
+| Seu Zeca | Pente de osso (chave da canoa fica oculta na lama do cais até usar `V`) |
 
 ### Ainda placeholder
 

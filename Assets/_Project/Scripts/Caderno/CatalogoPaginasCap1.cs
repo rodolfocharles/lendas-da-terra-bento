@@ -42,7 +42,7 @@ public static class CatalogoPaginasCap1
                 IdBoto,
                 "Boto-Cor-de-Rosa",
                 CategoriaPagina.Pista,
-                "Entidade espiritual: a poluicao nao o contamina, mas a dor dos animais o deixa bravo e incontrolavel. Seu Zeca empresta a canoa. Tres flechas purificadoras acalmam; a oferenda pede Tacaca e o retrato de Lia.",
+                "Entidade espiritual: a poluicao nao o contamina, mas a dor dos animais o deixa bravo. A chave do caico caiu na lama do cais (usar Visao Espectral [V]). Na agua turva, [V] revela a aura espiritual do Boto para acertar 3 flechas purificadoras; a oferenda pede Tacaca e o retrato de Lia.",
                 "Lia e Seu Zeca"),
             new PaginaCaderno(
                 IdBotoAcalmado,

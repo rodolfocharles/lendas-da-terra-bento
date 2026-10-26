@@ -36,6 +36,13 @@ public class ColetavelItem : MonoBehaviour
         if (!exigirTecla) TentarColetar();
     }
 
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if (exigirTecla) return;
+        if (other.GetComponent<BentoMovimento>() == null) return;
+        TentarColetar();
+    }
+
     void OnTriggerExit2D(Collider2D other)
     {
         if (other.GetComponent<BentoMovimento>() != null) jogadorProximo = false;
