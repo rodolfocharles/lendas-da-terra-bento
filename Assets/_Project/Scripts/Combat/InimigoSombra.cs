@@ -25,6 +25,16 @@ public class InimigoSombra : MonoBehaviour, IRecebeDano, IAlvoChicote
     public bool Purificada { get; private set; }
     public float ProgressoCorrupcao => corrupcaoMaxima <= 0f ? 0f : CorrupcaoAtual / corrupcaoMaxima;
 
+    public void DefinirCorrupcaoInicial(float valor)
+    {
+        corrupcaoMaxima = Mathf.Max(1f, valor);
+        if (!Purificada && !sumindo)
+        {
+            CorrupcaoAtual = corrupcaoMaxima;
+            AtualizarCor();
+        }
+    }
+
     public Transform Transforme => transform;
     public bool PodeSerPuxado => !Purificada && !sumindo && Time.time >= proximoPuxao;
 

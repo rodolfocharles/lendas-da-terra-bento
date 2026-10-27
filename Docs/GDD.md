@@ -2,6 +2,8 @@
 
 Documento de Design de Jogo (GDD) — versão consolidada.
 
+> **Protótipo (out/2026):** a fatia Norte já é jogável até o ritual do Curupira (ainda placa). Layout em faixas (Barca → Vila → Rio → Mata → Ruínas → Arena). Restauração, epílogo e resgate da fauna ainda pendem. Controles e regras atuais estão na [seção 12](#12-estado-atual-do-protótipo).
+
 ## 1. Visão geral
 
 - **Gênero:** 2D Action-Adventure / Puzzle RPG side-scroller com progressão estilo metroidvania leve.
@@ -93,9 +95,9 @@ Estações: **Fogão a Lenha**, **Bancada de Alquimia**, **Mesa de Pesquisa**. B
 ### Cap. 1 — Amazônia
 | NPC | Papel |
 |---|---|
-| **Dona Nair** | Guia; fala do avô, do amuleto e da receita do Tacacá (oferenda + buff) |
-| **Namorada do Boto** | Sente falta do “rapaz bonito” das noites; após purificação: feliz, apaixonada — ele voltou a aparecer |
-| **Pescador / testemunha da Iara** | Conta que a Iara protegia pescadores e banhistas; agora, corrompida, ataca e leva ao fundo |
+| **Dona Nair** | Guia; Tacacá (Treme + oferenda ao Boto) e **fitas coloridas** para a Iara |
+| **Namorada do Boto (Lia)** | Retrato para o Boto e **espelho** para a Iara; após purificação: feliz, apaixonada |
+| **Pescador (Seu Zeca)** | **Pente de osso**; indica onde caiu a chave da canoa no cais (Visão Espectral) e testemunha o canto da Iara |
 
 ---
 
@@ -117,7 +119,8 @@ Estações: **Fogão a Lenha**, **Bancada de Alquimia**, **Mesa de Pesquisa**. B
 
 | Região | Pratos | Ingredientes | Efeito |
 |---|---|---|---|
-| **Norte** | Tacacá / Pato no Tucupi | Jambu, Tucupi, Goma de Tapioca | **Treme:** resist. paralisia/veneno; aumenta dano elétrico/espiritual da besta. Tacacá também é **oferenda** a Boto e Iara |
+| **Norte** | Tacacá | Jambu + Tucupi + Goma | **Treme** (beber) contra o canto da Iara; **oferenda** ao Boto (não beber o último se for oferecer) |
+| **Norte** | Pato no Tucupi | 2× Tucupi + Jambu | Variante do **Treme** (só buff; não serve de oferenda ao Boto) |
 | Nordeste | Baião de Dois com carne de sol | Feijão fradinho, queijo coalho, carne de sol | **Vigor Sertanejo:** stamina (correr, chicote, escalar) |
 | Centro-Oeste | Galinhada com pequi | Pequi, arroz, galinha caipira | **Olho de Águia:** alcance e precisão da besta |
 | Sudeste | Feijoada completa | Feijão preto, porco, couve | **Casca Grossa:** escudo extra; menos dano de impacto |
@@ -147,14 +150,14 @@ Pisos falsos, pedras, dardos, luz/espelhos em ruínas (Marajoara, jesuítas, qui
 
 ## 9. Capítulo 1 — O Clamor dos Igarapés (roteiro)
 
-1. **Chegada de Barca.** Vila acinzentada: fumaça e incêndio ao fundo, água poluída, pesca e banho proibidos (Barão + corrupção). Dona Nair recebe Bento: avô, amuleto, receita do Tacacá (oferenda a Boto/Iara + buff).
+1. **Chegada de Barca.** Vila acinzentada: fumaça e incêndio ao fundo, água poluída, pesca e banho proibidos (Barão + corrupção). Dona Nair recebe Bento: avô, amuleto, receita do Tacacá (oferenda ao Boto + buff Treme) e **entrega o primeiro Tacacá pronto** mais **fitas coloridas** para a Iara. Lia dá o espelho; Seu Zeca, o pente de osso.
 2. **Exploração** com chicote, facão e Visão Espectral; Sombras; momentos de afeto.
 3. **Pistas.** Namorada do Boto + pescador da Iara alimentam o Caderno; Mesa de Pesquisa + diário do avô revelam o **Novelo de Cipó** para o Curupira.
-4. **Rio: Boto + Iara.** Seu Zeca empresta a **canoa** (chave no cais). O Boto é entidade espiritual: a poluição não o contamina, mas a dor dos animais o deixa incontrolável e ele tenta afundar o caíco. **Três flechas purificadoras** acalmam; a oferenda completa é **Tacacá + foto da Lia** (sem a foto, o Tacacá não é consumido e o caminho não abre). O Boto envia a **Essência das Águas** ao amuleto e libera a passagem. Iara, guardiã secundária, entrega a **Gota de Quartzo** (necessária para a arena). Tacacá também é oferenda à Iara.
+4. **Rio: Boto + Iara.** Seu Zeca entrega o **pente de osso** e conta que a **chave da canoa** caiu na lama do cais — Bento usa a **Visão Espectral (`V`)** para revelá-la. O Boto é entidade espiritual: a poluição não o contamina, mas a dor dos animais o deixa incontrolável e ele tenta afundar o caíco. Na água turva, Bento usa a **Visão Espectral (`V`)** para enxergar a aura do Boto e acertar **três flechas purificadoras**; a oferenda completa é **Tacacá + foto da Lia**. O Boto envia a **Essência das Águas** ao amuleto. Sem desembarcar, a **Iara** desce da margem e canta: sem Treme, puxa o Bento ao fundo; com Treme, sente o amuleto. A oferenda dela é **pente + espelho + fitas** (licença ao rio, não comida). Entrega a **Gota de Quartzo**.
 5. **Feira e escambo.** Cipó, resina, jambu, tucupi, goma; fundo de pesquisa com teto; moeda na feira.
 6. **Preparo na Barca.** Novelo Encantado, flechas, Tacacá/Pato no Tucupi.
 7. **Resgate da fauna** nas armadilhas do Barão.
-8. **Ritual do Curupira (híbrido).** Visão Espectral → novelo → purificar focos + Sombras → corrupção a 0%. Forma tradicional (menino, cabelo de fogo, pés invertidos). Recompensa: **Passo Invertido**.
+8. **Ritual do Curupira (híbrido).** A **Gota de Quartzo** abre a arena. Visão Espectral → novelo nos focos → purificar Sombras (enquanto elas existem, a corrupção não desce) → corrupção a 0% → selo com **Gota + Essência das Águas**. Forma tradicional (menino, cabelo de fogo, pés invertidos). Recompensa: **Passo Invertido** no amuleto (habilidade em H03).
 9. **Restauração + epílogo emocional.** Cor e carimbó voltam. Dona Nair (“seu avô deve estar orgulhoso”); crianças no rio; pescadores felizes; namorada do Boto feliz e apaixonada (o rapaz voltou às noites).
 10. **Mapa do Brasil.** Seguir adiante; opcional voltar para side quests, compras e NPCs.
 
@@ -169,7 +172,6 @@ Pisos falsos, pedras, dardos, luz/espelhos em ruínas (Marajoara, jesuítas, qui
 ### Nomes ainda abertos
 - Nome do **amuleto** e do **avô**.
 - Se o Barão tem cena direta no Cap. 1 ou só a Fortaleza ao fundo.
-- Como a **Essência das Águas** e a **Gota de Quartzo** se combinam no ritual final da fase.
 
 ---
 
@@ -178,15 +180,78 @@ Pisos falsos, pedras, dardos, luz/espelhos em ruínas (Marajoara, jesuítas, qui
 1. ~~Movimento + chicote (balanço) + pulo duplo~~ ✅
 2. ~~Câmera (Cinemachine + limites)~~ ✅
 3. ~~Vida, dano, checkpoint, zona de morte~~ ✅
-4. UI básica (energia, corrupção) — vida ✅ protótipo
+4. UI — vida, munição, buffs, energia do amuleto, barra de corrupção do Curupira ✅
 5. ~~Diálogo base + Dona Nair + Lia + Seu Zeca~~ ✅
-6. Inventário + economia (escambo, moeda, fundo com teto) — inventário ✅
-7. ~~Combate (facão, besta, Sombra) + chicote de combate/puzzle~~ ✅
+6. Inventário ✅ · falta escambo, moeda e fundo de pesquisa
+7. ~~Combate (facão, besta, Sombra, capanga) + chicote de combate/puzzle~~ ✅
 8. ~~Caderno de Campo + Mesa de Pesquisa (diário do avô)~~ ✅
 9. ~~Visão Espectral~~ ✅
-10. Barca (Fogão, Alquimia, salvamento) + receitas Norte — Fogão/Alquimia ✅
-11. ~~Encontros Boto + Iara~~ ✅ (Boto: canoa, 3 flechas, Tacacá + foto da Lia, Essência das Águas)
-12. Resgate da fauna
-13. Chefe Curupira + restauração + epílogo
-14. Mapa Geral (mínimo: Norte liberado)
-15. Arte, áudio, Input System / toque, playtest
+10. Barca (Fogão, Alquimia) ✅ · falta salvamento JSON
+11. ~~Encontros Boto + Iara~~ ✅ (canoa, flechas, Tacacá + foto; canto + Treme + pente/espelho/fitas)
+12. ~~Layout Cap. 1 em faixas + ruína (alavanca, pisos falsos, relíquia)~~ ✅
+13. Resgate da fauna
+14. ~~Chefe Curupira (ritual H01, ainda placa)~~ ✅
+15. Restauração + epílogo emocional
+16. Mapa Geral (mínimo: Norte liberado)
+17. Arte, áudio, Input System / toque, playtest
+
+---
+
+## 12. Estado atual do protótipo
+
+Ao apertar Play, o `BootstrapPrototipo` monta a fase cinza. O `LayoutPrototipo` espalha tudo da esquerda para a direita.
+
+### Mapa (esquerda → direita)
+
+| Faixa | O que tem |
+|---|---|
+| **Barca** | Entrar com E. Fogão, Alquimia, Mesa de Pesquisa |
+| **Vila** | Dona Nair (Tacacá + fitas), jambu/tucupi/goma, Lia (foto + espelho), chicote inicial |
+| **Rio** | Seu Zeca (chave + pente), canoa, Boto, Iara, ingredientes extras na margem |
+| **Mata** | Cipó, vegetação cortável, resina, capanga, Sombra, plataforma espectral |
+| **Ruínas** | Alavanca de chicote, pisos falsos (Visão Espectral), relíquia Marajoara |
+| **Arena** | Portão (Gota de Quartzo), 3 focos espectrais, Sombras, Curupira **placa** com ritual híbrido |
+
+### Controles
+
+| Tecla | Ação |
+|---|---|
+| A / D | Andar (na canoa: remar) |
+| Espaço | Pular / pulo duplo / soltar chicote com impulso / avançar diálogo |
+| E | Interagir (NPC, coletar, estações, canoa, oferenda, focos, portão). Clique direito: chicote |
+| W / S | Recolher / alongar a corda |
+| J ou clique esquerdo | Facão |
+| K (segurar) | Mira da besta em arco; soltar dispara |
+| V (segurar) | Visão Espectral (gasta energia do amuleto) |
+| I | Inventário (Comer aplica Treme) |
+| Tab ou C | Caderno de Campo |
+
+### Regras dos encontros (implementadas)
+
+**Canoa.** Precisa da chave de Seu Zeca (revelada no cais com Visão Espectral `V`). Três impactos do Boto afundam o caíco (respawn no checkpoint do rio). Só desembarca em cais.
+
+**Boto.** Entidade espiritual: a poluição não o contamina; a dor dos animais o deixa incontrolável. Na zona, investe contra a canoa oculto na água turva. **Visão Espectral (`V`)** revela sua aura espiritual para acertar **3 flechas purificadoras**. Oferenda: **Tacacá + foto da Lia** (E). Envia a **Essência das Águas** ao amuleto (não ocupa a bolsa).
+
+**Iara.** Sem desembarcar, desce da margem e canta. Sem Treme, em ~6 s puxa o Bento ao fundo. Com Treme (beber Tacacá ou Pato no inventário, inclusive com E durante o canto), ela para. Oferenda de licença: **pente + espelho + fitas** (não comida). Entrega a **Gota de Quartzo**.
+
+**Alquimia.** Flechas = 1 resina + 1 cipó → 3 flechas. Novelo = 2 cipó + 1 resina.
+
+**Curupira (ainda placa).** A Gota abre o portão da arena (não consome). Visão Espectral revela 3 focos; E enrola o Novelo (consome no primeiro foco). Cada foco invoca uma Sombra. Enquanto houver Sombra na arena, a corrupção não desce. Facão/besta no chefe não funcionam. Com 3 focos + 0 Sombras + corrupção a 0%, E sela com **Gota (consome) + Essência das Águas**. O amuleto recebe o **Passo Invertido** (habilidade ainda não implementada).
+
+**Amuleto.** Fragmentos (Essência das Águas, Passo Invertido) não vão para a bolsa; a HUD lista os que o Bento já absorveu.
+
+### Entrega de NPCs (primeira conversa)
+
+| NPC | Entrega |
+|---|---|
+| Dona Nair | 1 Tacacá + fitas coloridas |
+| Lia | Foto da Lia + espelho |
+| Seu Zeca | Pente de osso (chave da canoa fica oculta na lama do cais até usar `V`) |
+
+### Ainda placeholder
+
+- Arte do Curupira (ainda placa) e habilidade Passo Invertido
+- Restauração do belo e epílogos emocionais
+- Resgate da fauna
+- Escambo, moeda, fundo de pesquisa, save/load
+- Retratos desenhados (diálogos ainda são OnGUI)

@@ -9,10 +9,11 @@ public class NpcDialogo : MonoBehaviour
     public FalaDialogo[] falasAposEntrega;
     [Tooltip("Paginas do Caderno desbloqueadas ao conversar.")]
     public string[] paginasAoConversar;
-    [Tooltip("Item entregue uma vez ao conversar (chave, foto).")]
-    public string idItemAoConversar;
+    [Tooltip("Itens entregues uma vez ao conversar (chave, foto, oferendas).")]
+    public string[] idsItensAoConversar;
 
     private bool jogadorProximo;
+    private bool itemJaEntregue;
 
     void Reset()
     {
@@ -67,16 +68,21 @@ public class NpcDialogo : MonoBehaviour
 
     bool EntregarItemSeHouver()
     {
-        if (string.IsNullOrWhiteSpace(idItemAoConversar)) return false;
+        if (idsItensAoConversar == null || idsItensAoConversar.Length == 0) return false;
+        if (itemJaEntregue) return true;
 
         CatalogoItensNorte.Garantir();
         var inventario = InventarioBento.Instancia ?? FindFirstObjectByType<InventarioBento>();
-        if (inventario == null) return false;
-        if (inventario.TemPorId(idItemAoConversar)) return true;
+        if (inventario != null)
+        {
+            for (int i = 0; i < idsItensAoConversar.Length; i++)
+            {
+                var item = CatalogoItensNorte.PorId(idsItensAoConversar[i]);
+                if (item != null) inventario.Adicionar(item, 1);
+            }
+        }
 
-        var item = CatalogoItensNorte.PorId(idItemAoConversar);
-        if (item == null) return false;
-        inventario.Adicionar(item, 1);
+        itemJaEntregue = true;
         return false;
     }
 

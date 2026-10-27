@@ -375,16 +375,14 @@ public static class BootstrapPrototipo
         GarantirCanoaECais();
         GarantirEncontroBoto();
         GarantirEncontroIara();
-        CriarEncontro("EncontroCurupira", LayoutPrototipo.Curupira,
-            new Color(0.95f, 0.4f, 0.12f), new Vector3(1.3f, 2.1f, 1f),
-            "Curupira (H01)", "Novelo nos focos + purificar Sombras.");
+        GarantirEncontroCurupira();
 
         CriarCheckpoint("CheckpointRio", LayoutPrototipo.CheckpointRio, false);
         CriarCheckpoint("CheckpointArena", LayoutPrototipo.CheckpointArena, false);
 
-        CriarFoco("FocoCorrupcao_A", LayoutPrototipo.FocoA);
-        CriarFoco("FocoCorrupcao_B", LayoutPrototipo.FocoB);
-        CriarFoco("FocoCorrupcao_C", LayoutPrototipo.FocoC);
+        GarantirFoco("FocoCorrupcao_A", LayoutPrototipo.FocoA);
+        GarantirFoco("FocoCorrupcao_B", LayoutPrototipo.FocoB);
+        GarantirFoco("FocoCorrupcao_C", LayoutPrototipo.FocoC);
 
         if (GameObject.Find("SombraArena") == null)
         {
@@ -444,6 +442,27 @@ public static class BootstrapPrototipo
 
         if (canoa.GetComponent<CanoaRio>() == null)
             canoa.AddComponent<CanoaRio>();
+
+        CatalogoItensNorte.Garantir();
+        var inv = InventarioBento.Instancia ?? Object.FindFirstObjectByType<InventarioBento>();
+        bool jaTemChave = inv != null && inv.TemPorId(CatalogoItensNorte.IdChaveDaCanoa);
+        if (!jaTemChave && GameObject.Find("Coletavel_ChaveCanoa") == null)
+        {
+            var chaveGo = CriarMarcador("Coletavel_ChaveCanoa", LayoutPrototipo.ChaveCanoaCais,
+                new Color(0.55f, 0.9f, 1f, 0.95f), new Vector3(0.5f, 0.5f, 1f));
+            var colChave = chaveGo.GetComponent<BoxCollider2D>();
+            colChave.isTrigger = true;
+            colChave.size = new Vector2(1.4f, 1.4f);
+            chaveGo.GetComponent<SpriteRenderer>().sortingOrder = 4;
+
+            var coletavel = chaveGo.AddComponent<ColetavelItem>();
+            coletavel.item = CatalogoItensNorte.ChaveDaCanoa;
+            coletavel.quantidade = 1;
+
+            var espectral = chaveGo.AddComponent<ObjetoEspectral>();
+            espectral.tipo = TipoObjetoEspectral.Pista;
+            espectral.textoPista = "Brilho na lama: Chave da Canoa";
+        }
     }
 
     static void GarantirEncontroBoto()
@@ -510,7 +529,16 @@ public static class BootstrapPrototipo
                 new Color(0.12f, 0.35f, 0.42f), new Vector3(1.2f, 1.7f, 1f));
             var col = iara.GetComponent<BoxCollider2D>();
             col.isTrigger = true;
-            col.size = new Vector2(1.8f, 1.4f);
+            col.size = new Vector2(2.4f, 2.2f);
+        }
+        else
+        {
+            var col = iara.GetComponent<BoxCollider2D>();
+            if (col != null)
+            {
+                col.isTrigger = true;
+                col.size = new Vector2(2.4f, 2.2f);
+            }
         }
 
         var placeholder = iara.GetComponent<MarcadorEncontro>();
@@ -519,6 +547,48 @@ public static class BootstrapPrototipo
         var encontro = iara.GetComponent<EncontroIara>();
         if (encontro == null) encontro = iara.AddComponent<EncontroIara>();
         encontro.barreiras = new[] { barreira };
+    }
+
+    static void GarantirEncontroCurupira()
+    {
+        GameObject portao = GameObject.Find("BarreiraArenaCurupira");
+        if (portao == null)
+        {
+            portao = CriarMarcador("BarreiraArenaCurupira", LayoutPrototipo.BarreiraArena,
+                new Color(0.35f, 0.12f, 0.08f), new Vector3(0.8f, 5.2f, 1f));
+            var colP = portao.GetComponent<BoxCollider2D>();
+            colP.isTrigger = false;
+            colP.size = new Vector2(1f, 1f);
+            int camadaChao = LayerMask.NameToLayer("Chao");
+            if (camadaChao >= 0) portao.layer = camadaChao;
+            portao.AddComponent<BarreiraPuzzle>();
+        }
+
+        GameObject curupira = GameObject.Find("EncontroCurupira");
+        if (curupira == null)
+        {
+            curupira = CriarMarcador("EncontroCurupira", LayoutPrototipo.Curupira,
+                new Color(0.55f, 0.12f, 0.08f), new Vector3(1.3f, 2.1f, 1f));
+            var col = curupira.GetComponent<BoxCollider2D>();
+            col.isTrigger = true;
+            col.size = new Vector2(1.6f, 1.4f);
+        }
+        else
+        {
+            var col = curupira.GetComponent<BoxCollider2D>();
+            if (col != null)
+            {
+                col.isTrigger = true;
+                col.size = new Vector2(1.6f, 1.4f);
+            }
+        }
+
+        var placeholder = curupira.GetComponent<MarcadorEncontro>();
+        if (placeholder != null) Object.Destroy(placeholder);
+
+        var encontro = curupira.GetComponent<EncontroCurupira>();
+        if (encontro == null) encontro = curupira.AddComponent<EncontroCurupira>();
+        encontro.portaoArena = portao;
     }
 
     static void CriarEncontro(string nome, Vector3 posicao, Color cor, Vector3 escala, string titulo, string dica)
@@ -542,17 +612,24 @@ public static class BootstrapPrototipo
         cp.ativarAoIniciar = iniciar;
     }
 
-    static void CriarFoco(string nome, Vector3 posicao)
+    static void GarantirFoco(string nome, Vector3 posicao)
     {
-        if (GameObject.Find(nome) != null) return;
-        var go = CriarMarcador(nome, posicao, new Color(0.7f, 0.2f, 0.85f, 0.9f), new Vector3(0.55f, 0.9f, 1f));
-        var col = go.GetComponent<BoxCollider2D>();
-        col.isTrigger = true;
-        col.size = new Vector2(1.4f, 1.4f);
-        var foco = go.AddComponent<ObjetoEspectral>();
-        foco.tipo = TipoObjetoEspectral.Pista;
-        foco.textoPista = "Foco da corrupcao. O novelo de cipo se encaixa aqui.";
-        foco.idPaginaCaderno = CatalogoPaginasCap1.IdCurupira;
+        GameObject go = GameObject.Find(nome);
+        if (go == null)
+        {
+            go = CriarMarcador(nome, posicao, new Color(0.7f, 0.2f, 0.85f, 0.9f), new Vector3(0.55f, 0.9f, 1f));
+            var col = go.GetComponent<BoxCollider2D>();
+            col.isTrigger = true;
+            col.size = new Vector2(1.4f, 1.4f);
+            var espectral = go.AddComponent<ObjetoEspectral>();
+            espectral.tipo = TipoObjetoEspectral.Pista;
+            espectral.textoPista = "Foco da corrupcao. O novelo de cipo se encaixa aqui.";
+            espectral.idPaginaCaderno = CatalogoPaginasCap1.IdCurupira;
+            espectral.ocultarDica = true;
+        }
+
+        if (go.GetComponent<FocoCorrupcao>() == null)
+            go.AddComponent<FocoCorrupcao>();
     }
 
     static void GarantirZonaMorte()
@@ -574,7 +651,7 @@ public static class BootstrapPrototipo
             LayoutPrototipo.DonaNair,
             new Color(1f, 0.75f, 0.2f),
             new Vector3(1.1f, 1.8f, 1f),
-            new[] { CatalogoPaginasCap1.IdTacaca },
+            new[] { CatalogoPaginasCap1.IdTacaca, CatalogoPaginasCap1.IdIara },
             new[]
             {
                 new FalaDialogo
@@ -592,8 +669,24 @@ public static class BootstrapPrototipo
                 new FalaDialogo
                 {
                     personagem = "Dona Nair",
-                    emocao = "esperanca",
-                    texto = "Vou te ensinar o Tacaca: jambu, tucupi e goma. Serve de oferenda ao Boto e a Iara — e te protege da paralisia."
+                    emocao = "carinho",
+                    texto = "Fiz um Tacaca pra voce. Bebe quando o canto da Iara vier. Guarda outro pra oferenda ao Boto — o rio nao aceita cuia vazia."
+                },
+                new FalaDialogo
+                {
+                    personagem = "Dona Nair",
+                    emocao = "respeito",
+                    texto = "E leva estas fitas coloridas. A Mae d'Agua pede licenca, nao comida. Fitas, pente e espelho: pacto com o rio."
+                }
+            },
+            new[] { CatalogoItensNorte.IdTacaca, CatalogoItensNorte.IdFitasColoridas },
+            new[]
+            {
+                new FalaDialogo
+                {
+                    personagem = "Dona Nair",
+                    emocao = "serio",
+                    texto = "Tacaca pro Boto e pro Treme. Fitas pra Iara. Se faltar oferenda, fala com a Lia e o Seu Zeca."
                 }
             });
     }
@@ -605,7 +698,7 @@ public static class BootstrapPrototipo
             LayoutPrototipo.Lia,
             new Color(1f, 0.45f, 0.7f),
             new Vector3(1f, 1.6f, 1f),
-            new[] { CatalogoPaginasCap1.IdBoto },
+            new[] { CatalogoPaginasCap1.IdBoto, CatalogoPaginasCap1.IdIara },
             new[]
             {
                 new FalaDialogo
@@ -624,17 +717,17 @@ public static class BootstrapPrototipo
                 {
                     personagem = "Lia",
                     emocao = "esperanca",
-                    texto = "Leva este retrato. Se voce o encontrar, mostra pra ele. Quero que lembre das noites claras. Eu ainda espero."
+                    texto = "Leva este retrato pro Boto. E este espelho pra Iara — ela se mira nas pedras. Pedir licenca ao rio e o que a vila ensina."
                 }
             },
-            CatalogoItensNorte.IdFotoDaLia,
+            new[] { CatalogoItensNorte.IdFotoDaLia, CatalogoItensNorte.IdEspelho },
             new[]
             {
                 new FalaDialogo
                 {
                     personagem = "Lia",
                     emocao = "esperanca",
-                    texto = "Voce ja tem meu retrato. Mostra pro rapaz do rio. Eu continuo na beira, esperando as noites claras."
+                    texto = "Retrato pro rapaz das noites. Espelho pra Mae d'Agua. Eu continuo na beira, esperando."
                 }
             });
     }
@@ -659,28 +752,34 @@ public static class BootstrapPrototipo
                 {
                     personagem = "Seu Zeca",
                     emocao = "serio",
-                    texto = "Toma a chave do meu caico, no cais. Tres flechas purificadoras acalmam o rapaz. Depois, Tacaca de oferenda — e fala com a Lia na vila. Ele lembra dela."
+                    texto = "Quando ele bateu no cais, a chave do meu caico caiu na lama! Use o amuleto do seu avo — a Visao Espectral [V] — ali na margem pra achar a chave."
                 },
                 new FalaDialogo
                 {
                     personagem = "Seu Zeca",
                     emocao = "aviso",
-                    texto = "Mais adiante ta a Iara. O canto arrasta gente pro fundo. Leva Tacaca e cuidado. So a Gota de Quartzo dela abre o caminho ate o Curupira."
+                    texto = "Na agua turva, use tambem o [V] pra enxergar a aura espiritual do Boto e acertar tres flechas purificadoras. Depois, Tacaca e o retrato da Lia."
+                },
+                new FalaDialogo
+                {
+                    personagem = "Seu Zeca",
+                    emocao = "respeito",
+                    texto = "Antes de remar trecho fundo, a gente pede licenca a Mae d'Agua. Leva meu pente de osso. Come Tacaca se o canto vier — sem Treme, ela puxa pro fundo."
                 }
             },
-            CatalogoItensNorte.IdChaveDaCanoa,
+            new[] { CatalogoItensNorte.IdPenteDeOsso },
             new[]
             {
                 new FalaDialogo
                 {
                     personagem = "Seu Zeca",
                     emocao = "serio",
-                    texto = "A chave ja ta com voce. Solta o caico no cais, acalma o Boto com tres flechas e nao esquece a Lia. A Iara espera mais rio abaixo."
+                    texto = "Segura [V] na beira do cais pra achar a chave na lama, e usa [V] na canoa pra ver a aura do Boto na agua turva. O pente da Iara ja ta com voce."
                 }
             });
     }
 
-    static void CriarNpc(string nome, Vector3 posicao, Color cor, Vector3 escala, string[] paginasCaderno, FalaDialogo[] falas, string idItem = null, FalaDialogo[] falasApos = null)
+    static void CriarNpc(string nome, Vector3 posicao, Color cor, Vector3 escala, string[] paginasCaderno, FalaDialogo[] falas, string[] idsItens = null, FalaDialogo[] falasApos = null)
     {
         var existente = GameObject.Find(nome);
         NpcDialogo npc;
@@ -699,7 +798,7 @@ public static class BootstrapPrototipo
         if (npc == null) return;
         npc.falas = falas;
         npc.paginasAoConversar = paginasCaderno;
-        npc.idItemAoConversar = idItem;
+        npc.idsItensAoConversar = idsItens;
         npc.falasAposEntrega = falasApos;
     }
 

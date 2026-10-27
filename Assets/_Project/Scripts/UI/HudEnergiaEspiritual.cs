@@ -23,8 +23,12 @@ public class HudEnergiaEspiritual : MonoBehaviour
         float largura = 160f;
         float altura = 14f;
 
-        bool essencia = AmuletoAncestral.Instancia != null && AmuletoAncestral.Instancia.TemEssenciaDasAguas;
-        float extra = essencia ? 16f : 0f;
+        var amuleto = AmuletoAncestral.Instancia;
+        bool essencia = amuleto != null && amuleto.TemEssenciaDasAguas;
+        bool passo = amuleto != null && amuleto.TemPassoInvertido;
+        float extra = 0f;
+        if (essencia) extra += 16f;
+        if (passo) extra += 16f;
         GUI.Box(new Rect(x, y, largura, altura + 18f + extra), "");
         var titulo = new GUIStyle(GUI.skin.label) { fontSize = 13, fontStyle = FontStyle.Bold };
         titulo.normal.textColor = BentoVisaoEspectral.Ativa
@@ -38,11 +42,20 @@ public class HudEnergiaEspiritual : MonoBehaviour
         GUI.DrawTexture(new Rect(x + 4f, y + 18f, (largura - 8f) * fill, 10f), Texture2D.whiteTexture);
         GUI.color = Color.white;
 
+        float linhaFrag = y + 28f;
         if (essencia)
         {
             var frag = new GUIStyle(GUI.skin.label) { fontSize = 11 };
             frag.normal.textColor = new Color(0.95f, 0.7f, 0.85f);
-            GUI.Label(new Rect(x + 4f, y + 28f, largura - 8f, 16f), "Essencia das Aguas", frag);
+            GUI.Label(new Rect(x + 4f, linhaFrag, largura - 8f, 16f), "Essencia das Aguas", frag);
+            linhaFrag += 14f;
+        }
+
+        if (passo)
+        {
+            var frag = new GUIStyle(GUI.skin.label) { fontSize = 11 };
+            frag.normal.textColor = new Color(0.95f, 0.55f, 0.2f);
+            GUI.Label(new Rect(x + 4f, linhaFrag, largura - 8f, 16f), "Passo Invertido", frag);
         }
 
         // Leve tom azulado na tela enquanto a visao esta ativa

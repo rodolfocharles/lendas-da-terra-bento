@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// Receitas do Cap. 1 no Fogao a Lenha.
@@ -22,12 +23,13 @@ public static class CatalogoReceitasNorte
     public static void Garantir()
     {
         CatalogoItensNorte.Garantir();
-        if (receitas.Count > 0) return;
+        if (CatalogoValido()) return;
+        receitas.Clear();
 
         receitas.Add(new ReceitaDados(
             IdTacaca,
             "Tacaca",
-            "Oferenda ao Boto e a Iara. Buff Treme: resist. paralisia/veneno.",
+            "Oferenda ao Boto. Buff Treme contra o canto da Iara.",
             CatalogoItensNorte.Tacaca,
             new RequisitoIngrediente(CatalogoItensNorte.IdJambu),
             new RequisitoIngrediente(CatalogoItensNorte.IdTucupi),
@@ -40,5 +42,15 @@ public static class CatalogoReceitasNorte
             CatalogoItensNorte.PatoNoTucupi,
             new RequisitoIngrediente(CatalogoItensNorte.IdTucupi, 2),
             new RequisitoIngrediente(CatalogoItensNorte.IdJambu)));
+    }
+
+    static bool CatalogoValido()
+    {
+        if (receitas.Count == 0) return false;
+        for (int i = 0; i < receitas.Count; i++)
+        {
+            if (receitas[i] == null || receitas[i].resultado == null) return false;
+        }
+        return true;
     }
 }

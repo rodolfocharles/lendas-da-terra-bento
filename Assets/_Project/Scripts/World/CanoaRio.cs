@@ -16,7 +16,9 @@ public class CanoaRio : MonoBehaviour
         {
             if (Instancia == null) return false;
             if (!JogadorDentro) return Instancia.jogadorProximo;
-            return Instancia.PodeSair() && !EncontroBoto.CapturaTeclaE;
+            return Instancia.PodeSair()
+                && !EncontroBoto.CapturaTeclaE
+                && !EncontroIara.CapturaTeclaE;
         }
     }
 
@@ -99,7 +101,8 @@ public class CanoaRio : MonoBehaviour
 
         if (JogadorDentro)
         {
-            if (PodeSair() && !EncontroBoto.CapturaTeclaE && Input.GetKeyDown(teclaUsar))
+            if (PodeSair() && !EncontroBoto.CapturaTeclaE && !EncontroIara.CapturaTeclaE
+                && Input.GetKeyDown(teclaUsar))
                 Sair();
             return;
         }
@@ -140,7 +143,7 @@ public class CanoaRio : MonoBehaviour
                 {
                     personagem = "Bento",
                     emocao = "observando",
-                    texto = "O caico de Seu Zeca esta amarrado no cais. Preciso da chave dele para soltar a canoa."
+                    texto = "O caico de Seu Zeca esta amarrado. A chave caiu na lama do cais — preciso falar com ele e usar a Visao Espectral [V] na margem."
                 }
             });
             return;
@@ -195,6 +198,12 @@ public class CanoaRio : MonoBehaviour
             StartCoroutine(Afundar());
     }
 
+    public void AfogarPorCanto()
+    {
+        if (!JogadorDentro || Afundando) return;
+        StartCoroutine(Afundar());
+    }
+
     public void RestaurarNoCais()
     {
         StopAllCoroutines();
@@ -246,10 +255,11 @@ public class CanoaRio : MonoBehaviour
     public bool PodeSair()
     {
         if (!JogadorDentro || Afundando) return false;
+        if (EncontroIara.NaZonaDoCanto) return false;
         float x = transform.position.x;
         if (Mathf.Abs(x - LayoutPrototipo.CanoaCais.x) < 1.6f) return true;
-        return EncontroBoto.CaminhoLiberado
-            && Mathf.Abs(x - LayoutPrototipo.CaisIara.x) < 1.6f;
+        return EncontroIara.Purificada
+            && Mathf.Abs(x - LayoutPrototipo.CaisAposIara.x) < 1.6f;
     }
 
     static float LimiteEsquerdo()
@@ -259,9 +269,9 @@ public class CanoaRio : MonoBehaviour
 
     static float LimiteDireito()
     {
-        return EncontroBoto.CaminhoLiberado
-            ? LayoutPrototipo.CaisIara.x
-            : LayoutPrototipo.LimiteCanoaBoto;
+        if (EncontroIara.Purificada) return LayoutPrototipo.CaisAposIara.x;
+        if (EncontroBoto.CaminhoLiberado) return LayoutPrototipo.LimiteCanoaIara;
+        return LayoutPrototipo.LimiteCanoaBoto;
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -287,7 +297,7 @@ public class CanoaRio : MonoBehaviour
                 EncontroBoto.Acalmado
                     ? "Canoa: A/D navegar"
                     : $"Canoa: {ImpactosRestantes}/{impactosMaximos}  |  A/D navegar");
-            if (PodeSair() && !EncontroBoto.CapturaTeclaE)
+            if (PodeSair() && !EncontroBoto.CapturaTeclaE && !EncontroIara.CapturaTeclaE)
             {
                 Vector3 telaSair = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 1.4f);
                 if (telaSair.z >= 0f)
@@ -308,7 +318,7 @@ public class CanoaRio : MonoBehaviour
         bool temChave = inventario != null && inventario.TemPorId(CatalogoItensNorte.IdChaveDaCanoa);
         string dica = temChave
             ? "[E] Entrar na canoa"
-            : "Canoa trancada. Fale com Seu Zeca.";
-        GUI.Box(new Rect(tela.x - 130f, y - 28f, 260f, 32f), dica);
+            : "Canoa trancada. Fale com Seu Zeca e use [V] no cais.";
+        GUI.Box(new Rect(tela.x - 155f, y - 28f, 310f, 32f), dica);
     }
 }

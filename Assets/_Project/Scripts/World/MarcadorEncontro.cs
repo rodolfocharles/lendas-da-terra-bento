@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// Placeholder de encontro (Boto, Iara, Curupira) ate H10/H11/H01.
+/// Placeholder de encontro ate o ritual ser implementado.
 /// </summary>
 public class MarcadorEncontro : MonoBehaviour
 {

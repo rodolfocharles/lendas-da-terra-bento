@@ -19,6 +19,9 @@ Para colar/espelhar no Notion. Status: `Backlog` | `Em desenvolvimento` | `Concl
 | C10 | Sistema de diálogo + Dona Nair (placeholder)           | Narrativa   |
 | C11 | NPC Lia (Namorada do Boto) — pistas sobre o Boto       | Narrativa   |
 | C12 | NPC Seu Zeca (pescador) — pistas sobre a Iara          | Narrativa   |
+| C13 | Layout Cap. 1 em faixas (Barca / Vila / Rio / Mata / Ruínas / Arena) | Base |
+| C14 | Canoa no cais (chave, remar A/D, 3 impactos afundam)   | Encontros   |
+| C15 | HUD energia do amuleto + Essência das Águas            | Base        |
 | I01 | Inventário (itens, ingredientes, reagentes)            | Inventário |
 | I05 | Ingredientes Norte: Jambu, Tucupi, Goma de Tapioca      | Inventário |
 | B10 | Barca navegável (entrar/sair, estações)              | Bases       |
@@ -29,6 +32,7 @@ Para colar/espelhar no Notion. Status: `Backlog` | `Em desenvolvimento` | `Concl
 | X01 | Facão (combo curto + cortar vegetação)               | Combate     |
 | X02 | Besta com mira em arco + munição                      | Combate     |
 | X03 | Inimigo Sombra (purificação)                          | Combate     |
+| X04 | Capanga de treino (vida + chicote)                    | Combate     |
 | X07 | Visão Espectral (revelar pistas/plataformas)           | Combate     |
 | N05 | Caderno de Campo (páginas, rascunhos, abrir no boss)   | Narrativa   |
 | N06 | Diário do avô na Mesa de Pesquisa                     | Narrativa   |
@@ -37,7 +41,9 @@ Para colar/espelhar no Notion. Status: `Backlog` | `Em desenvolvimento` | `Concl
 | X08 | 1–2 puzzles estilo Indy (placeholder)                   | Combate     |
 | X09 | Layout fase Cap. 1 (blocos: vila, rio, arena)           | Combate     |
 | H10 | Encontro Boto: canoa, 3 flechas, Tacacá + foto, essência | Encontros   |
-| H11 | Encontro Iara + Gota de Quartzo                         | Encontros   |
+| H11 | Iara na canoa: Treme, pente/espelho/fitas, Gota         | Encontros   |
+| H01 | Boss Curupira (ritual novelo + Sombras + corrupção)     | Encontros   |
+| H13 | Oferendas Cap. 1: Nair (Tacacá+fitas), Lia (foto+espelho), Zeca (chave+pente) | Narrativa |
 
 ## Em desenvolvimento
 
@@ -50,7 +56,7 @@ _(vazio)_
 
 | ID  | Tarefa                                                                | Depende de |
 | --- | --------------------------------------------------------------------- | ---------- |
-| B03 | UI HUD completa (energia espiritual, munição, barra de corrupção) | C09        |
+| B03 | Unificar barra de corrupção do chefe na HUD persistente | C09, C15, H01 |
 | B04 | Salvamento/carregamento (JSON) na Barca                               | B02, B10   |
 | B05 | Menu pausa / opções                                                 | B03        |
 | B06 | Migrar Input System (teclado, controle, toque)                        | B01        |
@@ -79,7 +85,7 @@ _(vazio)_
 
 | ID  | Tarefa                                        | Depende de |
 | --- | --------------------------------------------- | ---------- |
-| X04 | Capanga / máquina do Barão (vida)           | X01        |
+| X04b | Máquina / drone do Barão (inimigo industrial) | X04 |
 
 ### Épico: Bases e culinária
 
@@ -91,9 +97,8 @@ _(Fogão, Alquimia e Mesa de Pesquisa no protótipo)_
 | ID  | Tarefa                                                | Depende de         |
 | --- | ----------------------------------------------------- | ------------------ |
 | H12 | Resgate da fauna                                      | X09, I01           |
-| H01 | Boss Curupira (ritual novelo + Sombras + corrupção) | H11, B13, N05, X03 |
 | H02 | Restauração do belo (cor + música)                 | H01                |
-| H03 | Fragmento Passo Invertido no amuleto                  | H01                |
+| H03 | Habilidade Passo Invertido (caminhos falsos / vegetação) | H01             |
 | H04 | Mapa Geral do Brasil (Norte liberado; revisitar)      | H02                |
 
 ### Épico: Apresentação

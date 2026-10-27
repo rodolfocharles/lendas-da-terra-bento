@@ -107,7 +107,11 @@ public class HudFogao : MonoBehaviour
 
     bool PodePreparar(ReceitaDados receita)
     {
-        if (inventario == null || receita?.ingredientes == null || receita.resultado == null) return false;
+        CatalogoReceitasNorte.Garantir();
+        if (inventario == null || receita?.ingredientes == null) return false;
+        if (receita.resultado == null)
+            receita.resultado = CatalogoItensNorte.PorId(receita.id);
+        if (receita.resultado == null) return false;
         for (int i = 0; i < receita.ingredientes.Length; i++)
         {
             var req = receita.ingredientes[i];

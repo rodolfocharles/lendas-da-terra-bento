@@ -68,7 +68,8 @@ public class BentoChicote : MonoBehaviour
 
         bool apertouE = Input.GetKeyDown(teclaChicote);
         if (CanoaRio.JogadorDentro) return;
-        if (apertouE && (EncontroBoto.CapturaTeclaE || EncontroIara.CapturaTeclaE || CanoaRio.CapturaTeclaE))
+        if (apertouE && (EncontroBoto.CapturaTeclaE || EncontroIara.CapturaTeclaE
+            || EncontroCurupira.CapturaTeclaE || CanoaRio.CapturaTeclaE))
             apertouE = false;
         if (apertouE || Input.GetMouseButtonDown(1))
         {
