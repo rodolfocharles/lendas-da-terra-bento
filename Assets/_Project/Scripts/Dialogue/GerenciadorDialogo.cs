@@ -120,8 +120,25 @@ public class GerenciadorDialogo : MonoBehaviour
             return CarregadorPixelArt.CarregarTextura("SeuZeca/Zeca_south.png");
         if (quem.IndexOf("Taina", System.StringComparison.OrdinalIgnoreCase) >= 0)
             return CarregadorPixelArt.CarregarTextura("Taina/Taina_south.png");
+        if (quem.Equals("Boto", System.StringComparison.OrdinalIgnoreCase)
+            || quem.IndexOf("Boto-Cor", System.StringComparison.OrdinalIgnoreCase) >= 0)
+            return CarregadorPixelArt.CarregarTextura("Boto/Retratos/" + RetratoBotoPorEmocao(fala.emocao) + ".png");
 
         return null;
+    }
+
+    static string RetratoBotoPorEmocao(string emocao)
+    {
+        string e = (emocao ?? "").ToLowerInvariant();
+        if (e.Contains("feliz") || e.Contains("alivi"))
+            return "Boto_Retrato_Feliz";
+        if (e.Contains("triste") || e.Contains("cansad") || e.Contains("saudade"))
+            return "Boto_Retrato_Triste";
+        if (e.Contains("sereno") || e.Contains("calmo") || e.Contains("paz"))
+            return "Boto_Retrato_Calmo";
+        if (e.Contains("corrupt") || e.Contains("bravo") || e.Contains("raiva"))
+            return "Boto_Retrato_Corrupto";
+        return "Boto_Retrato_Bom";
     }
 
     static string RetratoBentoPorEmocao(string emocao)

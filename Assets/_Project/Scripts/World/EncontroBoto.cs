@@ -30,15 +30,18 @@ public class EncontroBoto : MonoBehaviour, IRecebeDano
 
     int flechasAcertadas;
     SpriteRenderer sprite;
+    Sprite spriteBom;
+    Sprite spriteTriste;
+    Sprite spriteCalmo;
+    Sprite spriteFeliz;
+    Sprite spriteCorrupto;
     bool jogadorProximo;
     bool investindo;
     float proximaInvestida;
     float auraReveladaAte;
     float avisoSemVisaoAte;
-    Color corAguaTurva = new Color(0.18f, 0.35f, 0.45f, 0.16f);
-    Color corAuraEspectral = new Color(1f, 0.35f, 0.85f, 0.98f);
-    Color corBravo = new Color(0.55f, 0.2f, 0.45f);
-    Color corCalmo = new Color(0.95f, 0.55f, 0.75f);
+    Color corAguaTurva = new Color(1f, 1f, 1f, 0.18f);
+    Color corAuraEspectral = new Color(1f, 0.82f, 1f, 1f);
     Vector3 posicaoRepouso;
 
     public int FlechasAcertadas => flechasAcertadas;
@@ -66,7 +69,30 @@ public class EncontroBoto : MonoBehaviour, IRecebeDano
             if (barreira != null) barreiras = new[] { barreira };
         }
 
+        CarregarArte();
         AplicarEstado();
+    }
+
+    void CarregarArte()
+    {
+        spriteBom = CarregadorPixelArt.Personagem("Boto", "Boto_Bom");
+        spriteTriste = CarregadorPixelArt.Personagem("Boto", "Boto_Triste");
+        spriteCalmo = CarregadorPixelArt.Personagem("Boto", "Boto_Calmo");
+        spriteFeliz = CarregadorPixelArt.Personagem("Boto", "Boto_Feliz");
+        spriteCorrupto = CarregadorPixelArt.Personagem("Boto", "Boto_Corrupto");
+
+        if (sprite == null) return;
+        sprite.sortingOrder = 4;
+        sprite.flipX = true;
+        float escala = CarregadorPixelArt.EscalaMundo * 1.15f;
+        transform.localScale = new Vector3(escala, escala, 1f);
+
+        var col = GetComponent<BoxCollider2D>();
+        if (col != null)
+        {
+            col.size = new Vector2(1.35f, 0.75f);
+            col.offset = Vector2.zero;
+        }
     }
 
     void OnDestroy()
@@ -121,14 +147,11 @@ public class EncontroBoto : MonoBehaviour, IRecebeDano
             yield break;
         }
 
-        if (sprite != null)
-        {
-            sprite.color = AuraVisivel
-                ? corAuraEspectral
-                : new Color(0.55f, 0.2f, 0.45f, 0.55f);
-        }
-
         Vector3 alvo = canoa.transform.position + Vector3.up * 0.35f;
+        if (sprite != null)
+            sprite.flipX = alvo.x < transform.position.x;
+        AplicarEstado();
+
         while (Vector3.Distance(transform.position, alvo) > 0.35f)
         {
             if (Acalmado || canoa.Afundando || !CanoaRio.JogadorDentro)
@@ -141,8 +164,7 @@ public class EncontroBoto : MonoBehaviour, IRecebeDano
             if (BentoVisaoEspectral.Ativa)
                 auraReveladaAte = Time.time + duracaoAuraAposVisao;
 
-            if (sprite != null && AuraVisivel)
-                sprite.color = corAuraEspectral;
+            AplicarEstado();
 
             transform.position = Vector3.MoveTowards(
                 transform.position, alvo, velocidadeInvestida * Time.deltaTime);
@@ -164,6 +186,7 @@ public class EncontroBoto : MonoBehaviour, IRecebeDano
         }
 
         transform.position = posicaoRepouso;
+        if (sprite != null) sprite.flipX = true;
         investindo = false;
         AplicarEstado();
     }
@@ -316,10 +339,11 @@ public class EncontroBoto : MonoBehaviour, IRecebeDano
     {
         if (sprite != null)
         {
+            sprite.sprite = EscolherSprite();
             if (CaminhoLiberado || Acalmado)
-                sprite.color = corCalmo;
+                sprite.color = Color.white;
             else if (AuraVisivel)
-                sprite.color = Color.Lerp(corAuraEspectral, corCalmo, flechasAcertadas / (float)Mathf.Max(1, flechasParaAcalmar));
+                sprite.color = corAuraEspectral;
             else
                 sprite.color = corAguaTurva;
         }
@@ -379,5 +403,16 @@ public class EncontroBoto : MonoBehaviour, IRecebeDano
         else dica = "Oferenda: Tacaca + foto da Lia";
 
         GUI.Box(new Rect(tela.x - 150f, y - 28f, 300f, 32f), dica);
+    }
+
+    Sprite EscolherSprite()
+    {
+        if (CaminhoLiberado)
+            return spriteFeliz != null ? spriteFeliz : spriteBom;
+        if (Acalmado)
+            return spriteTriste != null ? spriteTriste : spriteCalmo;
+        if (spriteCorrupto != null) return spriteCorrupto;
+        if (spriteCalmo != null) return spriteCalmo;
+        return sprite.sprite;
     }
 }
