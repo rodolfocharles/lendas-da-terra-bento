@@ -20,6 +20,11 @@ public static class CatalogoReceitasNorte
         }
     }
 
+    public static void Resetar()
+    {
+        receitas.Clear();
+    }
+
     public static void Garantir()
     {
         CatalogoItensNorte.Garantir();
@@ -31,15 +36,17 @@ public static class CatalogoReceitasNorte
             "Tacaca",
             "Oferenda ao Boto. Buff Treme contra o canto da Iara.",
             CatalogoItensNorte.Tacaca,
-            new RequisitoIngrediente(CatalogoItensNorte.IdJambu),
             new RequisitoIngrediente(CatalogoItensNorte.IdTucupi),
-            new RequisitoIngrediente(CatalogoItensNorte.IdGoma)));
+            new RequisitoIngrediente(CatalogoItensNorte.IdGoma),
+            new RequisitoIngrediente(CatalogoItensNorte.IdJambu),
+            new RequisitoIngrediente(CatalogoItensNorte.IdCamaraoSeco)));
 
         receitas.Add(new ReceitaDados(
             IdPatoNoTucupi,
             "Pato no Tucupi",
-            "Prato tipico do Norte. Variacao do buff Treme.",
+            "Prato favorito da Taina na entrada da Mata (escambo). Tambem concede Treme.",
             CatalogoItensNorte.PatoNoTucupi,
+            new RequisitoIngrediente(CatalogoItensNorte.IdPatoAssado),
             new RequisitoIngrediente(CatalogoItensNorte.IdTucupi, 2),
             new RequisitoIngrediente(CatalogoItensNorte.IdJambu)));
     }

@@ -20,6 +20,11 @@ public static class CatalogoReceitasAlquimia
         }
     }
 
+    public static void Resetar()
+    {
+        receitas.Clear();
+    }
+
     public static void Garantir()
     {
         CatalogoItensNorte.Garantir();
@@ -38,11 +43,12 @@ public static class CatalogoReceitasAlquimia
         receitas.Add(new ReceitaDados(
             IdNovelo,
             "Novelo Encantado",
-            "Ritual do Curupira: novelo de cipo com resina sagrada.",
+            "Ritual do Curupira: novelo de cipo com resina e a Fibra do Caipora.",
             CatalogoItensNorte.NoveloEncantado,
             1,
             new RequisitoIngrediente(CatalogoItensNorte.IdCipo, 2),
-            new RequisitoIngrediente(CatalogoItensNorte.IdResina)));
+            new RequisitoIngrediente(CatalogoItensNorte.IdResina),
+            new RequisitoIngrediente(CatalogoItensNorte.IdFibraCaipora)));
     }
 
     static bool CatalogoValido()

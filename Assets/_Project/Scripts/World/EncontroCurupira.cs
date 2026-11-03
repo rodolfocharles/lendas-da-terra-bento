@@ -169,7 +169,7 @@ public class EncontroCurupira : MonoBehaviour, IRecebeDano
                     {
                         personagem = "Bento",
                         emocao = "pensativo",
-                        texto = "O foco pede o novelo. 2 cipos e resina na Bancada de Alquimia — o diario do avo ja tinha dito."
+                        texto = "O foco pede o novelo. 2 cipos, resina e a Fibra do Caipora na Bancada de Alquimia — o diario do avo ja tinha dito."
                     }
                 });
                 return;

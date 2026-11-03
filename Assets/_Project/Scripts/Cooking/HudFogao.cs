@@ -54,8 +54,8 @@ public class HudFogao : MonoBehaviour
         if (inventario == null)
             inventario = InventarioBento.Instancia ?? FindFirstObjectByType<InventarioBento>();
 
-        float largura = Mathf.Min(480f, Screen.width - 40f);
-        float altura = Mathf.Min(420f, Screen.height - 60f);
+        float largura = Mathf.Min(620f, Screen.width - 40f);
+        float altura = Mathf.Min(440f, Screen.height - 60f);
         float x = (Screen.width - largura) * 0.5f;
         float y = (Screen.height - altura) * 0.5f;
 
@@ -79,13 +79,13 @@ public class HudFogao : MonoBehaviour
             var receita = receitas[i];
             bool pode = PodePreparar(receita);
 
-            GUI.Box(new Rect(x + 12, linhaY, largura - 24, 110f), "");
+            GUI.Box(new Rect(x + 12, linhaY, largura - 24, 120f), "");
             GUI.Label(new Rect(x + 24, linhaY + 8, largura - 48, 24), receita.nomeExibicao, titulo);
-            GUI.Label(new Rect(x + 24, linhaY + 34, largura - 48, 36),
+            GUI.Label(new Rect(x + 24, linhaY + 34, largura - 48, 48),
                 $"{receita.descricao}\n{TextoIngredientes(receita)}", corpo);
 
             GUI.enabled = pode;
-            if (GUI.Button(new Rect(x + largura - 140, linhaY + 72, 110, 28), pode ? "Preparar" : "Falta item"))
+            if (GUI.Button(new Rect(x + largura - 140, linhaY + 84, 110, 28), pode ? "Preparar" : "Falta item"))
             {
                 if (TentarPreparar(receita))
                 {
@@ -95,7 +95,7 @@ public class HudFogao : MonoBehaviour
             }
             GUI.enabled = true;
 
-            linhaY += 120f;
+            linhaY += 130f;
         }
 
         if (!string.IsNullOrEmpty(mensagem) && Time.unscaledTime < mensagemAte)
@@ -133,6 +133,8 @@ public class HudFogao : MonoBehaviour
         inventario.Adicionar(receita.resultado, receita.quantidadeResultado);
         if (receita.id == CatalogoReceitasNorte.IdTacaca)
             CadernoCampo.Instancia?.Desbloquear(CatalogoPaginasCap1.IdTacaca);
+        else if (receita.id == CatalogoReceitasNorte.IdPatoNoTucupi)
+            CadernoCampo.Instancia?.Desbloquear(CatalogoPaginasCap1.IdPatoNoTucupi);
         Debug.Log($"[Lendas] Fogao: preparou {receita.nomeExibicao}");
         return true;
     }
@@ -154,9 +156,11 @@ public class HudFogao : MonoBehaviour
 
     static string NomeAmigavel(string id)
     {
+        if (id == CatalogoItensNorte.IdPatoAssado) return "Pato Assado";
+        if (id == CatalogoItensNorte.IdTucupi) return "Caldo de Tucupi";
+        if (id == CatalogoItensNorte.IdGoma) return "Goma de Tapioca";
         if (id == CatalogoItensNorte.IdJambu) return "Jambu";
-        if (id == CatalogoItensNorte.IdTucupi) return "Tucupi";
-        if (id == CatalogoItensNorte.IdGoma) return "Goma";
+        if (id == CatalogoItensNorte.IdCamaraoSeco) return "Camarao Seco";
         return id;
     }
 }

@@ -124,9 +124,8 @@ public class BentoMovimento : MonoBehaviour
         if ((movimentoHorizontal > 0f && !olhandoDireita) || (movimentoHorizontal < 0f && olhandoDireita))
         {
             olhandoDireita = !olhandoDireita;
-            Vector3 escala = transform.localScale;
-            escala.x *= -1f;
-            transform.localScale = escala;
+            var sr = GetComponent<SpriteRenderer>();
+            if (sr != null) sr.flipX = !olhandoDireita;
         }
     }
 

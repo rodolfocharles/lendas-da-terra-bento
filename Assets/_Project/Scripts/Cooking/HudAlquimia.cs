@@ -157,6 +157,7 @@ public class HudAlquimia : MonoBehaviour
     {
         if (id == CatalogoItensNorte.IdCipo) return "Cipo";
         if (id == CatalogoItensNorte.IdResina) return "Resina";
+        if (id == CatalogoItensNorte.IdFibraCaipora) return "Fibra do Caipora";
         return id;
     }
 }

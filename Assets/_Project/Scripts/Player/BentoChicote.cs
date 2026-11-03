@@ -23,6 +23,9 @@ public class BentoChicote : MonoBehaviour
     public float cooldownPuxao = 0.35f;
 
     public bool Balancando => pontoAtual != null;
+    public bool EmGolpeChicote => Time.time < fimGolpeChicote;
+
+    float fimGolpeChicote;
 
     private Rigidbody2D rb;
     private DistanceJoint2D junta;
@@ -69,7 +72,7 @@ public class BentoChicote : MonoBehaviour
         bool apertouE = Input.GetKeyDown(teclaChicote);
         if (CanoaRio.JogadorDentro) return;
         if (apertouE && (EncontroBoto.CapturaTeclaE || EncontroIara.CapturaTeclaE
-            || EncontroCurupira.CapturaTeclaE || CanoaRio.CapturaTeclaE))
+            || EncontroCaipora.CapturaTeclaE || EncontroCurupira.CapturaTeclaE || CanoaRio.CapturaTeclaE))
             apertouE = false;
         if (apertouE || Input.GetMouseButtonDown(1))
         {
@@ -128,6 +131,7 @@ public class BentoChicote : MonoBehaviour
 
     void TentarAgarrar()
     {
+        fimGolpeChicote = Time.time + 0.45f;
         if (TentarPuxarAlvo()) return;
         TentarBalancar();
     }

@@ -15,7 +15,7 @@ public class CanoaRio : MonoBehaviour
         get
         {
             if (Instancia == null) return false;
-            if (!JogadorDentro) return Instancia.jogadorProximo;
+            if (!JogadorDentro) return Instancia.EstaProximo();
             return Instancia.PodeSair()
                 && !EncontroBoto.CapturaTeclaE
                 && !EncontroIara.CapturaTeclaE;
@@ -43,6 +43,8 @@ public class CanoaRio : MonoBehaviour
     void Awake()
     {
         Instancia = this;
+        JogadorDentro = false;
+        Afundando = false;
         ImpactosRestantes = impactosMaximos;
         posicaoCais = transform.position;
         var col = GetComponent<Collider2D>();
@@ -107,7 +109,9 @@ public class CanoaRio : MonoBehaviour
             return;
         }
 
-        if (!jogadorProximo) return;
+        SincronizarCaisComBento();
+
+        if (!EstaProximo()) return;
         if (!Input.GetKeyDown(teclaUsar)) return;
         TentarEntrar();
     }
@@ -179,10 +183,22 @@ public class CanoaRio : MonoBehaviour
     void Sair()
     {
         if (bento == null) return;
-        Vector3 saida = pontoSaida != null
-            ? pontoSaida.position
-            : transform.position + Vector3.up * 0.9f;
+        bool caisLeste = EncontroIara.Purificada
+            && Mathf.Abs(transform.position.x - LayoutPrototipo.CaisAposIara.x) < 1.6f;
+
+        Vector3 caisDestino = caisLeste ? LayoutPrototipo.CaisAposIara : LayoutPrototipo.CanoaCais;
+        transform.position = caisDestino;
+
+        Vector3 saida = caisLeste
+            ? new Vector3(LayoutPrototipo.CaisAposIara.x + 0.6f, LayoutPrototipo.CaisAposIara.y + 0.85f, 0f)
+            : new Vector3(LayoutPrototipo.CanoaCais.x - 0.6f, LayoutPrototipo.CanoaCais.y + 0.85f, 0f);
+
         LiberarBento();
+        if (rbBento != null)
+        {
+            rbBento.linearVelocity = Vector2.zero;
+            rbBento.position = saida;
+        }
         bento.transform.position = saida;
         Debug.Log("[Lendas] Bento saiu da canoa.");
     }
@@ -209,8 +225,58 @@ public class CanoaRio : MonoBehaviour
         StopAllCoroutines();
         Afundando = false;
         ImpactosRestantes = impactosMaximos;
-        transform.position = posicaoCais;
         if (JogadorDentro) LiberarBento();
+        if (bento == null) bento = FindFirstObjectByType<BentoMovimento>();
+        bool ladoLeste = bento != null
+            && EncontroIara.Purificada
+            && bento.transform.position.x >= LayoutPrototipo.BarreiraCaisLeste.x;
+        transform.position = ladoLeste ? LayoutPrototipo.CaisAposIara : posicaoCais;
+    }
+
+    bool EstaProximo()
+    {
+        if (jogadorProximo) return true;
+        if (bento == null) bento = FindFirstObjectByType<BentoMovimento>();
+        if (bento == null) return false;
+        return Vector2.Distance(transform.position, bento.transform.position) <= 2.2f;
+    }
+
+    void SincronizarCaisComBento()
+    {
+        if (JogadorDentro || Afundando) return;
+        if (bento == null) bento = FindFirstObjectByType<BentoMovimento>();
+        if (bento == null) return;
+
+        float bx = bento.transform.position.x;
+
+        // Impede travessia do rio a pe em qualquer sentido
+        if (bx > LayoutPrototipo.BarreiraCais.x && bx < LayoutPrototipo.BarreiraCaisLeste.x)
+        {
+            float meioRio = (LayoutPrototipo.BarreiraCais.x + LayoutPrototipo.BarreiraCaisLeste.x) * 0.5f;
+            bool devolverLeste = EncontroIara.Purificada && bx >= meioRio;
+            Vector3 margem = devolverLeste
+                ? new Vector3(LayoutPrototipo.CaisAposIara.x + 0.6f, LayoutPrototipo.CaisAposIara.y + 0.85f, 0f)
+                : new Vector3(LayoutPrototipo.CanoaCais.x - 0.6f, LayoutPrototipo.CanoaCais.y + 0.85f, 0f);
+            var rb = bento.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+                rb.position = margem;
+            }
+            bento.transform.position = margem;
+            bx = margem.x;
+        }
+
+        if (EncontroIara.Purificada && bx >= LayoutPrototipo.BarreiraCaisLeste.x)
+        {
+            if (Mathf.Abs(transform.position.x - LayoutPrototipo.CaisAposIara.x) > 0.05f)
+                transform.position = LayoutPrototipo.CaisAposIara;
+        }
+        else if (bx <= LayoutPrototipo.BarreiraCais.x)
+        {
+            if (Mathf.Abs(transform.position.x - LayoutPrototipo.CanoaCais.x) > 0.05f)
+                transform.position = LayoutPrototipo.CanoaCais;
+        }
     }
 
     System.Collections.IEnumerator Afundar()
@@ -309,7 +375,7 @@ public class CanoaRio : MonoBehaviour
             return;
         }
 
-        if (!jogadorProximo) return;
+        if (!EstaProximo()) return;
         Vector3 tela = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 1.2f);
         if (tela.z < 0f) return;
         float y = Screen.height - tela.y;
