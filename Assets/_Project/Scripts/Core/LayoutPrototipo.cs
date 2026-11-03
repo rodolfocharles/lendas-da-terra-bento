@@ -35,7 +35,7 @@ public static class LayoutPrototipo
     public static readonly Vector3 AguaRio = new Vector3(36f, -0.65f, 0f);
     public const float InicioZonaBoto = 31f;
     public const float LimiteCanoaBoto = 38.6f;
-    public static readonly Vector3 BloqueioBoto = new Vector3(36f, 1.5f, 0f);
+    public static readonly Vector3 BloqueioBoto = new Vector3(36f, 0f, 0f);
     public static readonly Vector3 BarreiraBoto = new Vector3(40.2f, 2.6f, 0f);
     public static readonly Vector3 CaisIara = new Vector3(42.4f, 0.55f, 0f);
     public const float InicioZonaIara = 41.5f;
