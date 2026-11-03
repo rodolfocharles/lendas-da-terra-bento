@@ -76,7 +76,7 @@ public class GerenciadorDialogo : MonoBehaviour
         if (!EmDialogo || falaAtual == null) return;
 
         float largura = Mathf.Min(700f, Screen.width - 40f);
-        float altura = 120f;
+        float altura = 128f;
         float x = (Screen.width - largura) * 0.5f;
         float y = Screen.height - altura - 24f;
 
@@ -91,8 +91,48 @@ public class GerenciadorDialogo : MonoBehaviour
             ? falaAtual.personagem
             : $"{falaAtual.personagem} ({falaAtual.emocao})";
 
-        GUI.Label(new Rect(x + 16, y + 10, largura - 32, 28), cabecalho, titulo);
-        GUI.Label(new Rect(x + 16, y + 40, largura - 32, 50), falaAtual.texto, corpo);
-        GUI.Label(new Rect(x + 16, y + 90, largura - 32, 20), "[Espaco / E / Clique] continuar", corpo);
+        var retrato = ResolverRetrato(falaAtual);
+        float recuo = 16f;
+        if (retrato != null)
+        {
+            float lado = 88f;
+            GUI.DrawTexture(new Rect(x + 12f, y + 16f, lado, lado), retrato, ScaleMode.ScaleToFit, true);
+            recuo = 16f + lado + 8f;
+        }
+
+        GUI.Label(new Rect(x + recuo, y + 10, largura - recuo - 16f, 28), cabecalho, titulo);
+        GUI.Label(new Rect(x + recuo, y + 40, largura - recuo - 16f, 50), falaAtual.texto, corpo);
+        GUI.Label(new Rect(x + recuo, y + 90, largura - recuo - 16f, 20), "[Espaco / E / Clique] continuar", corpo);
+    }
+
+    static Texture2D ResolverRetrato(FalaDialogo fala)
+    {
+        if (fala == null) return null;
+
+        string quem = fala.personagem ?? "";
+        if (quem.IndexOf("Bento", System.StringComparison.OrdinalIgnoreCase) >= 0)
+            return CarregadorPixelArt.CarregarTextura("Bento/Retratos/" + RetratoBentoPorEmocao(fala.emocao) + ".png");
+        if (quem.IndexOf("Nair", System.StringComparison.OrdinalIgnoreCase) >= 0)
+            return CarregadorPixelArt.CarregarTextura("DonaNair/Nair_south.png");
+        if (quem.IndexOf("Lia", System.StringComparison.OrdinalIgnoreCase) >= 0)
+            return CarregadorPixelArt.CarregarTextura("Lia/Lia_south.png");
+        if (quem.IndexOf("Zeca", System.StringComparison.OrdinalIgnoreCase) >= 0)
+            return CarregadorPixelArt.CarregarTextura("SeuZeca/Zeca_south.png");
+        if (quem.IndexOf("Taina", System.StringComparison.OrdinalIgnoreCase) >= 0)
+            return CarregadorPixelArt.CarregarTextura("Taina/Taina_south.png");
+
+        return null;
+    }
+
+    static string RetratoBentoPorEmocao(string emocao)
+    {
+        string e = (emocao ?? "").ToLowerInvariant();
+        if (e.Contains("feliz") || e.Contains("alivi") || e.Contains("carinho"))
+            return "Bento_Retrato_Feliz";
+        if (e.Contains("surpres") || e.Contains("alerta") || e.Contains("urgent") || e.Contains("aviso"))
+            return "Bento_Retrato_Surpreso";
+        if (e.Contains("carisma") || e.Contains("confident"))
+            return "Bento_Retrato_Carisma";
+        return "Bento_Retrato_Neutro";
     }
 }

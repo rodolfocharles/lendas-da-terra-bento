@@ -35,6 +35,7 @@ public class BentoVisaoEspectral : MonoBehaviour
             return;
         }
         Instancia = this;
+        Ativa = false;
         movimento = GetComponent<BentoMovimento>();
         vida = GetComponent<BentoVida>();
         besta = GetComponent<BentoBesta>();

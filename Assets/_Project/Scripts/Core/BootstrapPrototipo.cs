@@ -6,6 +6,15 @@ using UnityEngine;
 /// </summary>
 public static class BootstrapPrototipo
 {
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    static void AoReiniciarPlay()
+    {
+        CarregadorPixelArt.LimparCache();
+        CatalogoItensNorte.Resetar();
+        CatalogoReceitasNorte.Resetar();
+        CatalogoReceitasAlquimia.Resetar();
+    }
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     static void AoCarregarCena()
     {
@@ -28,6 +37,7 @@ public static class BootstrapPrototipo
         GarantirDonaNair();
         GarantirNamoradaDoBoto();
         GarantirPescadorDaIara();
+        GarantirTainaMata();
         GarantirColetaveisNorte();
         GarantirBarcaEEstacoes();
         GarantirCombatePrototipo();
@@ -35,10 +45,52 @@ public static class BootstrapPrototipo
         GarantirObjetosEspectrais();
         GarantirBlocosCap1();
         LayoutPrototipo.Aplicar();
+        AplicarArtePersonagens();
         if (Object.FindFirstObjectByType<AplicadorLayout>() == null)
             new GameObject("AplicadorLayout").AddComponent<AplicadorLayout>();
 
         Debug.Log("[Lendas] Bootstrap: layout Barca / Vila / Mata / Ruinas.");
+    }
+
+    static void AplicarArtePersonagens()
+    {
+        AplicarSpriteNpc("DonaNair", "DonaNair", "Nair", "DonaNair/Animacoes/Nair_Idle_east_64x64_4f.png");
+        AplicarSpriteNpc("NamoradaDoBoto", "Lia", "Lia", null);
+        AplicarSpriteNpc("PescadorDaIara", "SeuZeca", "Zeca", null);
+        AplicarSpriteNpc("TainaMata", "Taina", "Taina", "Taina/Animacoes/Taina_Idle_east_64x64_4f.png");
+    }
+
+    static void AplicarSpriteNpc(string nomeObjeto, string pasta, string prefixo, string folhaIdle)
+    {
+        var go = GameObject.Find(nomeObjeto);
+        if (go == null) return;
+
+        var sr = go.GetComponent<SpriteRenderer>();
+        if (sr == null) return;
+
+        var sprite = CarregadorPixelArt.Personagem(pasta, prefixo + "_east");
+        if (sprite == null) return;
+
+        sr.sprite = sprite;
+        sr.color = Color.white;
+        sr.flipX = true;
+        sr.sortingOrder = 3;
+        float escala = CarregadorPixelArt.EscalaMundo;
+        go.transform.localScale = new Vector3(escala, escala, 1f);
+
+        var col = go.GetComponent<BoxCollider2D>();
+        if (col != null)
+        {
+            col.size = new Vector2(1.1f, 1f);
+            col.offset = Vector2.zero;
+        }
+
+        if (string.IsNullOrEmpty(folhaIdle)) return;
+
+        var anim = go.GetComponent<NpcAnimacaoIdle>();
+        if (anim == null) anim = go.AddComponent<NpcAnimacaoIdle>();
+        anim.quadros = CarregadorPixelArt.Folha(folhaIdle, 64, 64, 4);
+        anim.fps = 5f;
     }
 
     static void GarantirBentoComponentes()
@@ -59,6 +111,8 @@ public static class BootstrapPrototipo
             bento.gameObject.AddComponent<BentoVisaoEspectral>();
         if (bento.GetComponent<AmuletoAncestral>() == null)
             bento.gameObject.AddComponent<AmuletoAncestral>();
+        if (bento.GetComponent<BentoAnimacao>() == null)
+            bento.gameObject.AddComponent<BentoAnimacao>();
     }
 
     static void GarantirObjetosEspectrais()
@@ -95,6 +149,11 @@ public static class BootstrapPrototipo
 
             var plat = go.AddComponent<ObjetoEspectral>();
             plat.tipo = TipoObjetoEspectral.Plataforma;
+            go.AddComponent<PlataformaPassavel>();
+        }
+        else
+        {
+            GarantirPlataformaPassavel(GameObject.Find("PlataformaEspectral"));
         }
     }
 
@@ -147,8 +206,23 @@ public static class BootstrapPrototipo
             go.AddComponent<InimigoSombra>();
         }
 
+        GarantirJaulaFauna("JaulaFauna_A", LayoutPrototipo.JaulaFaunaA, "Filhote de Queixada");
+        GarantirJaulaFauna("JaulaFauna_B", LayoutPrototipo.JaulaFaunaB, "Arara da Mata");
+
         GarantirPuzzleAlavanca();
         GarantirPuzzlesIndy();
+    }
+
+    static void GarantirJaulaFauna(string nome, Vector3 posicao, string nomeAnimal)
+    {
+        if (GameObject.Find(nome) != null) return;
+        var go = CriarMarcador(nome, posicao,
+            new Color(0.32f, 0.34f, 0.38f, 0.95f), new Vector3(1.15f, 1.25f, 1f));
+        var col = go.GetComponent<BoxCollider2D>();
+        col.isTrigger = true;
+        col.size = new Vector2(1.4f, 1.4f);
+        var jaula = go.AddComponent<JaulaFauna>();
+        jaula.nomeAnimal = nomeAnimal;
     }
 
     static void GarantirPuzzleAlavanca()
@@ -201,21 +275,28 @@ public static class BootstrapPrototipo
             if (camadaChao >= 0) go.layer = camadaChao;
             var plat = go.AddComponent<ObjetoEspectral>();
             plat.tipo = TipoObjetoEspectral.Plataforma;
+            go.AddComponent<PlataformaPassavel>();
+        }
+        else
+        {
+            GarantirPlataformaPassavel(GameObject.Find("PlataformaEspectral_2"));
         }
 
         CriarPisoPuzzle("PisoFalso_A", LayoutPrototipo.PisoA, false, camadaChao);
         CriarPisoPuzzle("PisoFalso_B", LayoutPrototipo.PisoB, true, camadaChao);
         CriarPisoPuzzle("PisoFalso_C", LayoutPrototipo.PisoC, false, camadaChao);
 
-        if (GameObject.Find("PisoChegadaRuina") == null)
+        GameObject chegada = GameObject.Find("PisoChegadaRuina");
+        if (chegada == null)
         {
-            var go = CriarMarcador("PisoChegadaRuina", LayoutPrototipo.PisoChegada,
+            chegada = CriarMarcador("PisoChegadaRuina", LayoutPrototipo.PisoChegada,
                 new Color(0.5f, 0.42f, 0.3f), new Vector3(2.2f, 0.35f, 1f));
-            var col = go.GetComponent<BoxCollider2D>();
+            var col = chegada.GetComponent<BoxCollider2D>();
             col.isTrigger = false;
             col.size = new Vector2(1f, 1f);
-            if (camadaChao >= 0) go.layer = camadaChao;
+            if (camadaChao >= 0) chegada.layer = camadaChao;
         }
+        GarantirPlataformaPassavel(chegada);
 
         if (GameObject.Find("PistaPisosFalsos") == null)
         {
@@ -244,15 +325,27 @@ public static class BootstrapPrototipo
 
     static void CriarPisoPuzzle(string nome, Vector3 posicao, bool seguro, int camadaChao)
     {
-        if (GameObject.Find(nome) != null) return;
+        GameObject go = GameObject.Find(nome);
+        if (go == null)
+        {
+            go = CriarMarcador(nome, posicao, new Color(0.48f, 0.4f, 0.28f), new Vector3(1.35f, 0.32f, 1f));
+            var col = go.GetComponent<BoxCollider2D>();
+            col.isTrigger = false;
+            col.size = new Vector2(1f, 1f);
+            if (camadaChao >= 0) go.layer = camadaChao;
+            var piso = go.AddComponent<PisoFalso>();
+            piso.seguro = seguro;
+        }
 
-        var go = CriarMarcador(nome, posicao, new Color(0.48f, 0.4f, 0.28f), new Vector3(1.35f, 0.32f, 1f));
-        var col = go.GetComponent<BoxCollider2D>();
-        col.isTrigger = false;
-        col.size = new Vector2(1f, 1f);
-        if (camadaChao >= 0) go.layer = camadaChao;
-        var piso = go.AddComponent<PisoFalso>();
-        piso.seguro = seguro;
+        GarantirPlataformaPassavel(go);
+    }
+
+    static void GarantirPlataformaPassavel(GameObject go)
+    {
+        if (go == null) return;
+        var passavel = go.GetComponent<PlataformaPassavel>();
+        if (passavel == null) passavel = go.AddComponent<PlataformaPassavel>();
+        passavel.Aplicar();
     }
 
     static void GarantirColetaveisNorte()
@@ -265,19 +358,44 @@ public static class BootstrapPrototipo
             CriarColetavel("Coletavel_Tucupi", LayoutPrototipo.Tucupi, new Color(0.95f, 0.8f, 0.15f), CatalogoItensNorte.Tucupi, 3);
         if (GameObject.Find("Coletavel_Goma") == null)
             CriarColetavel("Coletavel_Goma", LayoutPrototipo.Goma, new Color(0.95f, 0.95f, 0.9f), CatalogoItensNorte.GomaDeTapioca, 1);
-        if (GameObject.Find("Coletavel_Cipo") == null)
-            CriarColetavel("Coletavel_Cipo", LayoutPrototipo.Cipo, new Color(0.55f, 0.7f, 0.35f), CatalogoItensNorte.Cipo, 3);
-        if (GameObject.Find("Coletavel_Resina") == null)
-            CriarColetavel("Coletavel_Resina", LayoutPrototipo.Resina, new Color(0.7f, 0.4f, 0.15f), CatalogoItensNorte.Resina, 2);
+        if (GameObject.Find("Coletavel_Camarao") == null)
+            CriarColetavel("Coletavel_Camarao", LayoutPrototipo.Camarao, new Color(0.95f, 0.5f, 0.35f), CatalogoItensNorte.CamaraoSeco, 1);
+        GarantirColetavelReaparece("Coletavel_Cipo", LayoutPrototipo.Cipo, new Color(0.55f, 0.7f, 0.35f), CatalogoItensNorte.Cipo, 3);
+        GarantirColetavelReaparece("Coletavel_Resina", LayoutPrototipo.Resina, new Color(0.7f, 0.4f, 0.15f), CatalogoItensNorte.Resina, 2);
         if (GameObject.Find("Coletavel_Jambu_Rio") == null)
-            CriarColetavel("Coletavel_Jambu_Rio", LayoutPrototipo.JambuRio, new Color(0.35f, 0.75f, 0.25f), CatalogoItensNorte.Jambu, 1);
+            CriarColetavel("Coletavel_Jambu_Rio", LayoutPrototipo.JambuRio, new Color(0.35f, 0.75f, 0.25f), CatalogoItensNorte.Jambu, 2);
         if (GameObject.Find("Coletavel_Tucupi_Rio") == null)
-            CriarColetavel("Coletavel_Tucupi_Rio", LayoutPrototipo.TucupiRio, new Color(0.95f, 0.8f, 0.15f), CatalogoItensNorte.Tucupi, 1);
+            CriarColetavel("Coletavel_Tucupi_Rio", LayoutPrototipo.TucupiRio, new Color(0.95f, 0.8f, 0.15f), CatalogoItensNorte.Tucupi, 2);
         if (GameObject.Find("Coletavel_Goma_Rio") == null)
             CriarColetavel("Coletavel_Goma_Rio", LayoutPrototipo.GomaRio, new Color(0.95f, 0.95f, 0.9f), CatalogoItensNorte.GomaDeTapioca, 1);
+        if (GameObject.Find("Coletavel_Camarao_Rio") == null)
+            CriarColetavel("Coletavel_Camarao_Rio", LayoutPrototipo.CamaraoRio, new Color(0.95f, 0.5f, 0.35f), CatalogoItensNorte.CamaraoSeco, 1);
+        if (GameObject.Find("Coletavel_PatoAssado") == null)
+            CriarColetavel("Coletavel_PatoAssado", LayoutPrototipo.PatoAssadoVila, new Color(0.75f, 0.45f, 0.2f), CatalogoItensNorte.PatoAssado, 1);
+        if (GameObject.Find("Coletavel_FavoMel") == null)
+            CriarColetavel("Coletavel_FavoMel", LayoutPrototipo.FavoDeMel, new Color(1f, 0.78f, 0.15f), CatalogoItensNorte.FavoDeMel, 1);
+        GarantirColetavelReaparece("Coletavel_Flechas_Clareira", LayoutPrototipo.FlechasClareira, new Color(0.55f, 0.85f, 1f), CatalogoItensNorte.FlechasPurificadoras, 2);
     }
 
-    static void CriarColetavel(string nome, Vector3 posicao, Color cor, ItemDados item, int quantidade = 1)
+    static void GarantirColetavelReaparece(string nome, Vector3 posicao, Color cor, ItemDados item, int quantidade)
+    {
+        var go = GameObject.Find(nome);
+        if (go == null)
+        {
+            CriarColetavel(nome, posicao, cor, item, quantidade, true);
+            return;
+        }
+
+        var coletavel = go.GetComponent<ColetavelItem>();
+        if (coletavel == null) coletavel = go.AddComponent<ColetavelItem>();
+        coletavel.item = item;
+        coletavel.quantidade = quantidade;
+        coletavel.reaparece = true;
+        coletavel.destruirAoColetar = false;
+        coletavel.MostrarDeNovo();
+    }
+
+    static void CriarColetavel(string nome, Vector3 posicao, Color cor, ItemDados item, int quantidade = 1, bool reaparece = false)
     {
         var go = CriarMarcador(nome, posicao, cor, new Vector3(0.55f, 0.55f, 1f));
         var col = go.GetComponent<BoxCollider2D>();
@@ -285,6 +403,8 @@ public static class BootstrapPrototipo
         var coletavel = go.AddComponent<ColetavelItem>();
         coletavel.item = item;
         coletavel.quantidade = quantidade;
+        coletavel.reaparece = reaparece;
+        coletavel.destruirAoColetar = !reaparece;
     }
 
     static void GarantirBarcaEEstacoes()
@@ -375,9 +495,12 @@ public static class BootstrapPrototipo
         GarantirCanoaECais();
         GarantirEncontroBoto();
         GarantirEncontroIara();
+        GarantirEncontroCaipora();
         GarantirEncontroCurupira();
 
         CriarCheckpoint("CheckpointRio", LayoutPrototipo.CheckpointRio, false);
+        CriarCheckpoint("CheckpointMata", LayoutPrototipo.CheckpointMata, false);
+        CriarCheckpoint("CheckpointCaipora", LayoutPrototipo.CheckpointCaipora, false, 2, "Clareira do Caipora");
         CriarCheckpoint("CheckpointArena", LayoutPrototipo.CheckpointArena, false);
 
         GarantirFoco("FocoCorrupcao_A", LayoutPrototipo.FocoA);
@@ -416,6 +539,8 @@ public static class BootstrapPrototipo
 
     static void GarantirCanoaECais()
     {
+        int camadaChao = LayerMask.NameToLayer("Chao");
+
         GameObject barreira = GameObject.Find("BarreiraCais");
         if (barreira == null)
         {
@@ -423,10 +548,23 @@ public static class BootstrapPrototipo
                 new Color(0.4f, 0.28f, 0.16f), new Vector3(0.8f, 5.2f, 1f));
             var colB = barreira.GetComponent<BoxCollider2D>();
             colB.isTrigger = false;
-            colB.size = new Vector2(1f, 1f);
-            int camadaChao = LayerMask.NameToLayer("Chao");
+            colB.size = new Vector2(1f, 6f);
+            colB.offset = new Vector2(0f, 2f);
             if (camadaChao >= 0) barreira.layer = camadaChao;
             barreira.AddComponent<BarreiraPuzzle>();
+        }
+
+        GameObject barreiraLeste = GameObject.Find("BarreiraCaisLeste");
+        if (barreiraLeste == null)
+        {
+            barreiraLeste = CriarMarcador("BarreiraCaisLeste", LayoutPrototipo.BarreiraCaisLeste,
+                new Color(0.4f, 0.28f, 0.16f), new Vector3(0.8f, 5.2f, 1f));
+            var colBL = barreiraLeste.GetComponent<BoxCollider2D>();
+            colBL.isTrigger = false;
+            colBL.size = new Vector2(1f, 6f);
+            colBL.offset = new Vector2(0f, 2f);
+            if (camadaChao >= 0) barreiraLeste.layer = camadaChao;
+            barreiraLeste.AddComponent<BarreiraPuzzle>();
         }
 
         GameObject canoa = GameObject.Find("CanoaRio");
@@ -436,8 +574,17 @@ public static class BootstrapPrototipo
                 new Color(0.55f, 0.32f, 0.16f), new Vector3(2.6f, 0.45f, 1f));
             var col = canoa.GetComponent<BoxCollider2D>();
             col.isTrigger = true;
-            col.size = new Vector2(1.1f, 1.8f);
+            col.size = new Vector2(1.4f, 1.8f);
             canoa.GetComponent<SpriteRenderer>().sortingOrder = 3;
+        }
+        else
+        {
+            var col = canoa.GetComponent<BoxCollider2D>();
+            if (col != null)
+            {
+                col.isTrigger = true;
+                col.size = new Vector2(1.4f, 1.8f);
+            }
         }
 
         if (canoa.GetComponent<CanoaRio>() == null)
@@ -549,6 +696,48 @@ public static class BootstrapPrototipo
         encontro.barreiras = new[] { barreira };
     }
 
+    static void GarantirEncontroCaipora()
+    {
+        GameObject barreira = GameObject.Find("BarreiraMataCaipora");
+        if (barreira == null)
+        {
+            barreira = CriarMarcador("BarreiraMataCaipora", LayoutPrototipo.BarreiraCaipora,
+                new Color(0.18f, 0.38f, 0.15f), new Vector3(0.8f, 5.2f, 1f));
+            var colB = barreira.GetComponent<BoxCollider2D>();
+            colB.isTrigger = false;
+            colB.size = new Vector2(1f, 1f);
+            int camadaChao = LayerMask.NameToLayer("Chao");
+            if (camadaChao >= 0) barreira.layer = camadaChao;
+            barreira.AddComponent<BarreiraPuzzle>();
+        }
+
+        GameObject caipora = GameObject.Find("EncontroCaipora");
+        if (caipora == null)
+        {
+            caipora = CriarMarcador("EncontroCaipora", LayoutPrototipo.Caipora,
+                new Color(0.25f, 0.58f, 0.22f), new Vector3(1.35f, 1.65f, 1f));
+            var col = caipora.GetComponent<BoxCollider2D>();
+            col.isTrigger = true;
+            col.size = new Vector2(2.2f, 1.9f);
+        }
+        else
+        {
+            var col = caipora.GetComponent<BoxCollider2D>();
+            if (col != null)
+            {
+                col.isTrigger = true;
+                col.size = new Vector2(2.2f, 1.9f);
+            }
+        }
+
+        var placeholder = caipora.GetComponent<MarcadorEncontro>();
+        if (placeholder != null) Object.Destroy(placeholder);
+
+        var encontro = caipora.GetComponent<EncontroCaipora>();
+        if (encontro == null) encontro = caipora.AddComponent<EncontroCaipora>();
+        encontro.barreiras = new[] { barreira };
+    }
+
     static void GarantirEncontroCurupira()
     {
         GameObject portao = GameObject.Find("BarreiraArenaCurupira");
@@ -602,14 +791,36 @@ public static class BootstrapPrototipo
         enc.dica = dica;
     }
 
-    static void CriarCheckpoint(string nome, Vector3 posicao, bool iniciar)
+    static void CriarCheckpoint(string nome, Vector3 posicao, bool iniciar, int flechasMinimas = 0, string rotulo = "Checkpoint")
     {
-        if (GameObject.Find(nome) != null) return;
-        var go = CriarMarcador(nome, posicao, new Color(0.2f, 0.9f, 0.3f, 0.85f), new Vector3(0.6f, 0.6f, 1f));
+        GameObject go = GameObject.Find(nome);
+        if (go == null)
+        {
+            go = CriarMarcador(nome, posicao, new Color(0.25f, 1f, 0.55f, 0.95f), new Vector3(1.1f, 0.7f, 1f));
+            var colNovo = go.GetComponent<BoxCollider2D>();
+            colNovo.size = new Vector2(3.2f, 2.4f);
+        }
+
+        go.transform.position = posicao;
         var col = go.GetComponent<BoxCollider2D>();
-        col.size = new Vector2(2f, 2f);
-        var cp = go.AddComponent<Checkpoint>();
+        if (col != null)
+        {
+            col.isTrigger = true;
+            col.size = new Vector2(3.2f, 2.4f);
+        }
+
+        var sr = go.GetComponent<SpriteRenderer>();
+        if (sr != null)
+        {
+            sr.color = new Color(0.25f, 1f, 0.55f, 0.95f);
+            sr.sortingOrder = 4;
+        }
+
+        var cp = go.GetComponent<Checkpoint>();
+        if (cp == null) cp = go.AddComponent<Checkpoint>();
         cp.ativarAoIniciar = iniciar;
+        cp.flechasMinimas = flechasMinimas;
+        cp.rotulo = rotulo;
     }
 
     static void GarantirFoco(string nome, Vector3 posicao)
@@ -739,7 +950,7 @@ public static class BootstrapPrototipo
             LayoutPrototipo.Zeca,
             new Color(0.35f, 0.65f, 1f),
             new Vector3(1.1f, 1.7f, 1f),
-            new[] { CatalogoPaginasCap1.IdIara, CatalogoPaginasCap1.IdBoto },
+            new[] { CatalogoPaginasCap1.IdIara, CatalogoPaginasCap1.IdBoto, CatalogoPaginasCap1.IdPatoNoTucupi },
             new[]
             {
                 new FalaDialogo
@@ -765,21 +976,95 @@ public static class BootstrapPrototipo
                     personagem = "Seu Zeca",
                     emocao = "respeito",
                     texto = "Antes de remar trecho fundo, a gente pede licenca a Mae d'Agua. Leva meu pente de osso. Come Tacaca se o canto vier — sem Treme, ela puxa pro fundo."
+                },
+                new FalaDialogo
+                {
+                    personagem = "Seu Zeca",
+                    emocao = "carinho",
+                    texto = "E Bento... minha vizinha Taina ficou presa do outro lado do rio, na entrada da mata, cuidando dos bichos. Ela adora Pato no Tucupi! Leva este Pato Assado, cozinha na sua Barca com tucupi e jambu e leva pra ela."
                 }
             },
-            new[] { CatalogoItensNorte.IdPenteDeOsso },
+            new[] { CatalogoItensNorte.IdPenteDeOsso, CatalogoItensNorte.IdPatoAssado },
             new[]
             {
                 new FalaDialogo
                 {
                     personagem = "Seu Zeca",
                     emocao = "serio",
-                    texto = "Segura [V] na beira do cais pra achar a chave na lama, e usa [V] na canoa pra ver a aura do Boto na agua turva. O pente da Iara ja ta com voce."
+                    texto = "Segura [V] na beira do cais pra achar a chave na lama, e usa [V] na canoa pra ver a aura do Boto. Nao esquece de cozinhar o Pato no Tucupi na Barca pra levar pra Taina na entrada da mata!"
                 }
             });
     }
 
-    static void CriarNpc(string nome, Vector3 posicao, Color cor, Vector3 escala, string[] paginasCaderno, FalaDialogo[] falas, string[] idsItens = null, FalaDialogo[] falasApos = null)
+    static void GarantirTainaMata()
+    {
+        var npc = CriarNpc(
+            "TainaMata",
+            LayoutPrototipo.Taina,
+            new Color(0.3f, 0.85f, 0.45f),
+            new Vector3(1.05f, 1.65f, 1f),
+            new[] { CatalogoPaginasCap1.IdCaipora, CatalogoPaginasCap1.IdPatoNoTucupi },
+            new[]
+            {
+                new FalaDialogo
+                {
+                    personagem = "Taina",
+                    emocao = "preocupada",
+                    texto = "Bento! Ainda bem que voce atravessou o rio. Os capangas do Barao espalharam jaulas de ferro na trilha e prenderam os bichos da mata!"
+                },
+                new FalaDialogo
+                {
+                    personagem = "Taina",
+                    emocao = "alerta",
+                    texto = "O Caipora montou no queixada e nao deixa ninguem passar. Primeiro voce precisa quebrar as 2 jaulas da fauna, derrotar o Capanga cacador e usar a Visao Espectral [V] quando ouvir o assobio dele na folhagem para acertar duas flechas purificadoras."
+                },
+                new FalaDialogo
+                {
+                    personagem = "Taina",
+                    emocao = "respeito",
+                    texto = "Depois que ele acalmar, a licenca do toco pede um Favo de Mel da mata e o meu Colar de Sementes."
+                },
+                new FalaDialogo
+                {
+                    personagem = "Taina",
+                    emocao = "esperanca",
+                    texto = "Faz dois dias que nao consigo voltar pra vila... Se o meu vizinho Seu Zeca te deu o Pato Assado, prepara um Pato no Tucupi la na Barca e traz pra mim que eu faco escambo pelo meu Colar de Sementes!"
+                }
+            },
+            null,
+            new[]
+            {
+                new FalaDialogo
+                {
+                    personagem = "Taina",
+                    emocao = "carinho",
+                    texto = "O Colar de Sementes ja ta com voce! Quebre as 2 jaulas da fauna, derrote o Capanga, use [V] no assobio do Caipora e ofereca o colar junto com o Favo de Mel."
+                }
+            });
+
+        if (npc != null)
+        {
+            npc.idItemPedidoEscambo = CatalogoItensNorte.IdPatoNoTucupi;
+            npc.idItemRecompensaEscambo = CatalogoItensNorte.IdColarDeSementes;
+            npc.falasAoEscambar = new[]
+            {
+                new FalaDialogo
+                {
+                    personagem = "Taina",
+                    emocao = "feliz",
+                    texto = "Pato no Tucupi quentinho! Sentir o tempero da vila renova a alma... Agradece ao Seu Zeca por mim!"
+                },
+                new FalaDialogo
+                {
+                    personagem = "Taina",
+                    emocao = "respeito",
+                    texto = "Aqui esta o meu Colar de Sementes. Quebre as jaulas dos bichos, pegue o Favo de Mel perto do gancho da mata e peca licenca ao Caipora — ele vai te entregar a fibra sagrada pro Novelo do Curupira!"
+                }
+            };
+        }
+    }
+
+    static NpcDialogo CriarNpc(string nome, Vector3 posicao, Color cor, Vector3 escala, string[] paginasCaderno, FalaDialogo[] falas, string[] idsItens = null, FalaDialogo[] falasApos = null)
     {
         var existente = GameObject.Find(nome);
         NpcDialogo npc;
@@ -795,11 +1080,12 @@ public static class BootstrapPrototipo
             npc = go.AddComponent<NpcDialogo>();
         }
 
-        if (npc == null) return;
+        if (npc == null) return null;
         npc.falas = falas;
         npc.paginasAoConversar = paginasCaderno;
         npc.idsItensAoConversar = idsItens;
         npc.falasAposEntrega = falasApos;
+        return npc;
     }
 
     static GameObject CriarMarcador(string nome, Vector3 posicao, Color cor, Vector3 escala)

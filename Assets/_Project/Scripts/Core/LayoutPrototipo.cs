@@ -18,15 +18,17 @@ public static class LayoutPrototipo
     public static readonly Vector3 Bento = new Vector3(-16.5f, 2f, 0f);
     public static readonly Vector3 Checkpoint = new Vector3(-16.5f, 0.85f, 0f);
     public static readonly Vector3 PistaEspectral = new Vector3(-8.5f, 2.6f, 0f);
-    public static readonly Vector3 DonaNair = new Vector3(-10f, 1.4f, 0f);
+    public static readonly Vector3 DonaNair = new Vector3(-10f, CarregadorPixelArt.YNpcNoChao, 0f);
     public static readonly Vector3 Jambu = new Vector3(-7.2f, 0.85f, 0f);
     public static readonly Vector3 Tucupi = new Vector3(-5.6f, 0.85f, 0f);
     public static readonly Vector3 Goma = new Vector3(-4f, 0.85f, 0f);
-    public static readonly Vector3 Lia = new Vector3(6f, 1.4f, 0f);
+    public static readonly Vector3 Camarao = new Vector3(-2.4f, 0.85f, 0f);
+    public static readonly Vector3 PatoAssadoVila = new Vector3(3.2f, 0.85f, 0f);
+    public static readonly Vector3 Lia = new Vector3(6f, CarregadorPixelArt.YNpcNoChao, 0f);
     public static readonly Vector3 GanchoInicio = new Vector3(-2f, 3.7f, 0f);
 
     public static readonly Vector3 CheckpointRio = new Vector3(20f, 0.85f, 0f);
-    public static readonly Vector3 Zeca = new Vector3(24f, 1.4f, 0f);
+    public static readonly Vector3 Zeca = new Vector3(24f, CarregadorPixelArt.YNpcNoChao, 0f);
     public static readonly Vector3 ChaveCanoaCais = new Vector3(25.6f, 0.85f, 0f);
     public static readonly Vector3 CanoaCais = new Vector3(27.2f, 0.55f, 0f);
     public static readonly Vector3 BarreiraCais = new Vector3(29.0f, 2.6f, 0f);
@@ -43,28 +45,40 @@ public static class LayoutPrototipo
     public static readonly Vector3 IaraAgua = new Vector3(43.2f, 0.7f, 0f);
     public static readonly Vector3 CaisAposIara = new Vector3(47.2f, 0.55f, 0f);
     public static readonly Vector3 BarreiraIara = new Vector3(48.2f, 2.6f, 0f);
+    public static readonly Vector3 BarreiraCaisLeste = new Vector3(47.0f, 2.6f, 0f);
     public static readonly Vector3 JambuRio = new Vector3(38f, 0.85f, 0f);
     public static readonly Vector3 TucupiRio = new Vector3(39.4f, 0.85f, 0f);
     public static readonly Vector3 GomaRio = new Vector3(40.8f, 0.85f, 0f);
+    public static readonly Vector3 CamaraoRio = new Vector3(42.2f, 0.85f, 0f);
 
+    public static readonly Vector3 Taina = new Vector3(52f, CarregadorPixelArt.YNpcNoChao, 0f);
+    public static readonly Vector3 CheckpointMata = new Vector3(54f, 0.85f, 0f);
     public static readonly Vector3 Cipo = new Vector3(58f, 0.85f, 0f);
     public static readonly Vector3 Vegetacao = new Vector3(62f, 1.3f, 0f);
+    public static readonly Vector3 JaulaFaunaA = new Vector3(64.5f, 1.2f, 0f);
+    public static readonly Vector3 JaulaFaunaB = new Vector3(68.5f, 1.2f, 0f);
     public static readonly Vector3 Resina = new Vector3(66f, 0.85f, 0f);
     public static readonly Vector3 GanchoMata = new Vector3(70f, 3.6f, 0f);
+    public static readonly Vector3 FavoDeMel = new Vector3(71.5f, 0.85f, 0f);
     public static readonly Vector3 Capanga = new Vector3(74f, 1.3f, 0f);
+    public static readonly Vector3 CheckpointCaipora = new Vector3(77.2f, 0.85f, 0f);
+    public static readonly Vector3 FlechasClareira = new Vector3(77.9f, 0.85f, 0f);
     public static readonly Vector3 Sombra = new Vector3(80f, 1.3f, 0f);
+    public const float InicioZonaCaipora = 82f;
+    public static readonly Vector3 Caipora = new Vector3(86f, 1.5f, 0f);
+    public static readonly Vector3 BarreiraCaipora = new Vector3(90f, 2.6f, 0f);
     public static readonly Vector3 PlataformaEspectral = new Vector3(84f, 2.5f, 0f);
 
     public static readonly Vector3 Alavanca = new Vector3(92f, 1.1f, 0f);
     public static readonly Vector3 Barreira = new Vector3(100f, 1.7f, 0f);
-    public static readonly Vector3 GanchoRuina = new Vector3(102f, 3.8f, 0f);
-    public static readonly Vector3 PlataformaEspectral2 = new Vector3(105f, 2.85f, 0f);
-    public static readonly Vector3 PistaPisos = new Vector3(106.5f, 3.65f, 0f);
-    public static readonly Vector3 PisoA = new Vector3(108.5f, 3.15f, 0f);
-    public static readonly Vector3 PisoB = new Vector3(111.3f, 3.15f, 0f);
-    public static readonly Vector3 PisoC = new Vector3(114.1f, 3.15f, 0f);
-    public static readonly Vector3 PisoChegada = new Vector3(117.5f, 3.1f, 0f);
-    public static readonly Vector3 Reliquia = new Vector3(117.5f, 3.9f, 0f);
+    public static readonly Vector3 GanchoRuina = new Vector3(102f, 5.4f, 0f);
+    public static readonly Vector3 PlataformaEspectral2 = new Vector3(105f, 4.35f, 0f);
+    public static readonly Vector3 PistaPisos = new Vector3(106.5f, 5.15f, 0f);
+    public static readonly Vector3 PisoA = new Vector3(108.5f, 4.55f, 0f);
+    public static readonly Vector3 PisoB = new Vector3(111.3f, 4.55f, 0f);
+    public static readonly Vector3 PisoC = new Vector3(114.1f, 4.55f, 0f);
+    public static readonly Vector3 PisoChegada = new Vector3(117.5f, 4.55f, 0f);
+    public static readonly Vector3 Reliquia = new Vector3(117.5f, 5.35f, 0f);
 
     public static readonly Vector3 BarreiraArena = new Vector3(121.5f, 2.6f, 0f);
     public static readonly Vector3 CheckpointArena = new Vector3(124f, 0.85f, 0f);
@@ -93,14 +107,27 @@ public static class LayoutPrototipo
         Posicionar("Coletavel_Jambu", Jambu);
         Posicionar("Coletavel_Tucupi", Tucupi);
         Posicionar("Coletavel_Goma", Goma);
+        Posicionar("Coletavel_Camarao", Camarao);
+        Posicionar("Coletavel_PatoAssado", PatoAssadoVila);
         Posicionar("NamoradaDoBoto", Lia);
         Posicionar("PescadorDaIara", Zeca);
 
+        Posicionar("TainaMata", Taina);
+        Posicionar("CheckpointMata", CheckpointMata);
         Posicionar("Coletavel_Cipo", Cipo);
         Posicionar("Vegetacao_Cipo", Vegetacao);
+        Posicionar("JaulaFauna_A", JaulaFaunaA);
+        Posicionar("JaulaFauna_B", JaulaFaunaB);
         Posicionar("Coletavel_Resina", Resina);
+        Posicionar("Coletavel_FavoMel", FavoDeMel);
         Posicionar("CapangaTreino", Capanga);
+        Posicionar("CheckpointCaipora", CheckpointCaipora);
+        Posicionar("Coletavel_Flechas_Clareira", FlechasClareira);
         Posicionar("SombraTreino", Sombra);
+        Posicionar("EncontroCaipora", Caipora);
+        Posicionar("BarreiraMataCaipora", BarreiraCaipora);
+        var muroCaipora = GameObject.Find("BarreiraMataCaipora");
+        if (muroCaipora != null) muroCaipora.transform.localScale = new Vector3(0.8f, 5.2f, 1f);
         Posicionar("PlataformaEspectral", PlataformaEspectral);
 
         Posicionar("AlavancaChicote", Alavanca);
@@ -121,6 +148,9 @@ public static class LayoutPrototipo
         Posicionar("BarreiraCais", BarreiraCais);
         var muroCais = GameObject.Find("BarreiraCais");
         if (muroCais != null) muroCais.transform.localScale = new Vector3(0.8f, 5.2f, 1f);
+        Posicionar("BarreiraCaisLeste", BarreiraCaisLeste);
+        var muroCaisLeste = GameObject.Find("BarreiraCaisLeste");
+        if (muroCaisLeste != null) muroCaisLeste.transform.localScale = new Vector3(0.8f, 5.2f, 1f);
         Posicionar("BloqueioBoto", BloqueioBoto);
         Posicionar("BarreiraRioBoto", BarreiraBoto);
         var muroBoto = GameObject.Find("BarreiraRioBoto");
@@ -132,6 +162,7 @@ public static class LayoutPrototipo
         Posicionar("Coletavel_Jambu_Rio", JambuRio);
         Posicionar("Coletavel_Tucupi_Rio", TucupiRio);
         Posicionar("Coletavel_Goma_Rio", GomaRio);
+        Posicionar("Coletavel_Camarao_Rio", CamaraoRio);
         Posicionar("CheckpointArena", CheckpointArena);
         Posicionar("BarreiraArenaCurupira", BarreiraArena);
         var muroArena = GameObject.Find("BarreiraArenaCurupira");

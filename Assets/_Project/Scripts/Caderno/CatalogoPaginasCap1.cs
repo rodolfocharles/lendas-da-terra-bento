@@ -7,11 +7,14 @@ public static class CatalogoPaginasCap1
 {
     public const string IdExpedicao = "expedicao_norte";
     public const string IdTacaca = "receita_tacaca";
+    public const string IdPatoNoTucupi = "receita_pato_tucupi";
     public const string IdBoto = "pista_boto";
     public const string IdBotoAcalmado = "boto_acalmado";
     public const string IdEssenciaAguas = "essencia_aguas";
     public const string IdIara = "pista_iara";
     public const string IdIaraPurificada = "iara_purificada";
+    public const string IdCaipora = "pista_caipora";
+    public const string IdCaiporaAcalmado = "caipora_acalmado";
     public const string IdCurupira = "ritual_curupira";
     public const string IdCurupiraPurificado = "curupira_purificado";
     public const string IdPassoInvertido = "passo_invertido";
@@ -36,8 +39,14 @@ public static class CatalogoPaginasCap1
                 IdTacaca,
                 "Receita: Tacaca",
                 CategoriaPagina.Receita,
-                "Jambu + tucupi + goma. Dona Nair entrega o primeiro. Bebe um contra o canto da Iara (Treme); guarda outro pra oferenda ao Boto.",
+                "Caldo de tucupi + goma de tapioca + jambu + camarao seco. Dona Nair entrega o primeiro. Bebe um contra o canto da Iara (Treme); guarda outro pra oferenda ao Boto.",
                 "Dona Nair"),
+            new PaginaCaderno(
+                IdPatoNoTucupi,
+                "Receita: Pato no Tucupi",
+                CategoriaPagina.Receita,
+                "Pato assado (Seu Zeca) + 2× caldo de tucupi + jambu no Fogao a Lenha. Prato favorito da Taina na entrada da Mata (escambo pelo Colar de Sementes). Tambem concede Treme.",
+                "Seu Zeca e Taina"),
             new PaginaCaderno(
                 IdBoto,
                 "Boto-Cor-de-Rosa",
@@ -69,6 +78,18 @@ public static class CatalogoPaginasCap1
                 "O Treme quebrou o canto. Pente, espelho e fitas pediram licenca. A Iara sentiu a Essencia das Aguas e entregou a Gota de Quartzo.",
                 "Bento"),
             new PaginaCaderno(
+                IdCaipora,
+                "Caipora — Guardiao da Caca",
+                CategoriaPagina.Pista,
+                "As jaulas do Barao prenderam os bichos e enfureceram o Caipora em seu queixada. Quebre as 2 jaulas da fauna, derrote o Capanga cacador e use a Visao Espectral [V] contra o assobio na mata para acertar 2 flechas purificadoras. Oferenda de licenca: Colar de Sementes (escambo com Taina por Pato no Tucupi) + Favo de Mel.",
+                "Taina"),
+            new PaginaCaderno(
+                IdCaiporaAcalmado,
+                "Caipora apaziguado",
+                CategoriaPagina.Pista,
+                "Com os bichos libertos das jaulas, o Colar de Sementes e o Favo de Mel, o Caipora abriu a trilha das Ruinas e entregou a Fibra do Caipora para tecer o Novelo Encantado.",
+                "Bento"),
+            new PaginaCaderno(
                 IdSombras,
                 "Sombras da corrupcao",
                 CategoriaPagina.Bestiario,
@@ -96,7 +117,7 @@ public static class CatalogoPaginasCap1
                 IdNovelo,
                 "Novelo Encantado",
                 CategoriaPagina.Ritual,
-                "2× cipo + resina na Bancada de Alquimia. Item ritual do chefe. Sem ele, o Curupira nao se deixa purificar.",
+                "2× cipo + resina + Fibra do Caipora na Bancada de Alquimia. Item ritual do chefe. Sem ele, o Curupira nao se deixa purificar.",
                 "Bancada de Alquimia"),
             new PaginaCaderno(
                 IdDiarioAvoAmuleto,

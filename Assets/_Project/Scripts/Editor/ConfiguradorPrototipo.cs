@@ -26,6 +26,32 @@ public static class ConfiguradorPrototipo
         Debug.Log("[Lendas] Prototipo configurado: layout Barca / Vila / Mata / Ruinas.");
     }
 
+    [MenuItem("Lendas/Configurar Importacao Pixel Art")]
+    static void ConfigurarImportacaoPixelArt()
+    {
+        string[] guids = AssetDatabase.FindAssets("t:Texture2D", new[] { "Assets/_Project/Art/Personagens" });
+        int alterados = 0;
+        foreach (string guid in guids)
+        {
+            string path = AssetDatabase.GUIDToAssetPath(guid);
+            var importer = AssetImporter.GetAtPath(path) as TextureImporter;
+            if (importer == null) continue;
+
+            importer.textureType = TextureImporterType.Sprite;
+            importer.spriteImportMode = SpriteImportMode.Single;
+            importer.spritePixelsPerUnit = 64f;
+            importer.filterMode = FilterMode.Point;
+            importer.textureCompression = TextureImporterCompression.Uncompressed;
+            importer.mipmapEnabled = false;
+            importer.alphaIsTransparency = true;
+            importer.wrapMode = TextureWrapMode.Clamp;
+            importer.SaveAndReimport();
+            alterados++;
+        }
+
+        Debug.Log("[Lendas] Importacao pixel art: " + alterados + " texturas (Point, PPU 64).");
+    }
+
     [MenuItem("Lendas/Criar Itens Norte (ScriptableObjects)")]
     static void CriarItensNorteAssets()
     {
@@ -39,18 +65,24 @@ public static class ConfiguradorPrototipo
 
         CriarOuAtualizarItem(pasta + "/Jambu.asset", CatalogoItensNorte.IdJambu, "Jambu",
             "Folha anestesiante do Norte. Ingrediente do Tacaca.", CategoriaItem.Ingrediente);
-        CriarOuAtualizarItem(pasta + "/Tucupi.asset", CatalogoItensNorte.IdTucupi, "Tucupi",
+        CriarOuAtualizarItem(pasta + "/Tucupi.asset", CatalogoItensNorte.IdTucupi, "Caldo de Tucupi",
             "Caldo amarelo da mandioca brava. Base do Tacaca e do Pato no Tucupi.", CategoriaItem.Ingrediente);
         CriarOuAtualizarItem(pasta + "/GomaDeTapioca.asset", CatalogoItensNorte.IdGoma, "Goma de Tapioca",
             "Goma que da o ponto do Tacaca.", CategoriaItem.Ingrediente);
+        CriarOuAtualizarItem(pasta + "/CamaraoSeco.asset", CatalogoItensNorte.IdCamaraoSeco, "Camarao Seco",
+            "Camarao salgado e seco, ingrediente obrigatorio do Tacaca.", CategoriaItem.Ingrediente);
         CriarOuAtualizarItem(pasta + "/Tacaca.asset", CatalogoItensNorte.IdTacaca, "Tacaca",
             "Oferenda ao Boto. Beber concede Treme contra o canto da Iara. Guarde um pra oferenda.", CategoriaItem.Comida);
+        CriarOuAtualizarItem(pasta + "/PatoAssado.asset", CatalogoItensNorte.IdPatoAssado, "Pato Assado",
+            "Pato assado que Seu Zeca guardou para a vizinha Taina. Ingrediente do Pato no Tucupi.", CategoriaItem.Ingrediente);
         CriarOuAtualizarItem(pasta + "/PatoNoTucupi.asset", CatalogoItensNorte.IdPatoNoTucupi, "Pato no Tucupi",
-            "Prato tipico do Norte. Variacao do buff Treme.", CategoriaItem.Comida);
+            "Prato favorito da Taina na entrada da Mata (escambo). Tambem concede o buff Treme.", CategoriaItem.Comida);
         CriarOuAtualizarItem(pasta + "/Cipo.asset", CatalogoItensNorte.IdCipo, "Cipo",
             "Fibra da mata. Base do Novelo Encantado.", CategoriaItem.Reagente);
         CriarOuAtualizarItem(pasta + "/Resina.asset", CatalogoItensNorte.IdResina, "Resina",
             "Seiva endurecida. Usada em flechas e no novelo.", CategoriaItem.Reagente);
+        CriarOuAtualizarItem(pasta + "/FibraDoCaipora.asset", CatalogoItensNorte.IdFibraCaipora, "Fibra do Caipora",
+            "Cipo abencoado pelo guardiao da caca. Reagente essencial para tecer o Novelo Encantado.", CategoriaItem.Reagente, 1);
         CriarOuAtualizarItem(pasta + "/FlechasPurificadoras.asset", CatalogoItensNorte.IdFlechasPurificadoras, "Flechas Purificadoras",
             "Municao da Besta Espiritual contra Sombras.", CategoriaItem.Item);
         CriarOuAtualizarItem(pasta + "/NoveloEncantado.asset", CatalogoItensNorte.IdNoveloEncantado, "Novelo Encantado",
@@ -69,6 +101,10 @@ public static class ConfiguradorPrototipo
             "Oferenda a Mae d'Agua. Lia mandou para ela admirar o reflexo nas pedras.", CategoriaItem.Reliquia, 1);
         CriarOuAtualizarItem(pasta + "/PenteDeOsso.asset", CatalogoItensNorte.IdPenteDeOsso, "Pente de Osso",
             "Oferenda de pescador. Seu Zeca pede licenca a Iara antes de remar trecho fundo.", CategoriaItem.Reliquia, 1);
+        CriarOuAtualizarItem(pasta + "/ColarDeSementes.asset", CatalogoItensNorte.IdColarDeSementes, "Colar de Sementes",
+            "Amuleto de respeito aos bichos da mata. Taina trocou pelo Pato no Tucupi.", CategoriaItem.Reliquia, 1);
+        CriarOuAtualizarItem(pasta + "/FavoDeMel.asset", CatalogoItensNorte.IdFavoDeMel, "Favo de Mel",
+            "Mel silvestre colhido na mata. Oferenda de licenca ao Caipora.", CategoriaItem.Reliquia, 1);
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
@@ -141,6 +177,7 @@ public static class ConfiguradorPrototipo
         if (raiz.GetComponent<BentoBesta>() == null) raiz.AddComponent<BentoBesta>();
         if (raiz.GetComponent<BentoVisaoEspectral>() == null) raiz.AddComponent<BentoVisaoEspectral>();
         if (raiz.GetComponent<AmuletoAncestral>() == null) raiz.AddComponent<AmuletoAncestral>();
+        if (raiz.GetComponent<BentoAnimacao>() == null) raiz.AddComponent<BentoAnimacao>();
 
         var junta = raiz.GetComponent<DistanceJoint2D>();
         junta.enabled = false;
@@ -181,6 +218,7 @@ public static class ConfiguradorPrototipo
         GarantirDonaNair();
         GarantirNamoradaDoBoto();
         GarantirPescadorDaIara();
+        GarantirTainaMata();
         GarantirColetaveisNorte();
         GarantirBarcaEEstacoes();
         GarantirCombatePrototipo();
@@ -336,8 +374,12 @@ public static class ConfiguradorPrototipo
         var jambu = AssetDatabase.LoadAssetAtPath<ItemDados>("Assets/_Project/Data/Itens/Jambu.asset");
         var tucupi = AssetDatabase.LoadAssetAtPath<ItemDados>("Assets/_Project/Data/Itens/Tucupi.asset");
         var goma = AssetDatabase.LoadAssetAtPath<ItemDados>("Assets/_Project/Data/Itens/GomaDeTapioca.asset");
+        var camarao = AssetDatabase.LoadAssetAtPath<ItemDados>("Assets/_Project/Data/Itens/CamaraoSeco.asset");
         var cipo = AssetDatabase.LoadAssetAtPath<ItemDados>("Assets/_Project/Data/Itens/Cipo.asset");
         var resina = AssetDatabase.LoadAssetAtPath<ItemDados>("Assets/_Project/Data/Itens/Resina.asset");
+        var patoAssado = AssetDatabase.LoadAssetAtPath<ItemDados>("Assets/_Project/Data/Itens/PatoAssado.asset");
+        var favoMel = AssetDatabase.LoadAssetAtPath<ItemDados>("Assets/_Project/Data/Itens/FavoDeMel.asset");
+        var flechas = AssetDatabase.LoadAssetAtPath<ItemDados>("Assets/_Project/Data/Itens/FlechasPurificadoras.asset");
 
         if (GameObject.Find("Coletavel_Jambu") == null)
             CriarColetavelEditor("Coletavel_Jambu", LayoutPrototipo.Jambu, new Color(0.35f, 0.75f, 0.25f), jambu, 2);
@@ -345,16 +387,26 @@ public static class ConfiguradorPrototipo
             CriarColetavelEditor("Coletavel_Tucupi", LayoutPrototipo.Tucupi, new Color(0.95f, 0.8f, 0.15f), tucupi, 3);
         if (GameObject.Find("Coletavel_Goma") == null)
             CriarColetavelEditor("Coletavel_Goma", LayoutPrototipo.Goma, new Color(0.95f, 0.95f, 0.9f), goma, 1);
+        if (GameObject.Find("Coletavel_Camarao") == null)
+            CriarColetavelEditor("Coletavel_Camarao", LayoutPrototipo.Camarao, new Color(0.95f, 0.5f, 0.35f), camarao, 1);
         if (GameObject.Find("Coletavel_Cipo") == null)
-            CriarColetavelEditor("Coletavel_Cipo", LayoutPrototipo.Cipo, new Color(0.55f, 0.7f, 0.35f), cipo, 3);
+            CriarColetavelEditor("Coletavel_Cipo", LayoutPrototipo.Cipo, new Color(0.55f, 0.7f, 0.35f), cipo, 3, true);
         if (GameObject.Find("Coletavel_Resina") == null)
-            CriarColetavelEditor("Coletavel_Resina", LayoutPrototipo.Resina, new Color(0.7f, 0.4f, 0.15f), resina, 2);
+            CriarColetavelEditor("Coletavel_Resina", LayoutPrototipo.Resina, new Color(0.7f, 0.4f, 0.15f), resina, 2, true);
         if (GameObject.Find("Coletavel_Jambu_Rio") == null)
-            CriarColetavelEditor("Coletavel_Jambu_Rio", LayoutPrototipo.JambuRio, new Color(0.35f, 0.75f, 0.25f), jambu, 1);
+            CriarColetavelEditor("Coletavel_Jambu_Rio", LayoutPrototipo.JambuRio, new Color(0.35f, 0.75f, 0.25f), jambu, 2);
         if (GameObject.Find("Coletavel_Tucupi_Rio") == null)
-            CriarColetavelEditor("Coletavel_Tucupi_Rio", LayoutPrototipo.TucupiRio, new Color(0.95f, 0.8f, 0.15f), tucupi, 1);
+            CriarColetavelEditor("Coletavel_Tucupi_Rio", LayoutPrototipo.TucupiRio, new Color(0.95f, 0.8f, 0.15f), tucupi, 2);
         if (GameObject.Find("Coletavel_Goma_Rio") == null)
             CriarColetavelEditor("Coletavel_Goma_Rio", LayoutPrototipo.GomaRio, new Color(0.95f, 0.95f, 0.9f), goma, 1);
+        if (GameObject.Find("Coletavel_Camarao_Rio") == null)
+            CriarColetavelEditor("Coletavel_Camarao_Rio", LayoutPrototipo.CamaraoRio, new Color(0.95f, 0.5f, 0.35f), camarao, 1);
+        if (GameObject.Find("Coletavel_PatoAssado") == null)
+            CriarColetavelEditor("Coletavel_PatoAssado", LayoutPrototipo.PatoAssadoVila, new Color(0.75f, 0.45f, 0.2f), patoAssado, 1);
+        if (GameObject.Find("Coletavel_FavoMel") == null)
+            CriarColetavelEditor("Coletavel_FavoMel", LayoutPrototipo.FavoDeMel, new Color(1f, 0.78f, 0.15f), favoMel, 1);
+        if (GameObject.Find("Coletavel_Flechas_Clareira") == null)
+            CriarColetavelEditor("Coletavel_Flechas_Clareira", LayoutPrototipo.FlechasClareira, new Color(0.55f, 0.85f, 1f), flechas, 2, true);
     }
 
     static void GarantirBarcaEEstacoes()
@@ -510,6 +562,9 @@ public static class ConfiguradorPrototipo
             go.AddComponent<InimigoSombra>();
         }
 
+        GarantirJaulaFaunaEditor("JaulaFauna_A", LayoutPrototipo.JaulaFaunaA, "Filhote de Queixada");
+        GarantirJaulaFaunaEditor("JaulaFauna_B", LayoutPrototipo.JaulaFaunaB, "Arara da Mata");
+
         if (GameObject.Find("BarreiraAlavanca") == null)
         {
             var barreira = new GameObject("BarreiraAlavanca");
@@ -553,6 +608,27 @@ public static class ConfiguradorPrototipo
         }
     }
 
+    static void GarantirJaulaFaunaEditor(string nome, Vector3 posicao, string nomeAnimal)
+    {
+        if (GameObject.Find(nome) != null) return;
+        var go = new GameObject(nome);
+        Undo.RegisterCreatedObjectUndo(go, "Criar " + nome);
+        go.transform.position = posicao;
+        go.transform.localScale = new Vector3(1.15f, 1.25f, 1f);
+
+        var sr = go.AddComponent<SpriteRenderer>();
+        sr.sprite = CarregarSpriteQuadrado();
+        sr.color = new Color(0.32f, 0.34f, 0.38f, 0.95f);
+        sr.sortingOrder = 2;
+
+        var col = go.AddComponent<BoxCollider2D>();
+        col.isTrigger = true;
+        col.size = new Vector2(1.4f, 1.4f);
+
+        var jaula = go.AddComponent<JaulaFauna>();
+        jaula.nomeAnimal = nomeAnimal;
+    }
+
     static void GarantirPuzzlesIndy()
     {
         CriarItensNorteAssets();
@@ -574,26 +650,30 @@ public static class ConfiguradorPrototipo
             if (camadaChao >= 0) go.layer = camadaChao;
             var plat = go.AddComponent<ObjetoEspectral>();
             plat.tipo = TipoObjetoEspectral.Plataforma;
+            go.AddComponent<PlataformaPassavel>();
         }
 
         CriarPisoPuzzleEditor("PisoFalso_A", LayoutPrototipo.PisoA, false, camadaChao, sprite);
         CriarPisoPuzzleEditor("PisoFalso_B", LayoutPrototipo.PisoB, true, camadaChao, sprite);
         CriarPisoPuzzleEditor("PisoFalso_C", LayoutPrototipo.PisoC, false, camadaChao, sprite);
 
-        if (GameObject.Find("PisoChegadaRuina") == null)
+        GameObject chegada = GameObject.Find("PisoChegadaRuina");
+        if (chegada == null)
         {
-            var go = new GameObject("PisoChegadaRuina");
-            Undo.RegisterCreatedObjectUndo(go, "Criar PisoChegadaRuina");
-            go.transform.position = LayoutPrototipo.PisoChegada;
-            go.transform.localScale = new Vector3(2.2f, 0.35f, 1f);
-            var sr = go.AddComponent<SpriteRenderer>();
+            chegada = new GameObject("PisoChegadaRuina");
+            Undo.RegisterCreatedObjectUndo(chegada, "Criar PisoChegadaRuina");
+            chegada.transform.position = LayoutPrototipo.PisoChegada;
+            chegada.transform.localScale = new Vector3(2.2f, 0.35f, 1f);
+            var sr = chegada.AddComponent<SpriteRenderer>();
             sr.sprite = sprite;
             sr.color = new Color(0.5f, 0.42f, 0.3f);
             sr.sortingOrder = 1;
-            var col = go.AddComponent<BoxCollider2D>();
+            var col = chegada.AddComponent<BoxCollider2D>();
             col.isTrigger = false;
-            if (camadaChao >= 0) go.layer = camadaChao;
+            if (camadaChao >= 0) chegada.layer = camadaChao;
         }
+        if (chegada.GetComponent<PlataformaPassavel>() == null)
+            Undo.AddComponent<PlataformaPassavel>(chegada);
 
         if (GameObject.Find("PistaPisosFalsos") == null)
         {
@@ -634,23 +714,29 @@ public static class ConfiguradorPrototipo
 
     static void CriarPisoPuzzleEditor(string nome, Vector3 posicao, bool seguro, int camadaChao, Sprite sprite)
     {
-        if (GameObject.Find(nome) != null) return;
-        var go = new GameObject(nome);
-        Undo.RegisterCreatedObjectUndo(go, "Criar " + nome);
-        go.transform.position = posicao;
-        go.transform.localScale = new Vector3(1.35f, 0.32f, 1f);
-        var sr = go.AddComponent<SpriteRenderer>();
-        sr.sprite = sprite;
-        sr.color = new Color(0.48f, 0.4f, 0.28f);
-        sr.sortingOrder = 1;
-        var col = go.AddComponent<BoxCollider2D>();
-        col.isTrigger = false;
-        if (camadaChao >= 0) go.layer = camadaChao;
-        var piso = go.AddComponent<PisoFalso>();
-        piso.seguro = seguro;
+        GameObject go = GameObject.Find(nome);
+        if (go == null)
+        {
+            go = new GameObject(nome);
+            Undo.RegisterCreatedObjectUndo(go, "Criar " + nome);
+            go.transform.position = posicao;
+            go.transform.localScale = new Vector3(1.35f, 0.32f, 1f);
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = sprite;
+            sr.color = new Color(0.48f, 0.4f, 0.28f);
+            sr.sortingOrder = 1;
+            var col = go.AddComponent<BoxCollider2D>();
+            col.isTrigger = false;
+            if (camadaChao >= 0) go.layer = camadaChao;
+            var piso = go.AddComponent<PisoFalso>();
+            piso.seguro = seguro;
+        }
+
+        if (go.GetComponent<PlataformaPassavel>() == null)
+            Undo.AddComponent<PlataformaPassavel>(go);
     }
 
-    static void CriarColetavelEditor(string nome, Vector3 posicao, Color cor, ItemDados item, int quantidade = 1)
+    static void CriarColetavelEditor(string nome, Vector3 posicao, Color cor, ItemDados item, int quantidade = 1, bool reaparece = false)
     {
         var go = new GameObject(nome);
         Undo.RegisterCreatedObjectUndo(go, "Criar " + nome);
@@ -669,6 +755,8 @@ public static class ConfiguradorPrototipo
         var coletavel = go.AddComponent<ColetavelItem>();
         coletavel.item = item;
         coletavel.quantidade = quantidade;
+        coletavel.reaparece = reaparece;
+        coletavel.destruirAoColetar = !reaparece;
     }
 
     static void GarantirGerenciadorDialogo()
@@ -715,9 +803,12 @@ public static class ConfiguradorPrototipo
         GarantirCanoaECaisEditor(sprite);
         GarantirEncontroBotoEditor(sprite);
         GarantirEncontroIaraEditor(sprite);
+        GarantirEncontroCaiporaEditor(sprite);
         GarantirEncontroCurupiraEditor(sprite);
 
         CriarCheckpointEditor("CheckpointRio", LayoutPrototipo.CheckpointRio, false);
+        CriarCheckpointEditor("CheckpointMata", LayoutPrototipo.CheckpointMata, false);
+        CriarCheckpointEditor("CheckpointCaipora", LayoutPrototipo.CheckpointCaipora, false, 2, "Clareira do Caipora");
         CriarCheckpointEditor("CheckpointArena", LayoutPrototipo.CheckpointArena, false);
 
         GarantirFocoEditor("FocoCorrupcao_A", LayoutPrototipo.FocoA, sprite);
@@ -768,6 +859,8 @@ public static class ConfiguradorPrototipo
 
     static void GarantirCanoaECaisEditor(Sprite sprite)
     {
+        int camadaChao = LayerMask.NameToLayer("Chao");
+
         GameObject barreira = GameObject.Find("BarreiraCais");
         if (barreira == null)
         {
@@ -781,9 +874,29 @@ public static class ConfiguradorPrototipo
             srB.sortingOrder = 2;
             var colB = barreira.AddComponent<BoxCollider2D>();
             colB.isTrigger = false;
-            int camadaChao = LayerMask.NameToLayer("Chao");
+            colB.size = new Vector2(1f, 6f);
+            colB.offset = new Vector2(0f, 2f);
             if (camadaChao >= 0) barreira.layer = camadaChao;
             barreira.AddComponent<BarreiraPuzzle>();
+        }
+
+        GameObject barreiraLeste = GameObject.Find("BarreiraCaisLeste");
+        if (barreiraLeste == null)
+        {
+            barreiraLeste = new GameObject("BarreiraCaisLeste");
+            Undo.RegisterCreatedObjectUndo(barreiraLeste, "Criar BarreiraCaisLeste");
+            barreiraLeste.transform.position = LayoutPrototipo.BarreiraCaisLeste;
+            barreiraLeste.transform.localScale = new Vector3(0.8f, 5.2f, 1f);
+            var srBL = barreiraLeste.AddComponent<SpriteRenderer>();
+            srBL.sprite = sprite;
+            srBL.color = new Color(0.4f, 0.28f, 0.16f);
+            srBL.sortingOrder = 2;
+            var colBL = barreiraLeste.AddComponent<BoxCollider2D>();
+            colBL.isTrigger = false;
+            colBL.size = new Vector2(1f, 6f);
+            colBL.offset = new Vector2(0f, 2f);
+            if (camadaChao >= 0) barreiraLeste.layer = camadaChao;
+            barreiraLeste.AddComponent<BarreiraPuzzle>();
         }
 
         GameObject canoa = GameObject.Find("CanoaRio");
@@ -799,7 +912,16 @@ public static class ConfiguradorPrototipo
             sr.sortingOrder = 3;
             var col = canoa.AddComponent<BoxCollider2D>();
             col.isTrigger = true;
-            col.size = new Vector2(1.1f, 1.8f);
+            col.size = new Vector2(1.4f, 1.8f);
+        }
+        else
+        {
+            var col = canoa.GetComponent<BoxCollider2D>();
+            if (col != null)
+            {
+                col.isTrigger = true;
+                col.size = new Vector2(1.4f, 1.8f);
+            }
         }
 
         if (canoa.GetComponent<CanoaRio>() == null)
@@ -918,6 +1040,50 @@ public static class ConfiguradorPrototipo
         encontro.barreiras = new[] { barreira };
     }
 
+    static void GarantirEncontroCaiporaEditor(Sprite sprite)
+    {
+        GameObject barreira = GameObject.Find("BarreiraMataCaipora");
+        if (barreira == null)
+        {
+            barreira = new GameObject("BarreiraMataCaipora");
+            Undo.RegisterCreatedObjectUndo(barreira, "Criar BarreiraMataCaipora");
+            barreira.transform.position = LayoutPrototipo.BarreiraCaipora;
+            barreira.transform.localScale = new Vector3(0.8f, 5.2f, 1f);
+            var srB = barreira.AddComponent<SpriteRenderer>();
+            srB.sprite = sprite;
+            srB.color = new Color(0.18f, 0.38f, 0.15f);
+            srB.sortingOrder = 2;
+            var colB = barreira.AddComponent<BoxCollider2D>();
+            colB.isTrigger = false;
+            int camadaChao = LayerMask.NameToLayer("Chao");
+            if (camadaChao >= 0) barreira.layer = camadaChao;
+            barreira.AddComponent<BarreiraPuzzle>();
+        }
+
+        GameObject caipora = GameObject.Find("EncontroCaipora");
+        if (caipora == null)
+        {
+            caipora = new GameObject("EncontroCaipora");
+            Undo.RegisterCreatedObjectUndo(caipora, "Criar EncontroCaipora");
+            caipora.transform.position = LayoutPrototipo.Caipora;
+            caipora.transform.localScale = new Vector3(1.35f, 1.65f, 1f);
+            var sr = caipora.AddComponent<SpriteRenderer>();
+            sr.sprite = sprite;
+            sr.color = new Color(0.25f, 0.58f, 0.22f);
+            sr.sortingOrder = 2;
+            var col = caipora.AddComponent<BoxCollider2D>();
+            col.isTrigger = true;
+            col.size = new Vector2(2.2f, 1.9f);
+        }
+
+        var placeholder = caipora.GetComponent<MarcadorEncontro>();
+        if (placeholder != null) Object.DestroyImmediate(placeholder);
+
+        var encontro = caipora.GetComponent<EncontroCaipora>();
+        if (encontro == null) encontro = caipora.AddComponent<EncontroCaipora>();
+        encontro.barreiras = new[] { barreira };
+    }
+
     static void GarantirEncontroCurupiraEditor(Sprite sprite)
     {
         GameObject portao = GameObject.Find("BarreiraArenaCurupira");
@@ -981,20 +1147,30 @@ public static class ConfiguradorPrototipo
         enc.dica = dica;
     }
 
-    static void CriarCheckpointEditor(string nome, Vector3 posicao, bool iniciar)
+    static void CriarCheckpointEditor(string nome, Vector3 posicao, bool iniciar, int flechasMinimas = 0, string rotulo = "Checkpoint")
     {
-        if (GameObject.Find(nome) != null) return;
-        var go = new GameObject(nome);
-        Undo.RegisterCreatedObjectUndo(go, "Criar " + nome);
-        go.transform.position = posicao;
-        var col = go.AddComponent<BoxCollider2D>();
-        col.isTrigger = true;
-        col.size = new Vector2(2f, 2f);
-        var checkpoint = go.AddComponent<Checkpoint>();
+        GameObject go = GameObject.Find(nome);
+        if (go == null)
+        {
+            go = new GameObject(nome);
+            Undo.RegisterCreatedObjectUndo(go, "Criar " + nome);
+            go.transform.position = posicao;
+            go.transform.localScale = new Vector3(1.1f, 0.7f, 1f);
+            var colNovo = go.AddComponent<BoxCollider2D>();
+            colNovo.isTrigger = true;
+            colNovo.size = new Vector2(3.2f, 2.4f);
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = CarregarSpriteQuadrado();
+            sr.color = new Color(0.25f, 1f, 0.55f, 0.95f);
+            sr.sortingOrder = 4;
+        }
+
+        var checkpoint = go.GetComponent<Checkpoint>();
+        if (checkpoint == null) checkpoint = go.AddComponent<Checkpoint>();
         checkpoint.ativarAoIniciar = iniciar;
-        var sr = go.AddComponent<SpriteRenderer>();
-        sr.sprite = CarregarSpriteQuadrado();
-        sr.color = new Color(0.3f, 0.9f, 0.4f, 0.7f);
+        checkpoint.flechasMinimas = flechasMinimas;
+        checkpoint.rotulo = rotulo;
+        EditorUtility.SetDirty(checkpoint);
     }
 
     static void GarantirFocoEditor(string nome, Vector3 posicao, Sprite sprite)
@@ -1132,7 +1308,7 @@ public static class ConfiguradorPrototipo
             LayoutPrototipo.Zeca,
             new Color(0.35f, 0.65f, 1f),
             new Vector3(1.1f, 1.7f, 1f),
-            new[] { CatalogoPaginasCap1.IdIara, CatalogoPaginasCap1.IdBoto },
+            new[] { CatalogoPaginasCap1.IdIara, CatalogoPaginasCap1.IdBoto, CatalogoPaginasCap1.IdPatoNoTucupi },
             new[]
             {
                 new FalaDialogo
@@ -1158,21 +1334,96 @@ public static class ConfiguradorPrototipo
                     personagem = "Seu Zeca",
                     emocao = "respeito",
                     texto = "Antes de remar trecho fundo, a gente pede licenca a Mae d'Agua. Leva meu pente de osso. Come Tacaca se o canto vier — sem Treme, ela puxa pro fundo."
+                },
+                new FalaDialogo
+                {
+                    personagem = "Seu Zeca",
+                    emocao = "carinho",
+                    texto = "E Bento... minha vizinha Taina ficou presa do outro lado do rio, na entrada da mata, cuidando dos bichos. Ela adora Pato no Tucupi! Leva este Pato Assado, cozinha na sua Barca com tucupi e jambu e leva pra ela."
                 }
             },
-            new[] { CatalogoItensNorte.IdPenteDeOsso },
+            new[] { CatalogoItensNorte.IdPenteDeOsso, CatalogoItensNorte.IdPatoAssado },
             new[]
             {
                 new FalaDialogo
                 {
                     personagem = "Seu Zeca",
                     emocao = "serio",
-                    texto = "Segura [V] na beira do cais pra achar a chave na lama, e usa [V] na canoa pra ver a aura do Boto na agua turva. O pente da Iara ja ta com voce."
+                    texto = "Segura [V] na beira do cais pra achar a chave na lama, e usa [V] na canoa pra ver a aura do Boto. Nao esquece de cozinhar o Pato no Tucupi na Barca pra levar pra Taina na entrada da mata!"
                 }
             });
     }
 
-    static void CriarNpcEditor(string nome, Vector3 posicao, Color cor, Vector3 escala, string[] paginasCaderno, FalaDialogo[] falas, string[] idsItens = null, FalaDialogo[] falasApos = null)
+    static void GarantirTainaMata()
+    {
+        var npc = CriarNpcEditor(
+            "TainaMata",
+            LayoutPrototipo.Taina,
+            new Color(0.3f, 0.85f, 0.45f),
+            new Vector3(1.05f, 1.65f, 1f),
+            new[] { CatalogoPaginasCap1.IdCaipora, CatalogoPaginasCap1.IdPatoNoTucupi },
+            new[]
+            {
+                new FalaDialogo
+                {
+                    personagem = "Taina",
+                    emocao = "preocupada",
+                    texto = "Bento! Ainda bem que voce atravessou o rio. Os capangas do Barao espalharam jaulas de ferro na trilha e prenderam os bichos da mata!"
+                },
+                new FalaDialogo
+                {
+                    personagem = "Taina",
+                    emocao = "alerta",
+                    texto = "O Caipora montou no queixada e nao deixa ninguem passar. Primeiro voce precisa quebrar as 2 jaulas da fauna, derrotar o Capanga cacador e usar a Visao Espectral [V] quando ouvir o assobio dele na folhagem para acertar duas flechas purificadoras."
+                },
+                new FalaDialogo
+                {
+                    personagem = "Taina",
+                    emocao = "respeito",
+                    texto = "Depois que ele acalmar, a licenca do toco pede um Favo de Mel da mata e o meu Colar de Sementes."
+                },
+                new FalaDialogo
+                {
+                    personagem = "Taina",
+                    emocao = "esperanca",
+                    texto = "Faz dois dias que nao consigo voltar pra vila... Se o meu vizinho Seu Zeca te deu o Pato Assado, prepara um Pato no Tucupi la na Barca e traz pra mim que eu faco escambo pelo meu Colar de Sementes!"
+                }
+            },
+            null,
+            new[]
+            {
+                new FalaDialogo
+                {
+                    personagem = "Taina",
+                    emocao = "carinho",
+                    texto = "O Colar de Sementes ja ta com voce! Quebre as 2 jaulas da fauna, derrote o Capanga, use [V] no assobio do Caipora e ofereca o colar junto com o Favo de Mel."
+                }
+            });
+
+        if (npc != null)
+        {
+            npc.idItemPedidoEscambo = CatalogoItensNorte.IdPatoNoTucupi;
+            npc.idItemRecompensaEscambo = CatalogoItensNorte.IdColarDeSementes;
+            npc.falasAoEscambar = new[]
+            {
+                new FalaDialogo
+                {
+                    personagem = "Taina",
+                    emocao = "feliz",
+                    texto = "Pato no Tucupi quentinho! Sentir o tempero da vila renova a alma... Agradece ao Seu Zeca por mim!"
+                },
+                new FalaDialogo
+                {
+                    personagem = "Taina",
+                    emocao = "respeito",
+                    texto = "Aqui esta o meu Colar de Sementes. Quebre as jaulas dos bichos, pegue o Favo de Mel perto do gancho da mata e peca licenca ao Caipora — ele vai te entregar a fibra sagrada pro Novelo do Curupira!"
+                }
+            };
+            EditorUtility.SetDirty(npc);
+        }
+    }
+
+    static NpcDialogo CriarNpcEditor(string nome, Vector3 posicao, Color cor, Vector3 escala, string[] paginasCaderno, FalaDialogo[] falas, string[] idsItens = null, FalaDialogo[] falasApos = null)
     {
         var existente = GameObject.Find(nome);
         NpcDialogo npc;
@@ -1199,12 +1450,13 @@ public static class ConfiguradorPrototipo
             npc = go.AddComponent<NpcDialogo>();
         }
 
-        if (npc == null) return;
+        if (npc == null) return null;
         npc.falas = falas;
         npc.paginasAoConversar = paginasCaderno;
         npc.idsItensAoConversar = idsItens;
         npc.falasAposEntrega = falasApos;
         EditorUtility.SetDirty(npc);
+        return npc;
     }
 
     static Sprite CarregarSpriteQuadrado()

@@ -8,10 +8,13 @@ public static class CatalogoItensNorte
     public const string IdJambu = "jambu";
     public const string IdTucupi = "tucupi";
     public const string IdGoma = "goma_tapioca";
+    public const string IdCamaraoSeco = "camarao_seco";
+    public const string IdPatoAssado = "pato_assado";
     public const string IdTacaca = "tacaca";
     public const string IdPatoNoTucupi = "pato_tucupi";
     public const string IdCipo = "cipo";
     public const string IdResina = "resina";
+    public const string IdFibraCaipora = "fibra_caipora";
     public const string IdFlechasPurificadoras = "flechas_purificadoras";
     public const string IdNoveloEncantado = "novelo_encantado";
     public const string IdMarcaMarajoara = "marca_marajoara";
@@ -21,14 +24,19 @@ public static class CatalogoItensNorte
     public const string IdFitasColoridas = "fitas_coloridas";
     public const string IdEspelho = "espelho";
     public const string IdPenteDeOsso = "pente_osso";
+    public const string IdColarDeSementes = "colar_sementes";
+    public const string IdFavoDeMel = "favo_mel";
 
     public static ItemDados Jambu { get; private set; }
     public static ItemDados Tucupi { get; private set; }
     public static ItemDados GomaDeTapioca { get; private set; }
+    public static ItemDados CamaraoSeco { get; private set; }
+    public static ItemDados PatoAssado { get; private set; }
     public static ItemDados Tacaca { get; private set; }
     public static ItemDados PatoNoTucupi { get; private set; }
     public static ItemDados Cipo { get; private set; }
     public static ItemDados Resina { get; private set; }
+    public static ItemDados FibraDoCaipora { get; private set; }
     public static ItemDados FlechasPurificadoras { get; private set; }
     public static ItemDados NoveloEncantado { get; private set; }
     public static ItemDados MarcaMarajoara { get; private set; }
@@ -38,23 +46,56 @@ public static class CatalogoItensNorte
     public static ItemDados FitasColoridas { get; private set; }
     public static ItemDados Espelho { get; private set; }
     public static ItemDados PenteDeOsso { get; private set; }
+    public static ItemDados ColarDeSementes { get; private set; }
+    public static ItemDados FavoDeMel { get; private set; }
+
+    public static void Resetar()
+    {
+        Jambu = null;
+        Tucupi = null;
+        GomaDeTapioca = null;
+        CamaraoSeco = null;
+        PatoAssado = null;
+        Tacaca = null;
+        PatoNoTucupi = null;
+        Cipo = null;
+        Resina = null;
+        FibraDoCaipora = null;
+        FlechasPurificadoras = null;
+        NoveloEncantado = null;
+        MarcaMarajoara = null;
+        GotaDeQuartzo = null;
+        ChaveDaCanoa = null;
+        FotoDaLia = null;
+        FitasColoridas = null;
+        Espelho = null;
+        PenteDeOsso = null;
+        ColarDeSementes = null;
+        FavoDeMel = null;
+    }
 
     public static void Garantir()
     {
         if (Jambu == null)
-            Jambu = Criar(IdJambu, "Jambu", "Folha anestesiante do Norte. Ingrediente do Tacaca.", CategoriaItem.Ingrediente);
+            Jambu = Criar(IdJambu, "Jambu", "Folha anestesiante do Norte. Ingrediente do Tacaca e do Pato no Tucupi.", CategoriaItem.Ingrediente);
         if (Tucupi == null)
-            Tucupi = Criar(IdTucupi, "Tucupi", "Caldo amarelo da mandioca brava. Base do Tacaca e do Pato no Tucupi.", CategoriaItem.Ingrediente);
+            Tucupi = Criar(IdTucupi, "Caldo de Tucupi", "Caldo amarelo da mandioca brava. Base do Tacaca e do Pato no Tucupi.", CategoriaItem.Ingrediente);
         if (GomaDeTapioca == null)
             GomaDeTapioca = Criar(IdGoma, "Goma de Tapioca", "Goma que da o ponto do Tacaca.", CategoriaItem.Ingrediente);
+        if (CamaraoSeco == null)
+            CamaraoSeco = Criar(IdCamaraoSeco, "Camarao Seco", "Camarao salgado e seco, ingrediente obrigatorio do Tacaca.", CategoriaItem.Ingrediente);
+        if (PatoAssado == null)
+            PatoAssado = Criar(IdPatoAssado, "Pato Assado", "Pato assado que Seu Zeca guardou para a vizinha Taina. Ingrediente do Pato no Tucupi.", CategoriaItem.Ingrediente);
         if (Tacaca == null)
             Tacaca = Criar(IdTacaca, "Tacaca", "Oferenda ao Boto. Beber concede Treme contra o canto da Iara. Guarde um pra oferenda.", CategoriaItem.Comida);
         if (PatoNoTucupi == null)
-            PatoNoTucupi = Criar(IdPatoNoTucupi, "Pato no Tucupi", "Prato tipico do Norte. Variacao do buff Treme.", CategoriaItem.Comida);
+            PatoNoTucupi = Criar(IdPatoNoTucupi, "Pato no Tucupi", "Prato favorito da Taina na entrada da Mata (escambo). Tambem concede o buff Treme.", CategoriaItem.Comida);
         if (Cipo == null)
             Cipo = Criar(IdCipo, "Cipo", "Fibra da mata. Base do Novelo Encantado.", CategoriaItem.Reagente);
         if (Resina == null)
             Resina = Criar(IdResina, "Resina", "Seiva endurecida. Usada em flechas e no novelo.", CategoriaItem.Reagente);
+        if (FibraDoCaipora == null)
+            FibraDoCaipora = Criar(IdFibraCaipora, "Fibra do Caipora", "Cipo abencoado pelo guardiao da caca. Reagente essencial para tecer o Novelo Encantado.", CategoriaItem.Reagente, 1);
         if (FlechasPurificadoras == null)
             FlechasPurificadoras = Criar(IdFlechasPurificadoras, "Flechas Purificadoras", "Municao da Besta Espiritual contra Sombras.", CategoriaItem.Item);
         if (NoveloEncantado == null)
@@ -73,6 +114,10 @@ public static class CatalogoItensNorte
             Espelho = Criar(IdEspelho, "Espelho", "Oferenda a Mae d'Agua. Lia mandou para ela admirar o reflexo nas pedras.", CategoriaItem.Reliquia, 1);
         if (PenteDeOsso == null)
             PenteDeOsso = Criar(IdPenteDeOsso, "Pente de Osso", "Oferenda de pescador. Seu Zeca pede licenca a Iara antes de remar trecho fundo.", CategoriaItem.Reliquia, 1);
+        if (ColarDeSementes == null)
+            ColarDeSementes = Criar(IdColarDeSementes, "Colar de Sementes", "Amuleto de respeito aos bichos da mata. Taina trocou pelo Pato no Tucupi.", CategoriaItem.Reliquia, 1);
+        if (FavoDeMel == null)
+            FavoDeMel = Criar(IdFavoDeMel, "Favo de Mel", "Mel silvestre colhido na mata. Oferenda de licenca ao Caipora.", CategoriaItem.Reliquia, 1);
     }
 
     public static ItemDados PorId(string id)
@@ -81,10 +126,13 @@ public static class CatalogoItensNorte
         if (id == IdJambu) return Jambu;
         if (id == IdTucupi) return Tucupi;
         if (id == IdGoma) return GomaDeTapioca;
+        if (id == IdCamaraoSeco) return CamaraoSeco;
+        if (id == IdPatoAssado) return PatoAssado;
         if (id == IdTacaca) return Tacaca;
         if (id == IdPatoNoTucupi) return PatoNoTucupi;
         if (id == IdCipo) return Cipo;
         if (id == IdResina) return Resina;
+        if (id == IdFibraCaipora) return FibraDoCaipora;
         if (id == IdFlechasPurificadoras) return FlechasPurificadoras;
         if (id == IdNoveloEncantado) return NoveloEncantado;
         if (id == IdMarcaMarajoara) return MarcaMarajoara;
@@ -94,6 +142,8 @@ public static class CatalogoItensNorte
         if (id == IdFitasColoridas) return FitasColoridas;
         if (id == IdEspelho) return Espelho;
         if (id == IdPenteDeOsso) return PenteDeOsso;
+        if (id == IdColarDeSementes) return ColarDeSementes;
+        if (id == IdFavoDeMel) return FavoDeMel;
         return null;
     }
 

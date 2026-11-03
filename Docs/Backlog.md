@@ -23,10 +23,11 @@ Para colar/espelhar no Notion. Status: `Backlog` | `Em desenvolvimento` | `Concl
 | C14 | Canoa no cais (chave, remar A/D, 3 impactos afundam)   | Encontros   |
 | C15 | HUD energia do amuleto + Essência das Águas            | Base        |
 | I01 | Inventário (itens, ingredientes, reagentes)            | Inventário |
-| I05 | Ingredientes Norte: Jambu, Tucupi, Goma de Tapioca      | Inventário |
+| I05 | Ingredientes Norte: Caldo de Tucupi, Goma de Tapioca, Jambu, Camarão Seco, Pato Assado | Inventário |
+| I02 | Escambo com NPC (Tainá: Pato no Tucupi ⇄ Colar de Sementes) | Inventário |
 | B10 | Barca navegável (entrar/sair, estações)              | Bases       |
 | B11 | Fogão a Lenha — Tacacá (oferenda + buff Treme)       | Bases       |
-| B12 | Fogão — Pato no Tucupi                                | Bases       |
+| B12 | Fogão — Pato no Tucupi (Pato Assado + 2× Tucupi + Jambu) | Bases   |
 | B14 | Sistema de buffs temporários de comida                 | Bases       |
 | B13 | Bancada de Alquimia (flechas + Novelo Encantado)        | Bases       |
 | X01 | Facão (combo curto + cortar vegetação)               | Combate     |
@@ -42,8 +43,10 @@ Para colar/espelhar no Notion. Status: `Backlog` | `Em desenvolvimento` | `Concl
 | X09 | Layout fase Cap. 1 (blocos: vila, rio, arena)           | Combate     |
 | H10 | Encontro Boto: canoa, 3 flechas, Tacacá + foto, essência | Encontros   |
 | H11 | Iara na canoa: Treme, pente/espelho/fitas, Gota         | Encontros   |
+| H12 | Resgate da fauna (2 jaulas do Barão na Mata)            | Encontros   |
+| H14 | Encontro Caipora na Mata (jaulas + assobio [V] + Colar de Sementes + Favo de Mel → Fibra do Caipora) | Encontros |
 | H01 | Boss Curupira (ritual novelo + Sombras + corrupção)     | Encontros   |
-| H13 | Oferendas Cap. 1: Nair (Tacacá+fitas), Lia (foto+espelho), Zeca (chave+pente) | Narrativa |
+| H13 | Oferendas Cap. 1: Nair (Tacacá+fitas), Lia (foto+espelho), Zeca (pente+Pato Assado; chave na lama), Tainá (escambo Colar) | Narrativa |
 
 ## Em desenvolvimento
 
@@ -76,7 +79,6 @@ _(vazio)_
 
 | ID  | Tarefa                              | Depende de |
 | --- | ----------------------------------- | ---------- |
-| I02 | Escambo com NPCs                    | I01, C10   |
 | I03 | Feira / mercador com moeda          | I01        |
 | I04 | Fundo de pesquisa com teto por fase | I03        |
 
@@ -96,7 +98,6 @@ _(Fogão, Alquimia e Mesa de Pesquisa no protótipo)_
 
 | ID  | Tarefa                                                | Depende de         |
 | --- | ----------------------------------------------------- | ------------------ |
-| H12 | Resgate da fauna                                      | X09, I01           |
 | H02 | Restauração do belo (cor + música)                 | H01                |
 | H03 | Habilidade Passo Invertido (caminhos falsos / vegetação) | H01             |
 | H04 | Mapa Geral do Brasil (Norte liberado; revisitar)      | H02                |

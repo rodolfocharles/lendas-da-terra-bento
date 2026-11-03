@@ -1,7 +1,9 @@
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
 /// Item no mundo que o Bento coleta ao encostar (ou com E).
+/// Reagentes da mata (cipo, resina, flechas) reaparecem para nao travar o prototipo.
 /// </summary>
 [RequireComponent(typeof(Collider2D))]
 public class ColetavelItem : MonoBehaviour
@@ -12,8 +14,20 @@ public class ColetavelItem : MonoBehaviour
     public bool exigirTecla;
     public KeyCode teclaColetar = KeyCode.E;
     public bool destruirAoColetar = true;
+    [Tooltip("Se verdadeiro, o item some e volta depois de alguns segundos.")]
+    public bool reaparece;
+    public float segundosParaReaparecer = 8f;
 
-    private bool jogadorProximo;
+    bool jogadorProximo;
+    bool escondido;
+    Collider2D colisor;
+    SpriteRenderer sprite;
+
+    void Awake()
+    {
+        colisor = GetComponent<Collider2D>();
+        sprite = GetComponent<SpriteRenderer>();
+    }
 
     void Reset()
     {
@@ -23,6 +37,7 @@ public class ColetavelItem : MonoBehaviour
 
     void Update()
     {
+        if (escondido) return;
         if (!exigirTecla || !jogadorProximo) return;
         if (GerenciadorDialogo.Instancia != null && GerenciadorDialogo.Instancia.EmDialogo) return;
         if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto || HudPesquisa.Aberto) return;
@@ -31,6 +46,7 @@ public class ColetavelItem : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (escondido) return;
         if (other.GetComponent<BentoMovimento>() == null) return;
         jogadorProximo = true;
         if (!exigirTecla) TentarColetar();
@@ -38,7 +54,7 @@ public class ColetavelItem : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D other)
     {
-        if (exigirTecla) return;
+        if (escondido || exigirTecla) return;
         if (other.GetComponent<BentoMovimento>() == null) return;
         TentarColetar();
     }
@@ -50,7 +66,7 @@ public class ColetavelItem : MonoBehaviour
 
     void TentarColetar()
     {
-        if (item == null) return;
+        if (escondido || item == null) return;
 
         var inventario = InventarioBento.Instancia;
         if (inventario == null)
@@ -63,12 +79,39 @@ public class ColetavelItem : MonoBehaviour
         if (!inventario.Adicionar(item, quantidade)) return;
 
         Debug.Log($"[Lendas] Coletou {quantidade}x {item.nomeExibicao}");
+
+        if (reaparece)
+        {
+            StartCoroutine(EsconderEReaparecer());
+            return;
+        }
+
         if (destruirAoColetar) Destroy(gameObject);
+    }
+
+    public void MostrarDeNovo()
+    {
+        StopAllCoroutines();
+        escondido = false;
+        jogadorProximo = false;
+        if (colisor != null) colisor.enabled = true;
+        if (sprite != null) sprite.enabled = true;
+        gameObject.SetActive(true);
+    }
+
+    IEnumerator EsconderEReaparecer()
+    {
+        escondido = true;
+        jogadorProximo = false;
+        if (colisor != null) colisor.enabled = false;
+        if (sprite != null) sprite.enabled = false;
+        yield return new WaitForSeconds(Mathf.Max(1f, segundosParaReaparecer));
+        MostrarDeNovo();
     }
 
     void OnGUI()
     {
-        if (!exigirTecla || !jogadorProximo) return;
+        if (escondido || !exigirTecla || !jogadorProximo) return;
         if (GerenciadorDialogo.Instancia != null && GerenciadorDialogo.Instancia.EmDialogo) return;
         if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto || HudPesquisa.Aberto) return;
 
