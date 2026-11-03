@@ -75,14 +75,14 @@ public static class BootstrapPrototipo
         sr.sprite = sprite;
         sr.color = Color.white;
         sr.flipX = true;
-        sr.sortingOrder = 4;
-        float escala = CarregadorPixelArt.EscalaMundo * 1.15f;
+        sr.sortingOrder = 2;
+        float escala = CarregadorPixelArt.EscalaMundo * EncontroBoto.EscalaRelativaAoBento;
         go.transform.localScale = new Vector3(escala, escala, 1f);
 
         var col = go.GetComponent<BoxCollider2D>();
         if (col != null)
         {
-            col.size = new Vector2(1.35f, 0.75f);
+            col.size = new Vector2(1.35f, 0.62f);
             col.offset = Vector2.zero;
             col.isTrigger = true;
         }
