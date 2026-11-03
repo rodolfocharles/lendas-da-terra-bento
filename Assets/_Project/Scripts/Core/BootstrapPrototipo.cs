@@ -58,6 +58,34 @@ public static class BootstrapPrototipo
         AplicarSpriteNpc("NamoradaDoBoto", "Lia", "Lia", null);
         AplicarSpriteNpc("PescadorDaIara", "SeuZeca", "Zeca", null);
         AplicarSpriteNpc("TainaMata", "Taina", "Taina", "Taina/Animacoes/Taina_Idle_east_64x64_4f.png");
+        AplicarSpriteBoto();
+    }
+
+    static void AplicarSpriteBoto()
+    {
+        var go = GameObject.Find("BloqueioBoto");
+        if (go == null) return;
+
+        var sr = go.GetComponent<SpriteRenderer>();
+        if (sr == null) return;
+
+        var sprite = CarregadorPixelArt.Personagem("Boto", "Boto_Corrupto");
+        if (sprite == null) return;
+
+        sr.sprite = sprite;
+        sr.color = Color.white;
+        sr.flipX = true;
+        sr.sortingOrder = 4;
+        float escala = CarregadorPixelArt.EscalaMundo * 1.15f;
+        go.transform.localScale = new Vector3(escala, escala, 1f);
+
+        var col = go.GetComponent<BoxCollider2D>();
+        if (col != null)
+        {
+            col.size = new Vector2(1.35f, 0.75f);
+            col.offset = Vector2.zero;
+            col.isTrigger = true;
+        }
     }
 
     static void AplicarSpriteNpc(string nomeObjeto, string pasta, string prefixo, string folhaIdle)
