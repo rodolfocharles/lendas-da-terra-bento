@@ -8,7 +8,7 @@ public static class LayoutPrototipo
 {
     public const float YChao = 0f;
     public const float XChaoInicio = -32f;
-    public const float XChaoFim = 150f;
+    public const float XChaoFim = 188f;
 
     public static readonly Vector3 Barca = new Vector3(-22f, 1.2f, 0f);
     public static readonly Vector3 Fogao = new Vector3(-23.8f, 2.25f, 0f);
@@ -28,71 +28,75 @@ public static class LayoutPrototipo
     public static readonly Vector3 GanchoInicio = new Vector3(-2f, 3.7f, 0f);
 
     public static readonly Vector3 CheckpointRio = new Vector3(20f, 0.85f, 0f);
-    public static readonly Vector3 Zeca = new Vector3(24f, CarregadorPixelArt.YNpcNoChao, 0f);
-    public static readonly Vector3 ChaveCanoaCais = new Vector3(25.6f, 0.85f, 0f);
-    public static readonly Vector3 CanoaCais = new Vector3(27.2f, 0.55f, 0f);
-    public static readonly Vector3 BarreiraCais = new Vector3(29.0f, 2.6f, 0f);
-    public static readonly Vector3 AguaRio = new Vector3(36f, -0.65f, 0f);
-    public const float InicioZonaBoto = 31f;
-    public const float LimiteCanoaBoto = 38.6f;
-    public static readonly Vector3 BloqueioBoto = new Vector3(36f, 0f, 0f);
-    public static readonly Vector3 BarreiraBoto = new Vector3(40.2f, 2.6f, 0f);
-    public static readonly Vector3 CaisIara = new Vector3(42.4f, 0.55f, 0f);
-    public const float InicioZonaIara = 41.5f;
-    public const float LimiteCanoaIara = 45.8f;
-    public static readonly Vector3 GanchoRio = new Vector3(38f, 3.6f, 0f);
-    public static readonly Vector3 Iara = new Vector3(44.6f, 1.55f, 0f);
-    public static readonly Vector3 IaraAgua = new Vector3(43.2f, 0.7f, 0f);
-    public static readonly Vector3 CaisAposIara = new Vector3(47.2f, 0.55f, 0f);
-    public static readonly Vector3 BarreiraIara = new Vector3(48.2f, 2.6f, 0f);
-    public static readonly Vector3 BarreiraCaisLeste = new Vector3(47.0f, 2.6f, 0f);
-    public static readonly Vector3 JambuRio = new Vector3(38f, 0.85f, 0f);
-    public static readonly Vector3 TucupiRio = new Vector3(39.4f, 0.85f, 0f);
-    public static readonly Vector3 GomaRio = new Vector3(40.8f, 0.85f, 0f);
-    public static readonly Vector3 CamaraoRio = new Vector3(42.2f, 0.85f, 0f);
+    public static readonly Vector3 Zeca = new Vector3(28f, CarregadorPixelArt.YNpcNoChao, 0f);
+    public static readonly Vector3 ChaveCanoaCais = new Vector3(36f, 0.85f, 0f);
+    public static readonly Vector3 CanoaCais = new Vector3(39.8f, 0.55f, 0f);
+    public static readonly Vector3 BarreiraCais = new Vector3(42.5f, 2.6f, 0f);
+    public static readonly Vector3 AguaRio = new Vector3(60f, -0.65f, 0f);
+    public const float LarguraAguaRio = 40f;
+    public const float LarguraFaixaRio = 66f;
+    public const float LarguraZonaRio = 64f;
+    public const float InicioZonaBoto = 43.2f;
+    public const float LimiteCanoaBoto = 60f;
+    public static readonly Vector3 BloqueioBoto = new Vector3(52f, 0f, 0f);
+    public static readonly Vector3 BarreiraBoto = new Vector3(62.2f, 2.6f, 0f);
+    public static readonly Vector3 CaisIara = new Vector3(65.4f, 0.55f, 0f);
+    public const float InicioZonaIara = 63f;
+    public const float LimiteCanoaIara = 76.5f;
+    public static readonly Vector3 GanchoRio = new Vector3(52f, 3.6f, 0f);
+    public static readonly Vector3 Iara = new Vector3(71.5f, 1.55f, 0f);
+    public static readonly Vector3 IaraAgua = new Vector3(69f, 0.7f, 0f);
+    public static readonly Vector3 VitoriaRegiaIara = new Vector3(71.5f, 0.62f, 0f);
+    public static readonly Vector3 CaisAposIara = new Vector3(78.5f, 0.55f, 0f);
+    public static readonly Vector3 BarreiraIara = new Vector3(80f, 2.6f, 0f);
+    public static readonly Vector3 BarreiraCaisLeste = new Vector3(78.2f, 2.6f, 0f);
+    public static readonly Vector3 JambuRio = new Vector3(79.4f, 0.85f, 0f);
+    public static readonly Vector3 TucupiRio = new Vector3(80.4f, 0.85f, 0f);
+    public static readonly Vector3 GomaRio = new Vector3(81.4f, 0.85f, 0f);
+    public static readonly Vector3 CamaraoRio = new Vector3(82.4f, 0.85f, 0f);
 
-    public static readonly Vector3 Taina = new Vector3(52f, CarregadorPixelArt.YNpcNoChao, 0f);
-    public static readonly Vector3 CheckpointMata = new Vector3(54f, 0.85f, 0f);
-    public static readonly Vector3 Cipo = new Vector3(58f, 0.85f, 0f);
-    public static readonly Vector3 Vegetacao = new Vector3(62f, 1.3f, 0f);
-    public static readonly Vector3 JaulaFaunaA = new Vector3(64.5f, 1.2f, 0f);
-    public static readonly Vector3 JaulaFaunaB = new Vector3(68.5f, 1.2f, 0f);
-    public static readonly Vector3 Resina = new Vector3(66f, 0.85f, 0f);
-    public static readonly Vector3 GanchoMata = new Vector3(70f, 3.6f, 0f);
-    public static readonly Vector3 FavoDeMel = new Vector3(71.5f, 0.85f, 0f);
-    public static readonly Vector3 Capanga = new Vector3(74f, 1.3f, 0f);
-    public static readonly Vector3 CheckpointCaipora = new Vector3(77.2f, 0.85f, 0f);
-    public static readonly Vector3 FlechasClareira = new Vector3(77.9f, 0.85f, 0f);
-    public static readonly Vector3 Sombra = new Vector3(80f, 1.3f, 0f);
-    public const float InicioZonaCaipora = 82f;
-    public static readonly Vector3 Caipora = new Vector3(86f, 1.5f, 0f);
-    public static readonly Vector3 BarreiraCaipora = new Vector3(90f, 2.6f, 0f);
-    public static readonly Vector3 PlataformaEspectral = new Vector3(84f, 2.5f, 0f);
+    public static readonly Vector3 Taina = new Vector3(83f, CarregadorPixelArt.YNpcNoChao, 0f);
+    public static readonly Vector3 CheckpointMata = new Vector3(85f, 0.85f, 0f);
+    public static readonly Vector3 Cipo = new Vector3(89f, 0.85f, 0f);
+    public static readonly Vector3 Vegetacao = new Vector3(93f, 1.3f, 0f);
+    public static readonly Vector3 JaulaFaunaA = new Vector3(95.5f, 1.2f, 0f);
+    public static readonly Vector3 JaulaFaunaB = new Vector3(99.5f, 1.2f, 0f);
+    public static readonly Vector3 Resina = new Vector3(97f, 0.85f, 0f);
+    public static readonly Vector3 GanchoMata = new Vector3(101f, 3.6f, 0f);
+    public static readonly Vector3 FavoDeMel = new Vector3(102.5f, 0.85f, 0f);
+    public static readonly Vector3 Capanga = new Vector3(105f, 1.3f, 0f);
+    public static readonly Vector3 CheckpointCaipora = new Vector3(108.2f, 0.85f, 0f);
+    public static readonly Vector3 FlechasClareira = new Vector3(108.9f, 0.85f, 0f);
+    public static readonly Vector3 Sombra = new Vector3(111f, 1.3f, 0f);
+    public const float InicioZonaCaipora = 113f;
+    public static readonly Vector3 Caipora = new Vector3(117f, 1.5f, 0f);
+    public static readonly Vector3 BarreiraCaipora = new Vector3(121f, 2.6f, 0f);
+    public static readonly Vector3 PlataformaEspectral = new Vector3(115f, 2.5f, 0f);
 
-    public static readonly Vector3 Alavanca = new Vector3(92f, 1.1f, 0f);
-    public static readonly Vector3 Barreira = new Vector3(100f, 1.7f, 0f);
-    public static readonly Vector3 GanchoRuina = new Vector3(102f, 5.4f, 0f);
-    public static readonly Vector3 PlataformaEspectral2 = new Vector3(105f, 4.35f, 0f);
-    public static readonly Vector3 PistaPisos = new Vector3(106.5f, 5.15f, 0f);
-    public static readonly Vector3 PisoA = new Vector3(108.5f, 4.55f, 0f);
-    public static readonly Vector3 PisoB = new Vector3(111.3f, 4.55f, 0f);
-    public static readonly Vector3 PisoC = new Vector3(114.1f, 4.55f, 0f);
-    public static readonly Vector3 PisoChegada = new Vector3(117.5f, 4.55f, 0f);
-    public static readonly Vector3 Reliquia = new Vector3(117.5f, 5.35f, 0f);
+    public static readonly Vector3 Alavanca = new Vector3(123f, 1.1f, 0f);
+    public static readonly Vector3 Barreira = new Vector3(131f, 1.7f, 0f);
+    public static readonly Vector3 GanchoRuina = new Vector3(133f, 5.4f, 0f);
+    public static readonly Vector3 PlataformaEspectral2 = new Vector3(136f, 4.35f, 0f);
+    public static readonly Vector3 PistaPisos = new Vector3(137.5f, 5.15f, 0f);
+    public static readonly Vector3 PisoA = new Vector3(139.5f, 4.55f, 0f);
+    public static readonly Vector3 PisoB = new Vector3(142.3f, 4.55f, 0f);
+    public static readonly Vector3 PisoC = new Vector3(145.1f, 4.55f, 0f);
+    public static readonly Vector3 PisoChegada = new Vector3(148.5f, 4.55f, 0f);
+    public static readonly Vector3 Reliquia = new Vector3(148.5f, 5.35f, 0f);
 
-    public static readonly Vector3 BarreiraArena = new Vector3(121.5f, 2.6f, 0f);
-    public static readonly Vector3 CheckpointArena = new Vector3(124f, 0.85f, 0f);
-    public static readonly Vector3 FocoA = new Vector3(128f, 1.1f, 0f);
-    public static readonly Vector3 SombraArena = new Vector3(131f, 1.3f, 0f);
-    public static readonly Vector3 FocoB = new Vector3(134f, 1.1f, 0f);
-    public static readonly Vector3 Curupira = new Vector3(140f, 1.6f, 0f);
-    public static readonly Vector3 FocoC = new Vector3(144f, 1.1f, 0f);
+    public static readonly Vector3 BarreiraArena = new Vector3(152.5f, 2.6f, 0f);
+    public static readonly Vector3 CheckpointArena = new Vector3(155f, 0.85f, 0f);
+    public static readonly Vector3 FocoA = new Vector3(159f, 1.1f, 0f);
+    public static readonly Vector3 SombraArena = new Vector3(162f, 1.3f, 0f);
+    public static readonly Vector3 FocoB = new Vector3(165f, 1.1f, 0f);
+    public static readonly Vector3 Curupira = new Vector3(171f, 1.6f, 0f);
+    public static readonly Vector3 FocoC = new Vector3(175f, 1.1f, 0f);
 
     public static readonly Vector3 ZonaVila = new Vector3(-8f, 2f, 0f);
-    public static readonly Vector3 ZonaRio = new Vector3(34f, 2f, 0f);
-    public static readonly Vector3 ZonaMata = new Vector3(70f, 2f, 0f);
-    public static readonly Vector3 ZonaRuinas = new Vector3(104f, 2f, 0f);
-    public static readonly Vector3 ZonaArena = new Vector3(136f, 2f, 0f);
+    public static readonly Vector3 ZonaRio = new Vector3(51f, 2f, 0f);
+    public static readonly Vector3 ZonaMata = new Vector3(101f, 2f, 0f);
+    public static readonly Vector3 ZonaRuinas = new Vector3(135f, 2f, 0f);
+    public static readonly Vector3 ZonaArena = new Vector3(167f, 2f, 0f);
 
     public static void Aplicar()
     {
@@ -142,6 +146,7 @@ public static class LayoutPrototipo
 
         Posicionar("CheckpointRio", CheckpointRio);
         Posicionar("AguaRio", AguaRio);
+        AjustarVisualDoRio();
         Posicionar("Coletavel_ChaveCanoa", ChaveCanoaCais);
         if (!CanoaRio.JogadorDentro)
             Posicionar("CanoaRio", CanoaCais);
@@ -155,7 +160,9 @@ public static class LayoutPrototipo
         Posicionar("BarreiraRioBoto", BarreiraBoto);
         var muroBoto = GameObject.Find("BarreiraRioBoto");
         if (muroBoto != null) muroBoto.transform.localScale = new Vector3(0.8f, 5.2f, 1f);
-        Posicionar("EncontroIara", Iara);
+        if (!EncontroIara.SaiuDaPedra)
+            Posicionar("EncontroIara", Iara);
+        Posicionar("VitoriaRegiaIara", VitoriaRegiaIara);
         Posicionar("BarreiraRioIara", BarreiraIara);
         var muroIara = GameObject.Find("BarreiraRioIara");
         if (muroIara != null) muroIara.transform.localScale = new Vector3(0.8f, 5.2f, 1f);
@@ -195,6 +202,24 @@ public static class LayoutPrototipo
 
         var vida = Object.FindFirstObjectByType<BentoVida>();
         if (vida != null) vida.DefinirCheckpoint(Checkpoint);
+    }
+
+    static void AjustarVisualDoRio()
+    {
+        var agua = GameObject.Find("AguaRio");
+        if (agua != null)
+            agua.transform.localScale = new Vector3(LarguraAguaRio, 0.7f, 1f);
+
+        var faixa = GameObject.Find("FaixaRio");
+        if (faixa != null)
+            faixa.transform.localScale = new Vector3(LarguraFaixaRio, 0.22f, 1f);
+
+        var zona = GameObject.Find("Zona_Rio");
+        if (zona != null)
+        {
+            var col = zona.GetComponent<BoxCollider2D>();
+            if (col != null) col.size = new Vector2(LarguraZonaRio, 8f);
+        }
     }
 
     static void AlinharChao()

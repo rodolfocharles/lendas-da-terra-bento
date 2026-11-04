@@ -123,8 +123,24 @@ public class GerenciadorDialogo : MonoBehaviour
         if (quem.Equals("Boto", System.StringComparison.OrdinalIgnoreCase)
             || quem.IndexOf("Boto-Cor", System.StringComparison.OrdinalIgnoreCase) >= 0)
             return CarregadorPixelArt.CarregarTextura("Boto/Retratos/" + RetratoBotoPorEmocao(fala.emocao) + ".png");
+        if (quem.Equals("Iara", System.StringComparison.OrdinalIgnoreCase))
+            return CarregadorPixelArt.CarregarTextura("Iara/Retratos/" + RetratoIaraPorEmocao(fala.emocao) + ".png");
 
         return null;
+    }
+
+    static string RetratoIaraPorEmocao(string emocao)
+    {
+        string e = (emocao ?? "").ToLowerInvariant();
+        if (e.Contains("feliz") || e.Contains("alivi"))
+            return "Iara_Retrato_Feliz";
+        if (e.Contains("triste") || e.Contains("aguard"))
+            return "Iara_Retrato_Triste";
+        if (e.Contains("sereno") || e.Contains("calmo") || e.Contains("reconhec") || e.Contains("desconfi"))
+            return "Iara_Retrato_Calmo";
+        if (e.Contains("canto") || e.Contains("corrupt") || e.Contains("bravo"))
+            return "Iara_Retrato_Corrupto";
+        return "Iara_Retrato_Bom";
     }
 
     static string RetratoBotoPorEmocao(string emocao)

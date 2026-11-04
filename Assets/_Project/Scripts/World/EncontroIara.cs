@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Iara na margem, depois na agua. Sem Treme, o canto puxa o Bento
-/// da canoa. Com Treme, ela sente o amuleto. Oferenda: pente, espelho e fitas.
+/// Iara comeca na vitoria-regia. Quando a canoa se aproxima, ela entra na
+/// agua (so a cabeca fora) e canta. Sem Treme, puxa o Bento ao fundo.
+/// Com Treme, dialogo de oferenda; depois ela volta com os presentes.
 /// </summary>
 [RequireComponent(typeof(Collider2D))]
 public class EncontroIara : MonoBehaviour
@@ -13,6 +14,9 @@ public class EncontroIara : MonoBehaviour
     public static EncontroIara Instancia { get; private set; }
     public static bool Purificada { get; private set; }
     public static event Action IaraPurificada;
+
+    public static bool SaiuDaPedra =>
+        Instancia != null && (Instancia.naAgua || Purificada);
 
     public static bool NaZonaDoCanto =>
         Instancia != null && !Purificada && CanoaRio.JogadorDentro && Instancia.CanoaNaZona();
@@ -28,16 +32,23 @@ public class EncontroIara : MonoBehaviour
     public GameObject[] barreiras;
     public KeyCode teclaOferecer = KeyCode.E;
     public float tempoAteOFundo = 6f;
+    public const float EscalaRelativaAoNpc = 1.2f;
 
     SpriteRenderer sprite;
+    Sprite spriteBom;
+    Sprite spriteTriste;
+    Sprite spriteCalmo;
+    Sprite spriteFeliz;
+    Sprite spriteCorrupto;
+    Sprite spriteAgua;
     bool prontaParaOferenda;
     bool avisoCantoFeito;
     bool acalmouComTreme;
     bool puxandoAoFundo;
     bool descendoAAgua;
+    bool naAgua;
+    bool oferendaIncompleta;
     float cantoAcumulado;
-    Color corCorrupta = new Color(0.12f, 0.35f, 0.42f);
-    Color corCalma = new Color(0.35f, 0.85f, 0.9f);
     Vector3 posicaoMargem;
     Vector3 posicaoAgua;
 
@@ -62,7 +73,33 @@ public class EncontroIara : MonoBehaviour
             if (barreira != null) barreiras = new[] { barreira };
         }
 
+        CarregarArte();
         AplicarEstado();
+    }
+
+    void CarregarArte()
+    {
+        spriteBom = CarregadorPixelArt.Personagem("Iara", "Iara_Bom");
+        spriteTriste = CarregadorPixelArt.Personagem("Iara", "Iara_Triste");
+        spriteCalmo = CarregadorPixelArt.Personagem("Iara", "Iara_Calmo");
+        spriteFeliz = CarregadorPixelArt.Personagem("Iara", "Iara_Feliz");
+        spriteCorrupto = CarregadorPixelArt.Personagem("Iara", "Iara_Corrupto");
+        spriteAgua = CarregadorPixelArt.Personagem("Iara", "Iara_Agua");
+
+        if (sprite == null) return;
+        sprite.sortingOrder = 5;
+        sprite.flipX = true;
+        sprite.color = Color.white;
+        float escala = CarregadorPixelArt.EscalaMundo * EscalaRelativaAoNpc;
+        transform.localScale = new Vector3(escala, escala, 1f);
+
+        var col = GetComponent<BoxCollider2D>();
+        if (col != null)
+        {
+            col.size = new Vector2(1.55f, 1.55f);
+            col.offset = Vector2.zero;
+            col.isTrigger = true;
+        }
     }
 
     void OnDestroy()
@@ -72,7 +109,19 @@ public class EncontroIara : MonoBehaviour
 
     void Update()
     {
-        if (Purificada || puxandoAoFundo) return;
+        if (Purificada)
+        {
+            FlutuarNaPedra();
+            AplicarEstado();
+            return;
+        }
+
+        if (naAgua && !puxandoAoFundo && !descendoAAgua)
+            FlutuarNaAgua();
+
+        AplicarEstado();
+
+        if (puxandoAoFundo) return;
         if (GerenciadorDialogo.Instancia != null && GerenciadorDialogo.Instancia.EmDialogo) return;
         if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto
             || HudCaderno.Aberto || HudPesquisa.Aberto) return;
@@ -83,14 +132,14 @@ public class EncontroIara : MonoBehaviour
             return;
         }
 
-        if (!descendoAAgua && !prontaParaOferenda)
+        if (!descendoAAgua && !naAgua && !prontaParaOferenda)
             StartCoroutine(DescerAAgua());
 
         if (TemTreme())
         {
             if (!acalmouComTreme) AcalmarPeloTreme();
         }
-        else if (!puxandoAoFundo)
+        else if (!puxandoAoFundo && naAgua)
         {
             if (!avisoCantoFeito)
             {
@@ -101,7 +150,7 @@ public class EncontroIara : MonoBehaviour
                     {
                         personagem = "Iara",
                         emocao = "canto",
-                        texto = "Ela desce da margem e o canto cobre o rio. Sem Treme, o corpo vai ceder e a agua abre."
+                        texto = "Ela desce da vitoria-regia e o canto cobre o rio. Sem Treme, o corpo vai ceder e a agua abre."
                     }
                 });
                 return;
@@ -128,7 +177,7 @@ public class EncontroIara : MonoBehaviour
         var canoa = CanoaRio.Instancia;
         if (canoa == null || canoa.Afundando) return false;
         float x = canoa.transform.position.x;
-        return x >= LayoutPrototipo.InicioZonaIara && x <= LayoutPrototipo.LimiteCanoaIara + 0.4f;
+        return x >= LayoutPrototipo.InicioZonaIara && x <= LayoutPrototipo.LimiteCanoaIara + 1.2f;
     }
 
     IEnumerator DescerAAgua()
@@ -140,9 +189,25 @@ public class EncontroIara : MonoBehaviour
         {
             t += Time.deltaTime;
             transform.position = Vector3.Lerp(inicio, posicaoAgua, t / 1.1f);
+            AplicarEstado();
             yield return null;
         }
         transform.position = posicaoAgua;
+        naAgua = true;
+        descendoAAgua = false;
+        AplicarEstado();
+    }
+
+    void FlutuarNaAgua()
+    {
+        float bob = Mathf.Sin(Time.time * 2.2f) * 0.05f;
+        transform.position = new Vector3(posicaoAgua.x, posicaoAgua.y + bob, 0f);
+    }
+
+    void FlutuarNaPedra()
+    {
+        float bob = Mathf.Sin(Time.time * 1.4f) * 0.03f;
+        transform.position = new Vector3(posicaoMargem.x, posicaoMargem.y + bob, 0f);
     }
 
     void AcalmarPeloTreme()
@@ -150,7 +215,7 @@ public class EncontroIara : MonoBehaviour
         acalmouComTreme = true;
         prontaParaOferenda = true;
         cantoAcumulado = 0f;
-        if (sprite != null) sprite.color = Color.Lerp(corCorrupta, corCalma, 0.45f);
+        AplicarEstado();
 
         bool temEssencia = AmuletoAncestral.Instancia != null
             && AmuletoAncestral.Instancia.TemEssenciaDasAguas;
@@ -180,7 +245,7 @@ public class EncontroIara : MonoBehaviour
             {
                 personagem = "Iara",
                 emocao = "desconfiada",
-                texto = "O canto nao te leva. Ainda assim, peço licenca antiga: pente, espelho e fitas — nao comida."
+                texto = "O canto nao te leva. Ainda assim, peco licenca antiga: pente, espelho e fitas — nao comida."
             });
         }
 
@@ -213,7 +278,8 @@ public class EncontroIara : MonoBehaviour
         puxandoAoFundo = false;
         cantoAcumulado = 0f;
         avisoCantoFeito = false;
-        descendoAAgua = true;
+        naAgua = true;
+        descendoAAgua = false;
         Debug.Log("[Lendas] Iara levou o Bento ao fundo. Coma Tacaca ou Pato (Treme) e volte de canoa.");
     }
 
@@ -260,6 +326,8 @@ public class EncontroIara : MonoBehaviour
 
         if (!temFitas || !temEspelho || !temPente)
         {
+            oferendaIncompleta = true;
+            AplicarEstado();
             string falta = TextoFalta(temFitas, temEspelho, temPente);
             GerenciadorDialogo.Instancia?.Iniciar(new[]
             {
@@ -285,6 +353,9 @@ public class EncontroIara : MonoBehaviour
         inventario.Adicionar(CatalogoItensNorte.GotaDeQuartzo, 1);
         Purificada = true;
         prontaParaOferenda = false;
+        oferendaIncompleta = false;
+        naAgua = false;
+        transform.position = posicaoMargem;
         AplicarEstado();
         CadernoCampo.Instancia?.Desbloquear(CatalogoPaginasCap1.IdIara);
         CadernoCampo.Instancia?.Desbloquear(CatalogoPaginasCap1.IdIaraPurificada);
@@ -300,13 +371,19 @@ public class EncontroIara : MonoBehaviour
             },
             new FalaDialogo
             {
+                personagem = "Iara",
+                emocao = "feliz",
+                texto = "Ela volta a vitoria-regia enfeitada com os presentes: o pente no cabelo, o espelho no colo e as fitas da Nair no vento."
+            },
+            new FalaDialogo
+            {
                 personagem = "Bento",
                 emocao = "respeitoso",
                 texto = "Obrigado. O rio pode voltar a proteger quem pesca e quem se banha."
             }
         });
 
-        Debug.Log("[Lendas] Iara acalmada. Gota de Quartzo no inventario.");
+        Debug.Log("[Lendas] Iara acalmada. Gota de Quartzo no inventario. Ela ficou com os presentes.");
     }
 
     static string TextoFalta(bool temFitas, bool temEspelho, bool temPente)
@@ -327,13 +404,35 @@ public class EncontroIara : MonoBehaviour
     void AplicarEstado()
     {
         if (sprite != null)
-            sprite.color = Purificada ? corCalma : corCorrupta;
+        {
+            sprite.sprite = EscolherSprite();
+            sprite.color = Color.white;
+            sprite.sortingOrder = 5;
+            sprite.flipX = true;
+        }
 
         if (barreiras == null) return;
         for (int i = 0; i < barreiras.Length; i++)
         {
             if (barreiras[i] != null) barreiras[i].SetActive(!Purificada);
         }
+    }
+
+    Sprite EscolherSprite()
+    {
+        if (Purificada)
+            return spriteFeliz != null ? spriteFeliz : spriteBom;
+        if (oferendaIncompleta)
+            return spriteTriste != null ? spriteTriste : spriteCalmo;
+        if (prontaParaOferenda || acalmouComTreme)
+            return spriteCalmo != null ? spriteCalmo : spriteBom;
+        if (naAgua || descendoAAgua || avisoCantoFeito)
+        {
+            if (spriteAgua != null) return spriteAgua;
+            return spriteCorrupto != null ? spriteCorrupto : spriteBom;
+        }
+        if (spriteBom != null) return spriteBom;
+        return sprite != null ? sprite.sprite : null;
     }
 
     void OnGUI()
@@ -352,8 +451,9 @@ public class EncontroIara : MonoBehaviour
         {
             float largura = 420f;
             float altura = 110f;
-            float x = (Screen.width - largura) * 0.5f;
-            float y = Screen.height - altura - 48f;
+            float treme = Mathf.Sin(Time.unscaledTime * 22f) * 7f;
+            float x = (Screen.width - largura) * 0.5f + treme;
+            float y = Screen.height - altura - 48f + Mathf.Cos(Time.unscaledTime * 18f) * 3f;
             GUI.Box(new Rect(x, y, largura, altura), "");
             var titulo = new GUIStyle(GUI.skin.label) { fontSize = 16, fontStyle = FontStyle.Bold, wordWrap = true };
             titulo.normal.textColor = Color.white;

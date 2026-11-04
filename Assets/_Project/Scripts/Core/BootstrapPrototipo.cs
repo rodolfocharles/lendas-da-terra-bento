@@ -59,6 +59,7 @@ public static class BootstrapPrototipo
         AplicarSpriteNpc("PescadorDaIara", "SeuZeca", "Zeca", null);
         AplicarSpriteNpc("TainaMata", "Taina", "Taina", "Taina/Animacoes/Taina_Idle_east_64x64_4f.png");
         AplicarSpriteBoto();
+        AplicarSpriteIara();
     }
 
     static void AplicarSpriteBoto()
@@ -82,7 +83,34 @@ public static class BootstrapPrototipo
         var col = go.GetComponent<BoxCollider2D>();
         if (col != null)
         {
-            col.size = new Vector2(1.35f, 0.62f);
+            col.size = new Vector2(1.7f, 0.95f);
+            col.offset = Vector2.zero;
+            col.isTrigger = true;
+        }
+    }
+
+    static void AplicarSpriteIara()
+    {
+        var go = GameObject.Find("EncontroIara");
+        if (go == null) return;
+
+        var sr = go.GetComponent<SpriteRenderer>();
+        if (sr == null) return;
+
+        var sprite = CarregadorPixelArt.Personagem("Iara", "Iara_Bom");
+        if (sprite == null) return;
+
+        sr.sprite = sprite;
+        sr.color = Color.white;
+        sr.flipX = true;
+        sr.sortingOrder = 5;
+        float escala = CarregadorPixelArt.EscalaMundo * EncontroIara.EscalaRelativaAoNpc;
+        go.transform.localScale = new Vector3(escala, escala, 1f);
+
+        var col = go.GetComponent<BoxCollider2D>();
+        if (col != null)
+        {
+            col.size = new Vector2(1.55f, 1.55f);
             col.offset = Vector2.zero;
             col.isTrigger = true;
         }
@@ -500,13 +528,13 @@ public static class BootstrapPrototipo
     static void GarantirBlocosCap1()
     {
         CriarFaixa("FaixaVila", LayoutPrototipo.ZonaVila, 40f, new Color(0.45f, 0.4f, 0.35f, 0.55f));
-        CriarFaixa("FaixaRio", LayoutPrototipo.ZonaRio, 32f, new Color(0.2f, 0.45f, 0.65f, 0.55f));
+        CriarFaixa("FaixaRio", LayoutPrototipo.ZonaRio, LayoutPrototipo.LarguraFaixaRio, new Color(0.2f, 0.45f, 0.65f, 0.55f));
         CriarFaixa("FaixaMata", LayoutPrototipo.ZonaMata, 36f, new Color(0.25f, 0.45f, 0.22f, 0.5f));
         CriarFaixa("FaixaRuinas", LayoutPrototipo.ZonaRuinas, 32f, new Color(0.55f, 0.45f, 0.28f, 0.5f));
         CriarFaixa("FaixaArena", LayoutPrototipo.ZonaArena, 28f, new Color(0.5f, 0.22f, 0.18f, 0.55f));
 
         CriarZona("Zona_Vila", LayoutPrototipo.ZonaVila, "Vila", 38f);
-        CriarZona("Zona_Rio", LayoutPrototipo.ZonaRio, "Rio", 30f);
+        CriarZona("Zona_Rio", LayoutPrototipo.ZonaRio, "Rio", LayoutPrototipo.LarguraZonaRio);
         CriarZona("Zona_Mata", LayoutPrototipo.ZonaMata, "Mata", 34f);
         CriarZona("Zona_Ruinas", LayoutPrototipo.ZonaRuinas, "Ruinas", 30f);
         CriarZona("Zona_Arena", LayoutPrototipo.ZonaArena, "Arena", 26f);
@@ -514,7 +542,7 @@ public static class BootstrapPrototipo
         if (GameObject.Find("AguaRio") == null)
         {
             var agua = CriarMarcador("AguaRio", LayoutPrototipo.AguaRio,
-                new Color(0.15f, 0.4f, 0.7f, 0.85f), new Vector3(28f, 0.7f, 1f));
+                new Color(0.15f, 0.4f, 0.7f, 0.85f), new Vector3(LayoutPrototipo.LarguraAguaRio, 0.7f, 1f));
             agua.GetComponent<SpriteRenderer>().sortingOrder = 0;
             var colAgua = agua.GetComponent<BoxCollider2D>();
             colAgua.enabled = false;
@@ -722,6 +750,39 @@ public static class BootstrapPrototipo
         var encontro = iara.GetComponent<EncontroIara>();
         if (encontro == null) encontro = iara.AddComponent<EncontroIara>();
         encontro.barreiras = new[] { barreira };
+
+        GarantirVitoriaRegia();
+    }
+
+    static void GarantirVitoriaRegia()
+    {
+        GameObject folha = GameObject.Find("VitoriaRegiaIara");
+        if (folha == null)
+        {
+            folha = CriarMarcador("VitoriaRegiaIara", LayoutPrototipo.VitoriaRegiaIara,
+                Color.white, Vector3.one);
+        }
+
+        var sr = folha.GetComponent<SpriteRenderer>();
+        if (sr == null) sr = folha.AddComponent<SpriteRenderer>();
+
+        var sprite = CarregadorPixelArt.Personagem("Iara", "VitoriaRegia");
+        if (sprite != null)
+        {
+            sr.sprite = sprite;
+            sr.color = Color.white;
+        }
+        else
+            sr.color = new Color(0.18f, 0.55f, 0.28f);
+
+        sr.sortingOrder = 1;
+        folha.transform.localScale = new Vector3(
+            CarregadorPixelArt.EscalaMundo * 1.45f,
+            CarregadorPixelArt.EscalaMundo * 0.32f,
+            1f);
+
+        var col = folha.GetComponent<BoxCollider2D>();
+        if (col != null) col.enabled = false;
     }
 
     static void GarantirEncontroCaipora()
