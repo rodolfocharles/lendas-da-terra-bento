@@ -1,0 +1,351 @@
+fileFormatVersion: 2
+guid: a990c1801aca69b4caa01b204553ec7a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2001940098353363229
+    second: Bento_Remar_east_84x84_9f_0
+  - first:
+      213: -7772889744824372255
+    second: Bento_Remar_east_84x84_9f_1
+  - first:
+      213: -5106291533281963182
+    second: Bento_Remar_east_84x84_9f_2
+  - first:
+      213: 609355195602681889
+    second: Bento_Remar_east_84x84_9f_3
+  - first:
+      213: -967214303325010264
+    second: Bento_Remar_east_84x84_9f_4
+  - first:
+      213: -153098170882834504
+    second: Bento_Remar_east_84x84_9f_5
+  - first:
+      213: 3927187422668116537
+    second: Bento_Remar_east_84x84_9f_6
+  - first:
+      213: -2236580349471939979
+    second: Bento_Remar_east_84x84_9f_7
+  - first:
+      213: 4672217811028174308
+    second: Bento_Remar_east_84x84_9f_8
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Bento_Remar_east_84x84_9f_0
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 12
+        width: 34
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e68908561ea734e0800000000000000
+      internalID: -2001940098353363229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bento_Remar_east_84x84_9f_1
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 12
+        width: 34
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e37779a5f5212490800000000000000
+      internalID: -7772889744824372255
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bento_Remar_east_84x84_9f_2
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 12
+        width: 36
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 253d42f97eec229b0800000000000000
+      internalID: -5106291533281963182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bento_Remar_east_84x84_9f_3
+      rect:
+        serializedVersion: 2
+        x: 268
+        y: 12
+        width: 47
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 120cfe7625dd47800800000000000000
+      internalID: 609355195602681889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bento_Remar_east_84x84_9f_4
+      rect:
+        serializedVersion: 2
+        x: 347
+        y: 12
+        width: 55
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a6c2a437b3c392f0800000000000000
+      internalID: -967214303325010264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bento_Remar_east_84x84_9f_5
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 12
+        width: 58
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8bf34c4560610edf0800000000000000
+      internalID: -153098170882834504
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bento_Remar_east_84x84_9f_6
+      rect:
+        serializedVersion: 2
+        x: 516
+        y: 12
+        width: 59
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 932d38e572c208630800000000000000
+      internalID: 3927187422668116537
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bento_Remar_east_84x84_9f_7
+      rect:
+        serializedVersion: 2
+        x: 603
+        y: 12
+        width: 58
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5722b16a50216f0e0800000000000000
+      internalID: -2236580349471939979
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bento_Remar_east_84x84_9f_8
+      rect:
+        serializedVersion: 2
+        x: 688
+        y: 12
+        width: 57
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e5669b385d07d040800000000000000
+      internalID: 4672217811028174308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Bento_Remar_east_84x84_9f_0: -2001940098353363229
+      Bento_Remar_east_84x84_9f_1: -7772889744824372255
+      Bento_Remar_east_84x84_9f_2: -5106291533281963182
+      Bento_Remar_east_84x84_9f_3: 609355195602681889
+      Bento_Remar_east_84x84_9f_4: -967214303325010264
+      Bento_Remar_east_84x84_9f_5: -153098170882834504
+      Bento_Remar_east_84x84_9f_6: 3927187422668116537
+      Bento_Remar_east_84x84_9f_7: -2236580349471939979
+      Bento_Remar_east_84x84_9f_8: 4672217811028174308
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -20,6 +20,8 @@ public class NpcDialogo : MonoBehaviour
     [Tooltip("Falas exibidas no momento em que o escambo acontece.")]
     public FalaDialogo[] falasAoEscambar;
 
+    public bool JogadorProximo => jogadorProximo;
+
     private bool jogadorProximo;
     private bool itemJaEntregue;
     private bool escamboConcluido;
@@ -59,6 +61,7 @@ public class NpcDialogo : MonoBehaviour
         if (GerenciadorDialogo.Instancia != null && GerenciadorDialogo.Instancia.EmDialogo) return;
         if (Input.GetKeyDown(teclaInteragir))
         {
+            BentoAnimacao.TocarInteracaoDoJogador();
             AnotarCaderno();
 
             if (TemEscamboConfigurado())

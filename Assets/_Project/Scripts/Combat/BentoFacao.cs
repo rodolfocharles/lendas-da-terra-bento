@@ -9,14 +9,15 @@ public class BentoFacao : MonoBehaviour
 {
     [Header("Dano")]
     public int danoGolpe = 1;
-    public float alcance = 1.1f;
-    public float alturaHitbox = 0.9f;
-    public float deslocamentoFrente = 0.7f;
+    public float alcance = 1.45f;
+    public float alturaHitbox = 1.05f;
+    public float deslocamentoFrente = 0.85f;
 
     [Header("Tempo")]
-    public float duracaoGolpe = 0.18f;
-    public float fimCombo = 0.45f;
-    public float recuperacao = 0.12f;
+    public float duracaoGolpe = 0.55f;
+    public float fimCombo = 0.8f;
+    public float recuperacao = 0.08f;
+    public float atrasoHit = 0.18f;
 
     [Header("Camadas")]
     public LayerMask camadasAlvo = ~0;
@@ -32,6 +33,8 @@ public class BentoFacao : MonoBehaviour
     private float tempoProximoGolpe;
     private float tempoExpiraCombo;
     private float tempoFimAtaque;
+    private float tempoHit;
+    private bool hitAplicado;
     private readonly Collider2D[] bufferHits = new Collider2D[12];
 
     void Awake()
@@ -44,6 +47,12 @@ public class BentoFacao : MonoBehaviour
 
     void Update()
     {
+        if (atacando && !hitAplicado && Time.time >= tempoHit)
+        {
+            AplicarHits();
+            hitAplicado = true;
+        }
+
         if (atacando && Time.time >= tempoFimAtaque)
             atacando = false;
 
@@ -65,6 +74,7 @@ public class BentoFacao : MonoBehaviour
         if (besta == null) besta = GetComponent<BentoBesta>();
         if (besta != null && besta.Mirando) return false;
         if (GerenciadorDialogo.Instancia != null && GerenciadorDialogo.Instancia.EmDialogo) return false;
+        if (CanoaRio.JogadorDentro) return false;
         if (HudInventario.Aberto || HudFogao.Aberto || HudAlquimia.Aberto || HudCaderno.Aberto || HudPesquisa.Aberto) return false;
         return true;
     }
@@ -73,11 +83,11 @@ public class BentoFacao : MonoBehaviour
     {
         indiceCombo = indiceCombo >= 2 ? 1 : indiceCombo + 1;
         atacando = true;
+        hitAplicado = false;
         tempoFimAtaque = Time.time + duracaoGolpe;
+        tempoHit = Time.time + atrasoHit;
         tempoProximoGolpe = Time.time + duracaoGolpe + recuperacao;
         tempoExpiraCombo = Time.time + fimCombo;
-
-        AplicarHits();
         Debug.Log($"[Lendas] Facao golpe {indiceCombo}");
     }
 

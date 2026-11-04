@@ -39,6 +39,7 @@ public class CanoaRio : MonoBehaviour
     bool colBentoEraTrigger;
     RigidbodyType2D tipoOriginal;
     BentoVida vida;
+    BentoBesta bestaBento;
 
     void Awake()
     {
@@ -58,9 +59,9 @@ public class CanoaRio : MonoBehaviour
         {
             var assento = new GameObject("PontoAssentoCanoa");
             assento.transform.SetParent(transform);
-            assento.transform.localPosition = new Vector3(0f, 0.55f, 0f);
             pontoAssento = assento.transform;
         }
+        pontoAssento.localPosition = new Vector3(0f, 0.28f, 0f);
 
         if (pontoSaida == null)
         {
@@ -121,7 +122,7 @@ public class CanoaRio : MonoBehaviour
         if (!JogadorDentro || Afundando || bento == null) return;
         if (GerenciadorDialogo.Instancia != null && GerenciadorDialogo.Instancia.EmDialogo) return;
 
-        float h = Input.GetAxisRaw("Horizontal");
+        float h = (bestaBento != null && bestaBento.Mirando) ? 0f : Input.GetAxisRaw("Horizontal");
         Vector3 p = transform.position;
         p.x += h * velocidade * Time.fixedDeltaTime;
         p.x = Mathf.Clamp(p.x, LimiteEsquerdo(), LimiteDireito());
@@ -130,7 +131,7 @@ public class CanoaRio : MonoBehaviour
 
         Vector3 assento = pontoAssento != null
             ? pontoAssento.position
-            : transform.position + Vector3.up * 0.55f;
+            : transform.position + Vector3.up * 0.28f;
         bento.transform.position = assento;
         if (rbBento != null) rbBento.linearVelocity = Vector2.zero;
     }
@@ -176,6 +177,7 @@ public class CanoaRio : MonoBehaviour
             colBento.isTrigger = true;
         }
 
+        bestaBento = bento.GetComponent<BentoBesta>();
         JogadorDentro = true;
         Debug.Log("[Lendas] Bento entrou na canoa.");
     }

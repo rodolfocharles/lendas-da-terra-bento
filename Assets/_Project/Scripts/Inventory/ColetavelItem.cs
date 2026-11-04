@@ -18,6 +18,8 @@ public class ColetavelItem : MonoBehaviour
     public bool reaparece;
     public float segundosParaReaparecer = 8f;
 
+    public bool PodeColetarComE => exigirTecla && jogadorProximo && !escondido;
+
     bool jogadorProximo;
     bool escondido;
     Collider2D colisor;
@@ -78,6 +80,7 @@ public class ColetavelItem : MonoBehaviour
         if (inventario == null) return;
         if (!inventario.Adicionar(item, quantidade)) return;
 
+        BentoAnimacao.TocarInteracaoDoJogador();
         Debug.Log($"[Lendas] Coletou {quantidade}x {item.nomeExibicao}");
 
         if (reaparece)
