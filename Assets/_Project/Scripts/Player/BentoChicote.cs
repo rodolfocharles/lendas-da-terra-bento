@@ -71,8 +71,10 @@ public class BentoChicote : MonoBehaviour
 
         bool apertouE = Input.GetKeyDown(teclaChicote);
         if (CanoaRio.JogadorDentro) return;
+        if (GerenciadorDialogo.Instancia != null && GerenciadorDialogo.Instancia.EmDialogo) return;
         if (apertouE && (EncontroBoto.CapturaTeclaE || EncontroIara.CapturaTeclaE
-            || EncontroCaipora.CapturaTeclaE || EncontroCurupira.CapturaTeclaE || CanoaRio.CapturaTeclaE))
+            || EncontroCaipora.CapturaTeclaE || EncontroCurupira.CapturaTeclaE || CanoaRio.CapturaTeclaE
+            || PertoDeNpcOuItem()))
             apertouE = false;
         if (apertouE || Input.GetMouseButtonDown(1))
         {
@@ -129,11 +131,29 @@ public class BentoChicote : MonoBehaviour
         }
     }
 
+    static bool PertoDeNpcOuItem()
+    {
+        var npcs = Object.FindObjectsByType<NpcDialogo>(FindObjectsSortMode.None);
+        for (int i = 0; i < npcs.Length; i++)
+            if (npcs[i] != null && npcs[i].JogadorProximo) return true;
+
+        var itens = Object.FindObjectsByType<ColetavelItem>(FindObjectsSortMode.None);
+        for (int i = 0; i < itens.Length; i++)
+            if (itens[i] != null && itens[i].PodeColetarComE) return true;
+
+        return false;
+    }
+
     void TentarAgarrar()
     {
-        fimGolpeChicote = Time.time + 0.45f;
-        if (TentarPuxarAlvo()) return;
+        if (TentarPuxarAlvo())
+        {
+            fimGolpeChicote = Time.time + 0.45f;
+            return;
+        }
+
         TentarBalancar();
+        if (Balancando) fimGolpeChicote = Time.time + 0.45f;
     }
 
     bool TentarPuxarAlvo()
