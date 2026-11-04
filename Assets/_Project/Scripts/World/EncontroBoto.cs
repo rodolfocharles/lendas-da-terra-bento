@@ -18,7 +18,7 @@ public class EncontroBoto : MonoBehaviour, IRecebeDano
     public static event Action CaminhoDoRioLiberado;
 
     public static bool CapturaTeclaE =>
-        Instancia != null && Instancia.jogadorProximo && Acalmado && !CaminhoLiberado
+        Instancia != null && Instancia.PertoParaInteragir() && Acalmado && !CaminhoLiberado
         && CanoaRio.JogadorDentro && Instancia.CanoaNaZonaDeCombate();
 
     public GameObject[] barreiras;
@@ -32,6 +32,7 @@ public class EncontroBoto : MonoBehaviour, IRecebeDano
     public float alturaPulo = 1.05f;
     public float duracaoPulo = 0.72f;
     public float duracaoMergulho = 0.55f;
+    public float distanciaInteracao = 4.8f;
 
     int flechasAcertadas;
     SpriteRenderer sprite;
@@ -97,7 +98,7 @@ public class EncontroBoto : MonoBehaviour, IRecebeDano
         var col = GetComponent<BoxCollider2D>();
         if (col != null)
         {
-            col.size = new Vector2(1.35f, 0.62f);
+            col.size = new Vector2(1.7f, 0.95f);
             col.offset = Vector2.zero;
         }
 
@@ -143,10 +144,19 @@ public class EncontroBoto : MonoBehaviour, IRecebeDano
             AplicarEstado();
         }
 
-        if (!jogadorProximo || !Acalmado || !CanoaRio.JogadorDentro) return;
+        if (!PertoParaInteragir() || !Acalmado || !CanoaRio.JogadorDentro) return;
         if (!CanoaNaZonaDeCombate()) return;
         if (!Input.GetKeyDown(teclaOferecer)) return;
         TentarOferenda();
+    }
+
+    bool PertoParaInteragir()
+    {
+        if (jogadorProximo) return true;
+        var canoa = CanoaRio.Instancia;
+        if (canoa == null) return false;
+        Vector3 delta = transform.position - canoa.transform.position;
+        return Mathf.Abs(delta.x) <= distanciaInteracao && Mathf.Abs(delta.y) <= 2.4f;
     }
 
     bool CanoaNaZonaDeCombate()
@@ -154,7 +164,7 @@ public class EncontroBoto : MonoBehaviour, IRecebeDano
         var canoa = CanoaRio.Instancia;
         if (canoa == null || canoa.Afundando) return false;
         float x = canoa.transform.position.x;
-        return x >= LayoutPrototipo.InicioZonaBoto && x <= LayoutPrototipo.LimiteCanoaBoto + 0.5f;
+        return x >= LayoutPrototipo.InicioZonaBoto && x <= LayoutPrototipo.LimiteCanoaBoto + 1.2f;
     }
 
     IEnumerator Investir()
@@ -569,7 +579,7 @@ public class EncontroBoto : MonoBehaviour, IRecebeDano
             return;
         }
 
-        if (!jogadorProximo || !Acalmado || !CanoaRio.JogadorDentro || !CanoaNaZonaDeCombate()) return;
+        if (!PertoParaInteragir() || !Acalmado || !CanoaRio.JogadorDentro || !CanoaNaZonaDeCombate()) return;
 
         var inventario = InventarioBento.Instancia;
         bool temTacaca = inventario != null && inventario.TemPorId(CatalogoItensNorte.IdTacaca);

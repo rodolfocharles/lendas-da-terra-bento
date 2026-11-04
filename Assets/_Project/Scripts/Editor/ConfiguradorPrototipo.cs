@@ -777,13 +777,13 @@ public static class ConfiguradorPrototipo
         var sprite = CarregarSpriteQuadrado();
 
         CriarFaixaEditor("FaixaVila", LayoutPrototipo.ZonaVila.x, 40f, new Color(0.45f, 0.4f, 0.35f, 0.55f), sprite);
-        CriarFaixaEditor("FaixaRio", LayoutPrototipo.ZonaRio.x, 32f, new Color(0.2f, 0.45f, 0.65f, 0.55f), sprite);
+        CriarFaixaEditor("FaixaRio", LayoutPrototipo.ZonaRio.x, LayoutPrototipo.LarguraFaixaRio, new Color(0.2f, 0.45f, 0.65f, 0.55f), sprite);
         CriarFaixaEditor("FaixaMata", LayoutPrototipo.ZonaMata.x, 36f, new Color(0.25f, 0.45f, 0.22f, 0.5f), sprite);
         CriarFaixaEditor("FaixaRuinas", LayoutPrototipo.ZonaRuinas.x, 32f, new Color(0.55f, 0.45f, 0.28f, 0.5f), sprite);
         CriarFaixaEditor("FaixaArena", LayoutPrototipo.ZonaArena.x, 28f, new Color(0.5f, 0.22f, 0.18f, 0.55f), sprite);
 
         CriarZonaEditor("Zona_Vila", LayoutPrototipo.ZonaVila, "Vila", 38f);
-        CriarZonaEditor("Zona_Rio", LayoutPrototipo.ZonaRio, "Rio", 30f);
+        CriarZonaEditor("Zona_Rio", LayoutPrototipo.ZonaRio, "Rio", LayoutPrototipo.LarguraZonaRio);
         CriarZonaEditor("Zona_Mata", LayoutPrototipo.ZonaMata, "Mata", 34f);
         CriarZonaEditor("Zona_Ruinas", LayoutPrototipo.ZonaRuinas, "Ruinas", 30f);
         CriarZonaEditor("Zona_Arena", LayoutPrototipo.ZonaArena, "Arena", 26f);
@@ -793,7 +793,7 @@ public static class ConfiguradorPrototipo
             var agua = new GameObject("AguaRio");
             Undo.RegisterCreatedObjectUndo(agua, "Criar AguaRio");
             agua.transform.position = LayoutPrototipo.AguaRio;
-            agua.transform.localScale = new Vector3(28f, 0.7f, 1f);
+            agua.transform.localScale = new Vector3(LayoutPrototipo.LarguraAguaRio, 0.7f, 1f);
             var srAgua = agua.AddComponent<SpriteRenderer>();
             srAgua.sprite = sprite;
             srAgua.color = new Color(0.15f, 0.4f, 0.7f, 0.85f);
